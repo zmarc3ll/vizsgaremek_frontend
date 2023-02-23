@@ -23,5 +23,34 @@ interface State{
   birthDateInput: string; //temporarily string but actually Date
 }
 
+class App extends Component<{}, State> {
+  constructor(props: {}){
+    super(props);
+
+    this.state = {
+      usernameInput: '',
+      passwordInput: '',
+      passwordAuthInput: '',
+      emailInput: '',
+      birthDateInput: '', //format is not right for Date type.
+      users: []
+    }
+  }
+
+  async loadUsers(){
+    let response = await fetch('http://localhost:3001/user');
+    let data = await response.json() as User[];
+    console.log(data);
+    this.setState({
+      users: data,
+    })
+  }
+
+  componentDidMount() {
+    this.loadUsers();
+  }
+ 
+
+}
 
 export default App;
