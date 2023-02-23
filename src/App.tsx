@@ -50,7 +50,41 @@ class App extends Component<{}, State> {
     this.loadUsers();
   }
  
+  handleUpload = async () => {
+    const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput } = this.state;
+    if(usernameInput.trim() === '' || passwordInput.length < 6 || passwordAuthInput.length < 6 || emailInput.trim() === '' || birthDateInput.trim() === ''){
+      return;      
+    }
 
+    const dbData = {
+      username: usernameInput,
+      password: passwordInput,
+      passwordAuth: passwordAuthInput,
+      email: emailInput,
+      birthDate: birthDateInput,
+    }
+
+    let response = await fetch('http://localhost:3001/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dbData),
+    });
+
+    this.setState({
+      usernameInput: '',
+      passwordInput: '',
+      passwordAuthInput: '',
+      emailInput: '',
+      birthDateInput: '', //format is not right for Date type.
+      users: []
+    })
+
+    await this.loadUsers();
+  };
+
+  
 }
 
 export default App;
