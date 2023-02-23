@@ -84,7 +84,24 @@ class App extends Component<{}, State> {
     await this.loadUsers();
   };
 
-  
+  render() {
+    const {usernameInput, passwordInput, passwordAuthInput, emailInput,birthDateInput} = this.state;
+    return <div>
+       <h2>Új user felvétele</h2>
+    Username: <input type="text" value={usernameInput} onChange={e => this.setState({ usernameInput: e.currentTarget.value})} /> <br />
+    Jelszó: <input type="text" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })}/> <br />
+    Jelszó újra: <input type="text" value={passwordAuthInput} onChange={e => this.setState({passwordAuthInput: e.currentTarget.value })}/> <br />
+    Email: <input type="text" value={emailInput} onChange={e => this.setState({emailInput: e.currentTarget.value })}/> <br /> 
+    Születési Év: <input type="date" value={birthDateInput} onChange={e => this.setState({ birthDateInput: e.currentTarget.value })}/> <br /> 
+    <button onClick={this.handleUpload}>Hozzáaddás</button> <br />
+      <h2>Adatbázis tábla tartalmazza:</h2>
+      <ul>{
+        this.state.users.map(user =>
+        <li>{user.username}, {user.email} </li>
+        )
+        }</ul>
+    </div>
+  }
 }
 
 export default App;
