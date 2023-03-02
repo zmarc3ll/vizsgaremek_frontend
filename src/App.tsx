@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+import { Route, Routes } from 'react-router-dom';
+import Main from './Main';
 
 interface User{
   id: number;
@@ -89,7 +91,12 @@ class App extends Component<{}, State> {
   render() {
     const {usernameInput, passwordInput, passwordAuthInput, emailInput,birthDateInput} = this.state;
     return <div>
-       <h2>Új user felvétele</h2>
+      <main>
+        <Routes >
+          <Route path='/' element={<Main/>} />
+        </Routes>
+      </main>
+      {/*  <h2>Új user felvétele</h2>
     Username: <input type="text" value={usernameInput} onChange={e => this.setState({ usernameInput: e.currentTarget.value})} /> <br />
     Jelszó: <input type="text" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })}/> <br />
     Jelszó újra: <input type="text" value={passwordAuthInput} onChange={e => this.setState({passwordAuthInput: e.currentTarget.value })}/> <br />
@@ -101,7 +108,7 @@ class App extends Component<{}, State> {
         this.state.users.map(user =>
         <li>{user.username}, {user.email} </li>
         )
-        }</ul>
+        }</ul> */}
     </div>
   }
 }
