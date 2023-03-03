@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import { Route, Routes } from 'react-router-dom';
 import Main from './Main';
+import Login from './Login';
 
 interface User{
   id: number;
@@ -90,12 +91,15 @@ class App extends Component<{}, State> {
 
   render() {
     const {usernameInput, passwordInput, passwordAuthInput, emailInput,birthDateInput} = this.state;
-    return <div>
+    return <body>
+    <div>
       <main>
         <Routes >
           <Route path='/' element={<Main/>} />
+          <Route path='/login' element={<Login/>} />
         </Routes>
       </main>
+
       {/*  <h2>Új user felvétele</h2>
     Username: <input type="text" value={usernameInput} onChange={e => this.setState({ usernameInput: e.currentTarget.value})} /> <br />
     Jelszó: <input type="text" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })}/> <br />
@@ -110,6 +114,7 @@ class App extends Component<{}, State> {
         )
         }</ul> */}
     </div>
+    </body>
   }
 }
 
