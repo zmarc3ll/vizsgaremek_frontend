@@ -30,7 +30,7 @@ export default class Main extends Component {
                   </button>
                   <ul className="dropdown-menu">
                     <li><h6 className="dropdown-header">Profil</h6></li>
-                    <li><a className="dropdown-item"><Link to='/login'>Belépés</Link></a></li>
+                    <Link to='/login'><li><a className="dropdown-item">Belépés</a></li></Link>
                     <li><a className="dropdown-item" href="./register.html">Regisztráció</a></li>
                     <li><a className="dropdown-item" href="#">Profil szerkesztése</a></li>
                   </ul>
