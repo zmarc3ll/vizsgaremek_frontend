@@ -25,13 +25,13 @@ export default class Main extends Component {
               </ul>
               <ul className="navbar-nav ms-auto">
                 <div className="btn-group dropstart">
-                  <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img className="img-fluid img-thumbnail nav-item" src={'bxs-user-circle.png'} alt="userProfile" title="User" />
+                  <button type="button" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img className="img-fluid img-thumbnail nav-item" src={'bxs-user-circle.png'} alt="userProfile" title="User" />
                   </button>
                   <ul className="dropdown-menu">
                     <li><h6 className="dropdown-header">Profil</h6></li>
                     <Link to='/login'><li><a className="dropdown-item">Belépés</a></li></Link>
-                    <li><a className="dropdown-item" href="./register.html">Regisztráció</a></li>
+                    <Link to='/register'><li><a className="dropdown-item" href="./register.html">Regisztráció</a></li></Link>
                     <li><a className="dropdown-item" href="#">Profil szerkesztése</a></li>
                   </ul>
                 </div>
