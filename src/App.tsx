@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Main from './Main';
 import Login from './Login';
+import Register from './Register';
 
 interface User{
   id: number;
@@ -94,9 +95,10 @@ class App extends Component<{}, State> {
     return <body>
     <div>
       <main>
-        <Routes >
+        <Routes>
           <Route path='/' element={<Main/>} />
           <Route path='/login' element={<Login/>} />
+          <Route path='/register' element={<Register/>} />
         </Routes>
       </main>
 
