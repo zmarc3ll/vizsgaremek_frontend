@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default class Login extends Component {
     render() {
-        return <><><nav className="navbar navbar-expand-sm bg-light fixed-top">
+        return <><nav className="navbar navbar-expand-sm bg-light fixed-top">
             <div className="container-fluid">
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -25,13 +25,13 @@ export default class Login extends Component {
                     </ul>
                     <ul className="navbar-nav ms-auto">
                         <div className="btn-group dropstart">
-                            <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button type="button" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img className="img-fluid img-thumbnail nav-item" src={'bxs-user-circle.png'} alt="userProfile" title="User" />
                             </button>
                             <ul className="dropdown-menu">
                                 <li><h6 className="dropdown-header">Profil</h6></li>
-                                <li><a className="dropdown-item"><Link to='/login'>Belépés</Link></a></li>
-                                <li><a className="dropdown-item" href="./register.html">Regisztráció</a></li>
+                                <Link to='/login'><li><a className="dropdown-item">Belépés</a></li></Link>
+                                <Link to='/register'><li><a className="dropdown-item">Regisztráció</a></li></Link>
                                 <li><a className="dropdown-item" href="#">Profil szerkesztése</a></li>
                             </ul>
                         </div>
@@ -74,14 +74,13 @@ export default class Login extends Component {
 
                                 <div className="text-center text-lg-start mt-4 pt-2">
                                     <a href="index.html" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Bejelentkezés</a>
-                                    <p className="small fw-bold mt-2 pt-1 mb-0">Nincs fiókja? <a href="./register.html"
-                                        className="link-danger">Regisztrálok</a></p>
+                                    <p className="small fw-bold mt-2 pt-1 mb-0">Nincs fiókja? <Link to={'/register'}><a className="link-danger">Regisztrálok</a></Link></p>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            </section></><footer className="text-center text-lg-start bg-light text-muted footer">
+            </section><footer className="text-center text-lg-start bg-light text-muted footer">
                 <section className="">
                     <div className="container text-center text-md-start mt-5">
                         <div className="row mt-3">
