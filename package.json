@@ -44,6 +44,10 @@
     ]
   },
   "devDependencies": {
+<<<<<<< HEAD
+=======
+    "@types/bootstrap": "^5.2.6",
+>>>>>>> 5b52f8ec3c3b9081bc03d53401e1a780e140adce
     "@types/react-router-dom": "^5.3.3"
   }
 }
