@@ -22,7 +22,7 @@ a:link {
 }
 
 footer {
-  padding-top: 30px;  
+  padding-top: 30px; 
 }
 
 #fillPage {
@@ -33,6 +33,7 @@ footer {
 
 .card { 
   border-radius: 25px;
+  box-shadow: #d2d2d2 2px 2px 20px 4px;
 }
 
 #hasAccount{
