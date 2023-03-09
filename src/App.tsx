@@ -6,6 +6,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import Main from './Main';
 import Login from './Login';
 import Register from './Register';
+import Calendar from './Calendar';
 
 class App extends Component {
 
@@ -52,6 +53,7 @@ class App extends Component {
           <Route path='/' element={<Main/>} />
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
+          <Route path='/calendar' element={<Calendar/>} />
         </Routes>
       </main>
       <footer className="text-center text-lg-start text-muted footer">
@@ -78,7 +80,7 @@ class App extends Component {
                       <a href="#!" className="text-reset">Garázs</a>
                     </p>
                     <p>
-                      <a href="#!" className="text-reset">Naptár</a>
+                      <Link to='/calendar' className="text-reset">Naptár</Link>
                     </p>
                     <p>
                       <a href="#!" className="text-reset">Rólunk</a>
