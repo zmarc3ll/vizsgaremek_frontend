@@ -26,7 +26,7 @@ class App extends Component {
                   <a className="nav-link" href="#">Garázs</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">Naptár</a>
+                  <Link to='./calendar' className="nav-link">Naptár</Link>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="#">Rólunk</a>
@@ -80,7 +80,7 @@ class App extends Component {
                       <a href="#!" className="text-reset">Garázs</a>
                     </p>
                     <p>
-                      <Link to='/calendar' className="text-reset">Naptár</Link>
+                      <Link to='./calendar' className="text-reset">Naptár</Link>
                     </p>
                     <p>
                       <a href="#!" className="text-reset">Rólunk</a>
