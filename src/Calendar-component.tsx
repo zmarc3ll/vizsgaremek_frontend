@@ -1,12 +1,27 @@
-import React from 'react';
-import MyCalendar from './Calendar';
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
-const App = () => {
+type CalendarProps = {};
+
+const CalendarComponent: React.FC<CalendarProps> = () => {
+  const [date, setDate] = useState(new Date());
+
+  const onChange = (date: Date) => {
+    setDate(date);
+  };
+
   return (
-    <div>
-      <MyCalendar />
+    <div className="calendar-container">
+      <Calendar
+        onChange={onChange}
+        value={date}
+        className="calendar"
+        calendarType="US"
+        minDetail="month"
+      />
     </div>
   );
 };
 
-export default App;
+export default CalendarComponent;
