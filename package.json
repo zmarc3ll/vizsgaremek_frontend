@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
+    "@types/react-calendar": "^3.9.0",
     "@types/react-router-dom": "^5.3.3"
   }
 }
