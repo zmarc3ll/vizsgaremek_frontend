@@ -99,36 +99,36 @@ export default class Register extends Component<{}, State> {
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
+                                                <label className="form-label" htmlFor="form3Example1c">Felhasználónév</label>
                                                     <input type="text" id="form3Example1c" className="form-control" value={usernameInput} onChange={e => this.setState({ usernameInput: e.currentTarget.value })} />
-                                                    <label className="form-label" htmlFor="form3Example1c">Felhasználónév</label>
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
-                                                    <input type="email" id="form3Example3c" className="form-control" value={emailInput} onChange={e => this.setState({ emailInput: e.currentTarget.value })} />
                                                     <label className="form-label" htmlFor="form3Example3c">Email</label>
+                                                    <input type="email" id="form3Example3c" className="form-control" value={emailInput} onChange={e => this.setState({ emailInput: e.currentTarget.value })} />
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
-                                                    <input type="password" id="form3Example4c" className="form-control" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })} />
                                                     <label className="form-label" htmlFor="form3Example4c">Jelszó</label>
+                                                    <input type="password" id="form3Example4c" className="form-control" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })} />
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
-                                                    <input type="password" id="form3Example4cd" className="form-control" value={passwordAuthInput} onChange={e => this.setState({ passwordAuthInput: e.currentTarget.value })} />
                                                     <label className="form-label" htmlFor="form3Example4cd">Jelszó újra</label>
+                                                    <input type="password" id="form3Example4cd" className="form-control" value={passwordAuthInput} onChange={e => this.setState({ passwordAuthInput: e.currentTarget.value })} />
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
-                                                    <input type="date" id="form3Example4cd" className="form-control" value={birthDateInput} onChange={e => this.setState({ birthDateInput: e.currentTarget.value })} />
                                                     <label className="form-label" htmlFor="form3Example4cd">Születési dátum</label>
+                                                    <input type="date" id="form3Example4cd" className="form-control" value={birthDateInput} onChange={e => this.setState({ birthDateInput: e.currentTarget.value })} />
                                                 </div>
                                             </div>
 
