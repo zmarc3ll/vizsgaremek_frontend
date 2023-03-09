@@ -42,4 +42,9 @@ footer {
 nav.navbar{
   box-shadow: #d2d2d2 2px 2px 20px 4px;
 }
-
+input {
+  box-shadow: #d2d2d2 1px 1px 10px 2px;
+}
+button.btn-success {
+  box-shadow: #d2d2d2 1px 1px 10px 2px;
+}
