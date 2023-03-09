@@ -53,7 +53,7 @@ export default class Register extends Component<{}, State> {
 
     handleUpload = async () => {
         const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput } = this.state;
-        if (usernameInput.trim() === '' || passwordInput.length < 6 || passwordAuthInput.length < 6 || emailInput.trim() === '' || birthDateInput.trim() === '') {
+        if (usernameInput.trim() === '' || usernameInput.length <= 3  || passwordInput.length <= 6 || passwordAuthInput.length <= 6 || emailInput.trim() === '') {
             return;
         }
 
