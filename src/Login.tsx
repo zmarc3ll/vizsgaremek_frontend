@@ -38,7 +38,7 @@ export default class Login extends Component {
                                 </div>
 
                                 <div className="text-center text-lg-start mt-4 pt-2">
-                                    <button className="btn btn-success btn-lg " role="button" aria-pressed="false">Bejelentkezés</button>
+                                    <button className="btn btn-success btn-lg" type="submit" role="button" aria-pressed="false">Bejelentkezés</button>
                                     <p className="small fw-bold mt-2 pt-1 mb-0">Nincs fiókja? <Link to={'/register'} className="link-danger">Regisztrálok</Link></p>
                                 </div>
                             </form>
