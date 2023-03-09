@@ -23,6 +23,7 @@ interface State {
     birthDateInput: string; //temporarily string but actually Date
 }
 
+
 export default class Register extends Component<{}, State> {
 
     constructor(props: {}) {
@@ -139,7 +140,7 @@ export default class Register extends Component<{}, State> {
                                                 </label>
                                             </div>
                                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                <Link to={'/login'}><button type="button" className="btn btn-success btn-lg" id="liveToastBtn" onClick={this.handleUpload}>Regisztrálás</button></Link>
+                                                <Link to={'/login'}><button type="submit" className="btn btn-success btn-lg" onClick={this.handleUpload}>Regisztrálás</button></Link>
                                             </div>
                                             <p className="small fw-bold mt-2 pt-1 mb-0" id="hasAccount">Van már fiókja? <Link to={'/login'} className="link-danger">Bejelentkezés</Link></p>
                                         </form>
