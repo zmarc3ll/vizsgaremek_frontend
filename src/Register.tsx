@@ -1,6 +1,20 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 
+interface State {
+    users: User[];
+    usernameInput: string;
+    passwordInput: string;
+    passwordAuthInput: string;
+    emailInput: string;
+    birthDateInput: string; //temporarily string but actually Date
+    usernameWrong: string;
+    passwordWrong: string;
+    passwordAuthWrong:string;
+    emailWrong: string;
+    birthDateWrong: string;
+}
+
 interface User {
     id: number;
     username: string;
@@ -14,16 +28,6 @@ interface UserListResponse {
     users: User[];
 }
 
-interface State {
-    users: User[];
-    usernameInput: string;
-    passwordInput: string;
-    passwordAuthInput: string;
-    emailInput: string;
-    birthDateInput: string; //temporarily string but actually Date
-}
-
-
 export default class Register extends Component<{}, State> {
 
     constructor(props: {}) {
@@ -35,26 +39,48 @@ export default class Register extends Component<{}, State> {
             passwordAuthInput: '',
             emailInput: '',
             birthDateInput: '', //format is not right for Date type.
-            users: []
+            users: [],
+            usernameWrong:'',
+            passwordWrong:'',
+            passwordAuthWrong:'',
+            emailWrong:'',
+            birthDateWrong:''
         }
     }
+
+    
     async loadUsers() {
         let response = await fetch('http://localhost:3001/user');
-        let data = await response.json() as User[];
+        let data = await response.json() as UserListResponse;
         console.log(data);
         this.setState({
-            users: data,
+            users: data.users,
         })
     }
 
     componentDidMount() {
         this.loadUsers();
     }
-
+    
     handleUpload = async () => {
         const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput } = this.state;
-        if (usernameInput.trim() === '' || usernameInput.length <= 3  || passwordInput.length <= 6 || passwordAuthInput.length <= 6 || emailInput.trim() === '') {
+        if (usernameInput.length < 3  || passwordInput.length <= 6 || passwordAuthInput.length <= 6 || passwordInput !== passwordAuthInput) {
+            this.setState({
+                usernameWrong: 'Adjon meg érvényes felhasználó nevet!',
+                passwordWrong: 'Adjon meg érvényes jelszót!',
+                passwordAuthWrong:'A jelszóknak egyeznie kell!',
+                emailWrong: 'Adjon meg érvényes email címet!',
+                birthDateWrong:'Adjon meg 18 év feletti születési dátumot!'
+            })
             return;
+        } else {
+            this.setState({
+            usernameWrong:'',
+            passwordWrong:'',
+            passwordAuthWrong:'',
+            emailWrong:'',
+            birthDateWrong:''
+        })
         }
 
         const dbData = {
@@ -79,14 +105,20 @@ export default class Register extends Component<{}, State> {
             passwordAuthInput: '',
             emailInput: '',
             birthDateInput: '', //format is not right for Date type.
-            users: []
+            users: [],
+            usernameWrong:'',
+            passwordWrong:'',
+            emailWrong:'',
+            birthDateWrong:''
         })
 
         await this.loadUsers();
     };
 
     render() {
-        const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput } = this.state;
+        const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput, usernameWrong, passwordWrong, emailWrong, birthDateWrong,passwordAuthWrong } = this.state;
+        const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        const usernameReg = /^(?=.{7,12}$)[a-zA-Z]+\d+$/; //not working ):
         return <><section className="vh-200">
             <div className="container h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
@@ -96,27 +128,29 @@ export default class Register extends Component<{}, State> {
                                 <div className="row justify-content-center">
                                     <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                                         <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Regisztráció</p>
-                                        <form className="mx-1 mx-md-4 needs-validation" noValidate>
+                                        <form className="mx-1 mx-md-4">
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
                                                 <label className="form-label" htmlFor="form3Example1c">Felhasználónév</label>
-                                                    <input type="text" id="form3Example1c" className="form-control" value={usernameInput} required onChange={e => this.setState({ usernameInput: e.currentTarget.value })} />
-                                                    <label htmlFor="form3Example1c">error</label>
+                                                    <input type="text" id="form3Example1c" className="form-control" value={usernameInput}onChange={e => this.setState({ usernameInput: e.currentTarget.value })} />
+                                                    {(usernameInput.length < 3 && !usernameReg.test(usernameInput)) ? <label htmlFor="form3Example1c" className="form-label label-valid">{usernameWrong}</label> : <img className="checkmark" src={'check-mark.png'}/>}
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
                                                     <label className="form-label" htmlFor="form3Example3c">Email</label>
-                                                    <input type="email" id="form3Example3c" className="form-control" value={emailInput} required onChange={e => this.setState({ emailInput: e.currentTarget.value })} />
+                                                    <input type="email" id="form3Example3c" className="form-control" value={emailInput} onChange={e => this.setState({ emailInput: e.currentTarget.value })} />
+                                                    {!emailReg.test(emailInput) ? <label htmlFor="form3Example1c" className="form-label label-valid">{emailWrong}</label> : <img className="checkmark" src={'check-mark.png'}/>}
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
                                                 <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                 <div className="form-outline flex-fill mb-0">
                                                     <label className="form-label" htmlFor="form3Example4c">Jelszó</label>
-                                                    <input type="password" id="form3Example4c" className="form-control" value={passwordInput} required onChange={e => this.setState({ passwordInput: e.currentTarget.value })} />
+                                                    <input type="password" id="form3Example4c" className="form-control" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })} />
+                                                    {passwordInput.length < 6 ? <label htmlFor="form3Example1c" className="form-label label-valid">{passwordWrong}</label> : <img className="checkmark" src={'check-mark.png'}/>}
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
@@ -124,6 +158,7 @@ export default class Register extends Component<{}, State> {
                                                 <div className="form-outline flex-fill mb-0">
                                                     <label className="form-label" htmlFor="form3Example4cd">Jelszó újra</label>
                                                     <input type="password" id="form3Example4cd" className="form-control" value={passwordAuthInput} required onChange={e => this.setState({ passwordAuthInput: e.currentTarget.value })} />
+                                                    {passwordAuthInput !== passwordInput && passwordAuthInput.length < 3 ? <label htmlFor="form3Example1c" className="form-label label-valid">{passwordAuthWrong}</label> : <img className="checkmark" src={'check-mark.png'}/>} 
                                                 </div>
                                             </div>
                                             <div className="d-flex flex-row align-items-center mb-4">
