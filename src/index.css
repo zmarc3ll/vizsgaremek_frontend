@@ -102,3 +102,15 @@ button.btn-success {
 .react-calendar__tile--active:enabled:focus {
   background-color: #0069d9;
 }
+
+.checkmark{
+  height: 1rem;
+  width: 1rem;
+  margin-left: 0.5rem;
+}
+
+label.label-valid {
+  color: red;
+}
+
+
