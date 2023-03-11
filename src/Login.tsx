@@ -34,9 +34,8 @@ export default class Login extends Component {
                                             Emlékezz rám
                                         </label>
                                     </div>
-                                    <a href="#!" className="text-body">Elfelejtette a jelszót?</a>
+                                    <p className="text-body"><em>Üdvözöljük!</em></p>
                                 </div>
-
                                 <div className="text-center text-lg-start mt-4 pt-2">
                                     <button className="btn btn-success btn-lg" type="submit" role="button" aria-pressed="false">Bejelentkezés</button>
                                     <p className="small fw-bold mt-2 pt-1 mb-0">Nincs fiókja? <Link to={'/register'} className="link-danger">Regisztrálok</Link></p>
