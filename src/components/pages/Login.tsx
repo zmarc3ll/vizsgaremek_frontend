@@ -16,7 +16,7 @@ export default class Login extends Component {
                                 </div>
 
                                 <div className="form-outline mb-4">
-                                    <input type="email" id="form3Example3" className="form-control form-control-lg"
+                                    <input type="text" id="form3Example3" className="form-control form-control-lg"
                                         placeholder="Adja meg a felhsználónevét" />
                                     <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
                                 </div>

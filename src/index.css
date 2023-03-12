@@ -113,4 +113,10 @@ label.label-valid {
   color: red;
 }
 
+#footerLogo {
+  height:10rem;
+  width: 13rem;
+  margin: auto;
+  display: block;
+}
 

@@ -3,10 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import './App.css';
 import { Link, Route, Routes } from 'react-router-dom';
-import Main from './Main';
-import Login from './Login';
-import Register from './Register';
-import Calendar from './Calendar';
+import Main from './components/pages/Main';
+import Login from './components/pages/Login';
+import Register from './components/pages/Register';
+import Calendar from './components/pages/Calendar';
 
 class App extends Component {
 
@@ -61,13 +61,10 @@ class App extends Component {
           <div className="container text-center text-md-start mt-5">
             <div className="row mt-3">
               <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold mb-4">
+                <h6 className="text-uppercase fw-bold mb-4 text-center">
                   <i className="fas fa-gem me-3"></i>TeAutod.hu
                 </h6>
-                <p>
-                  Here you can use rows and columns to organize your footer content. Lorem ipsum
-                  dolor sit amet, consectetur adipisicing elit.
-                </p>
+                <Link to={'/'}><img src={'TeAutod.hu.png'} alt="TeAutod.hu" title="TeAutod.hu" className='img-fluid' id='footerLogo' /></Link>
               </div>
               <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">
@@ -88,19 +85,19 @@ class App extends Component {
               </div>
               <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">
-                  Useful links
+                  Partnerek
                 </h6>
                 <p>
-                  <a href="#!" className="text-reset">Pricing</a>
+                  <a href="#!" className="text-reset">Partner1</a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">Settings</a>
+                  <a href="#!" className="text-reset">Partner2</a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">Orders</a>
+                  <a href="#!" className="text-reset">Partner3</a>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">Help</a>
+                  <a href="#!" className="text-reset">Partner4</a>
                 </p>
               </div>
               <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
