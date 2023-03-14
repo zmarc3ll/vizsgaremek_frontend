@@ -33,25 +33,25 @@ const CalendarComponent: React.FC = () => {
   }, []);
 
   return (
-    <input type='datetime-local' />
-    /*
-    <DatePicker
-      selected={startDate}
-      onChange={(date: Date) => setStartDate(date)}
-      showTimeSelect
-      dateFormat="yyyy-MM-dd HH:mm"
-      minDate={new Date('2023-03-14')}
-      maxDate={new Date('2023-09-14')}
-      minTime={new Date('1970-01-01T08:00')}
-      maxTime={new Date('1970-01-01T19:59')}
-      timeFormat="HH:mm"
-      timeIntervals={60}
-      highlightDates={myLabels}
-      excludeTimes={myInvalid.map((invalid) => {
-        return { start: invalid.start, end: invalid.end };
-      })}
-    />
-    */
+    <body id='undoBlockContent'>
+      <input type='datetime-local' />
+      {/* <DatePicker
+        selected={startDate}
+        onChange={(date: Date) => setStartDate(date)}
+        showTimeSelect
+        dateFormat="yyyy-MM-dd HH:mm"
+        minDate={new Date('2023-03-14')}
+        maxDate={new Date('2023-09-14')}
+        minTime={new Date('1970-01-01T08:00')}
+        maxTime={new Date('1970-01-01T19:59')}
+        timeFormat="HH:mm"
+        timeIntervals={60}
+        highlightDates={myLabels}
+        excludeTimes={myInvalid.map((invalid) => {
+          return { start: invalid.start, end: invalid.end };
+        })}
+      /> */}
+    </body>
   );
 };
 
