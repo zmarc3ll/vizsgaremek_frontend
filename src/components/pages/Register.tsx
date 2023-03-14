@@ -7,7 +7,7 @@ interface State {
     passwordInput: string;
     passwordAuthInput: string;
     emailInput: string;
-    birthDateInput: string; //temporarily string but actually Date
+    birthDateInput: string;
     usernameWrong: string;
     passwordWrong: string;
     passwordAuthWrong: string;
@@ -48,7 +48,6 @@ export default class Register extends Component<{}, State> {
             birthDateWrong: '',
         }
     }
-
 
     async loadUsers() {
         let response = await fetch('http://localhost:3001/user');
@@ -206,7 +205,7 @@ export default class Register extends Component<{}, State> {
                                                 </div>
                                                 <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                                    {/* <Link to={'/login'}> */}
-                                                    {isValid ? <Link to={'/login'}><button type="submit" className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button></Link> : <button type="submit" disabled className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button>}
+                                                    {isValid ? <button type="submit" className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button> : <button type="submit" disabled className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button>}
                                                     {/* </Link> */}
                                                 </div>
 
