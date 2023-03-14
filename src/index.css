@@ -9,7 +9,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-top: 90px;
 }
 
 code {
@@ -116,7 +115,17 @@ label.label-valid {
 #footerLogo {
   height:10rem;
   width: 13rem;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   display: block;
+}
+
+#undoBlockContent { 
+  padding-top:90px;
+}
+
+.carousel{
+  padding-top: 60px;
+  box-shadow: #d2d2d2 1px 1px 10px 2px;
 }
 
