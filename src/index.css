@@ -129,3 +129,8 @@ label.label-valid {
   box-shadow: #d2d2d2 1px 1px 10px 2px;
 }
 
+.invalid-feedback {
+  display: block;
+  font-size: 1rem;
+  color: #ff0019;
+}
