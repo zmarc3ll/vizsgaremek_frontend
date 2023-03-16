@@ -72,7 +72,7 @@ export default class Register extends Component<{}, State> {
                 passwordWrong: 'Adjon meg érvényes jelszót!',
                 passwordAuthWrong: 'A két jelszónak egyeznie kell!',
                 emailWrong: 'Adjon meg érvényes email címet!',
-                birthDateWrong: 'A regisztrációhoz el kell mulia 18 évesnek!',
+                birthDateWrong: 'Csak a 18. életévüket betöltött felhasználók regisztrálhatnak!',
             })
             return;
         } else {
