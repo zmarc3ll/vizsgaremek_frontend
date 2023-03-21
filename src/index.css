@@ -9,6 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
 }
 
 code {
@@ -115,9 +116,6 @@ label.label-valid {
 #footerLogo {
   height:10rem;
   width: 13rem;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
 }
 
 #undoBlockContent { 
@@ -134,3 +132,25 @@ label.label-valid {
   font-size: 1rem;
   color: #ff0019;
 }
+
+#exampleImg {
+  border-radius: 45px;
+  width: 90%;
+  height: 90%;
+}
+
+#homeRegisterCard {
+  width: 50%;
+}
+
+#reasonGallery {
+  width: 70%;
+}
+
+#garageContainer {
+ width: 80%;
+}
+
+#carDataList {
+  list-style-image: url("/public/carList.png");
+ }
