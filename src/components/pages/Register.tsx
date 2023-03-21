@@ -143,12 +143,12 @@ export default class Register extends Component<{}, State> {
                                             <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                                                 <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Regisztráció</p>
                                                 <> {(() => {
-                                                        if (usernameWrong === '' || emailWrong === '' || passwordWrong === '' || passwordAuthWrong === '' || birthDateWrong === '') {
-                                                            isValid = true
-                                                        } else {
-                                                            isValid = false;
-                                                        }
-                                                    })()}</>
+                                                    if (usernameWrong === '' || emailWrong === '' || passwordWrong === '' || passwordAuthWrong === '' || birthDateWrong === '') {
+                                                        isValid = true
+                                                    } else {
+                                                        isValid = false;
+                                                    }
+                                                })()}</>
                                                 <form className="mx-1 mx-md-4" onSubmit={this.handleUpload}>
                                                     <div className="d-flex flex-row align-items-center mb-4">
                                                         <i className="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -193,18 +193,53 @@ export default class Register extends Component<{}, State> {
                                                         <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" htmlFor="form3Example4cd">Születési dátum</label>
-                                                            <input type="date" id="form3Example4cd" className="form-control" value={birthDateInput} required onInput={this.handleValidation} onChange={e => this.setState({ birthDateInput: e.currentTarget.value})} />
+                                                            <input type="date" id="form3Example4cd" className="form-control" value={birthDateInput} required onInput={this.handleValidation} onChange={e => this.setState({ birthDateInput: e.currentTarget.value })} />
                                                             {new Date(birthDateInput).getFullYear() <= new Date().getFullYear() - 18 ? <img className="checkmark" src={'check-mark.png'} /> : <label htmlFor="form3Example4cd" className="form-label label-valid">{birthDateWrong}</label>}
                                                         </div>
                                                     </div>
                                                     <div className="form-check d-flex justify-content-center mb-5">
-                                                        <input className="form-check-input me-2" type="checkbox" required value="" id="form2Example3c" onClick={this.handleValidation} />
+                                                        <input className="form-check-input me-2" type="checkbox" required value="" id="form2Example3c" />
                                                         <label className="form-check-label" htmlFor="form2Example3">
-                                                            Elfogadom a felhasználói feltételeket ( <a href="./tos.html">Terms of service</a> )
+                                                            Elfogadom a felhasználói feltételeket ( <a href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Terms of service</a> )
                                                         </label>
+                                                        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                            <div className="modal-dialog">
+                                                                <div className="modal-content">
+                                                                    <div className="modal-header">
+                                                                        <h1 className="modal-title fs-5" id="staticBackdropLabel">Felhasználói feltételek</h1>
+                                                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div className="modal-body">
+                                                                        <p>1. <strong>Általános információk</strong> <br />
+                                                                            A TeAutód.hu weboldalának használata előfeltételezi az alábbi felhasználási feltételek elfogadását és betartását. A weboldal tulajdonosa a TeAutód Kft. (a továbbiakban: "Tulajdonos"). <br />
+                                                                            A weboldal célja a járművek vásárlásával és értékesítésével kapcsolatos információk, termékek és szolgáltatások megjelenítése és közvetítése.<br />
+                                                                            <br />
+                                                                            2. <strong>Regisztráció</strong><br />
+                                                                            A TeAutód.hu weboldalának használatához regisztráció szükséges. A regisztráció során megadott adatoknak valósak és pontosak kell lenniük. A regisztrációval a felhasználó elfogadja az adatvédelmi szabályzatot is.<br />
+                                                                            <br />
+                                                                            A regisztrált felhasználók felelősek a felhasználónevük és jelszavuk biztonságáért, és kötelesek azokat bizalmasan kezelni.<br />
+                                                                            <br />
+                                                                            3. <strong>Tartalom és szerzői jogok</strong><br />
+                                                                            A TeAutód.hu weboldalon található minden tartalom, például szöveg, kép, hang, videó, grafika, stb. az oldal tulajdonát képezi, vagy a jogtulajdonos engedélyével került felhasználásra. A tartalom bármely formában történő felhasználása és terjesztése kizárólag a Tulajdonos előzetes írásbeli engedélyével lehetséges.<br />
+                                                                            <br />
+                                                                            4. <strong>Felhasználói magatartás</strong><br />
+                                                                            A TeAutód.hu weboldalon történő használat során a felhasználónak tilos bármilyen jogellenes, trágár, fenyegető, zaklató, rágalmazó vagy obszcén anyagot közzétenni vagy terjeszteni, harmadik személyek jogait megsérteni, vagy a weboldal működését akadályozni vagy zavarni.<br />
+                                                                            <br />
+                                                                            5. <strong>Adatvédelem</strong><br />
+                                                                            A TeAutód.hu weboldal adatvédelmi szabályzata az oldalon található, és az adatkezeléssel kapcsolatos részleteket tartalmazza.<br />
+                                                                            <br />
+                                                                            6. <strong>Felelősség</strong><br />
+                                                                            A TeAutód.hu weboldal fenntartja a jogot a változtatásokra, a weboldal tartalmának módosítására, vagy akár az oldal teljes leállására!</p><br />
+                                                                    </div>
+                                                                    <div className="modal-footer">
+                                                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Bezár</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                       {/* <Link to={'/login'}> */}
+                                                        {/* <Link to={'/login'}> */}
                                                         {isValid ? <button type="submit" className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button> : <button type="submit" disabled className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button>}
                                                         {/* </Link> */}
                                                     </div>
