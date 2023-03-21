@@ -100,16 +100,16 @@ export default class Login extends Component<{}, ILoginState> {
                   <h2 className="text-center fw-bold mx-1 mb-3 pt-2">Belépés</h2>
                 </div>
                 <div className="form-outline mb-4">
+                <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
                   <input type="text" id="form3Example3" className="form-control form-control-lg"
                     placeholder="Adja meg a felhsználónevét" value={this.state.username}
                     onChange={this.handleUsernameChange} />
-                  <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
                 </div>
                 <div className="form-outline mb-3">
+                <label className="form-label" htmlFor="form3Example4">Jelszó</label>
                   <input type="password" id="form3Example4" className="form-control form-control-lg"
                     placeholder="Adja meg a jelszót" value={this.state.password}
                     onChange={this.handlePasswordChange} />
-                  <label className="form-label" htmlFor="form3Example4">Jelszó</label>
                   {this.state.errors.password && (
                     <div className="invalid-feedback">{this.state.errors.password}</div>
                   )}
