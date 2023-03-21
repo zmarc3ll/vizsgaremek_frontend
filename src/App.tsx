@@ -7,118 +7,25 @@ import Main from './components/pages/Main';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Calendar from './components/pages/Calendar';
+import NavbarComponent from './components/Navbar-component';
+import FooterComponent from './components/Footer-component';
+import Garage from './components/pages/Garage';
 
 class App extends Component {
-
+  
   render() {
     return <div>
-      <nav className="navbar navbar-expand-sm bg-light fixed-top">
-        <div className="container-fluid">
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link to={'/'} className="nav-link active" aria-current="page">Főoldal</Link>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Garázs</a>
-              </li>
-              <li className="nav-item">
-                <Link to='./calendar' className="nav-link">Naptár</Link>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Rólunk</a>
-              </li>
-            </ul>
-            <ul className="navbar-nav ms-auto">
-              <div className="btn-group dropstart">
-                <button type="button" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img className="img-fluid img-thumbnail nav-item" src={'bxs-user-circle.png'} alt="userProfile" title="User" />
-                </button>
-                <ul className="dropdown-menu">
-                  <li><h6 className="dropdown-header">Profil</h6></li>
-                  <li><Link to='/login' className="dropdown-item">Belépés</Link></li>
-                  <li><Link to='/register' className="dropdown-item">Regisztráció</Link></li>
-                  <li><a className="dropdown-item" href="#">Profil szerkesztése</a></li>
-                </ul>
-              </div>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <NavbarComponent></NavbarComponent>
       <main>
         <Routes>
           <Route path='/' element={<Main />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/calendar' element={<Calendar />} />
+          <Route path='/garage' element={<Garage />} />
         </Routes>
       </main>
-      <footer className="text-center text-lg-start text-muted footer">
-        <section className="">
-          <div className="container text-center text-md-start mt-5">
-            <div className="row mt-3">
-              <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold mb-4 text-center">
-                  <i className="fas fa-gem me-3"></i>TeAutod.hu
-                </h6>
-                <Link to={'/'}><img src={'TeAutod.hu.png'} alt="TeAutod.hu" title="TeAutod.hu" className='img-fluid' id='footerLogo' /></Link>
-              </div>
-              <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold mb-4">
-                  Oldalak
-                </h6>
-                <p>
-                  <Link to={'/'} className="text-reset">Főoldal</Link>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">Garázs</a>
-                </p>
-                <p>
-                  <Link to='./calendar' className="text-reset">Naptár</Link>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">Rólunk</a>
-                </p>
-              </div>
-              <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold mb-4">
-                  Partnerek
-                </h6>
-                <p>
-                  <a href="#!" className="text-reset">Partner1</a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">Partner2</a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">Partner3</a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">Partner4</a>
-                </p>
-              </div>
-              <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                <h6 className="text-uppercase fw-bold mb-4">Kapcsolat</h6>
-                <p><i className="fas fa-home me-3"></i> Budapest, 14.kerület, HU</p>
-                <p>
-                  <i className="fas fa-envelope me-3"></i>
-                  teautod@example.com
-                </p>
-                <p><i className="fas fa-phone me-3"></i> + 01 234 567 88</p>
-                <p><i className="fas fa-print me-3"></i> + 01 234 567 89</p>
-              </div>
-            </div>
-          </div>
-        </section>
-        <div className="text-center p-4">
-          © 2023 Copyright:
-          <Link to={'/'} className="text-reset fw-bold">TeAutod.hu</Link>
-        </div>
-      </footer>
-
+      <FooterComponent></FooterComponent>
       {/*  <h2>Új user felvétele</h2>
     Username: <input type="text" value={usernameInput} onChange={e => this.setState({ usernameInput: e.currentTarget.value})} /> <br />
     Jelszó: <input type="text" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })}/> <br />
