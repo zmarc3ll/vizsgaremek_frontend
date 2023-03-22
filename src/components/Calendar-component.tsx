@@ -1,58 +1,94 @@
-import React, { useMemo, useState } from 'react';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useState } from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { EventInput } from '@fullcalendar/common';
 
+const MyCalendar = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
+  const [events, setEvents] = useState<EventInput[]>([]);
 
-const CalendarComponent: React.FC = () => {
-  const [startDate, setStartDate] = useState(new Date());
+  const handleDateSelect = (selectInfo: any) => {
+    setStart(selectInfo.startStr);
+    setEnd(selectInfo.endStr);
+    setShowModal(true);
+  };
 
-  const myLabels = useMemo(() => {
-    return [
-      {
-        date: new Date('2023-03-14'),
-        textColor: '#e1528f',
-        title: '4 SPOTS',
-      },
-    ];
-  }, []);
+  const handleModalClose = () => {
+    setShowModal(false);
+    setTitle('');
+    setStart('');
+    setEnd('');
+  };
 
-  const myInvalid = useMemo(() => {
-    return [
-      {
-        start: new Date('2023-03-14T08:00'),
-        end: new Date('2023-03-14T13:00'),
-      },
-      {
-        start: new Date('2023-03-14T15:00'),
-        end: new Date('2023-03-14T17:00'),
-      },
-      {
-        start: new Date('2023-03-14T19:00'),
-        end: new Date('2023-03-14T20:00'),
-      },
-    ];
-  }, []);
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const newEvent = {
+      title,
+      start,
+      end,
+    };
+    setEvents([...events, newEvent]);
+    handleModalClose();
+  };
+  const eventSource = { events };
 
   return (
-    <body id='undoBlockContent'>
-      <input type='datetime-local' />
-      {/* <DatePicker
-        selected={startDate}
-        onChange={(date: Date) => setStartDate(date)}
-        showTimeSelect
-        dateFormat="yyyy-MM-dd HH:mm"
-        minDate={new Date('2023-03-14')}
-        maxDate={new Date('2023-09-14')}
-        minTime={new Date('1970-01-01T08:00')}
-        maxTime={new Date('1970-01-01T19:59')}
-        timeFormat="HH:mm"
-        timeIntervals={60}
-        highlightDates={myLabels}
-        excludeTimes={myInvalid.map((invalid) => {
-          return { start: invalid.start, end: invalid.end };
-        })}
-      /> */}
-    </body>
+    <div>
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        initialView="dayGridMonth"
+        selectable={true}
+        events={[eventSource]}
+        select={handleDateSelect}
+      />
+      {showModal && (
+        <div className="modal" style={{ display: 'block' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <form onSubmit={handleFormSubmit}>
+                <div className="modal-header">
+                  <h5 className="modal-title">Add Event</h5>
+                  <button type="button" className="btn-close" aria-label="Close" onClick={handleModalClose}></button>
+                </div>
+                <div className="modal-body">
+                  <div className="form-group">
+                    <label>Title</label>
+                    <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                  </div>
+                  <div className="form-group">
+                    <label>Start</label>
+                    <input type="datetime-local" className="form-control" value={start} onChange={(e) => setStart(e.target.value)} required />
+                  </div>
+                  <div className="form-group">
+                    <label>End</label>
+                    <input type="datetime-local" className="form-control" value={end} onChange={(e) => setEnd(e.target.value)} required />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="submit" className="btn btn-primary">Save</button>
+                  <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      <ul>
+        {events.map((event, index) => (
+          <li key={index}>
+            <div>{event.title}</div>
+            <div>{event.start && event.start.toString()}</div>
+            <div>{event.end && event.end.toString()}</div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
-export default CalendarComponent;
+export default MyCalendar;
