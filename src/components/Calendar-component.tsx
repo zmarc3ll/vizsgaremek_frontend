@@ -38,56 +38,62 @@ const MyCalendar = () => {
   const eventSource = { events };
 
   return (
-    <div>
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        selectable={true}
-        events={[eventSource]}
-        select={handleDateSelect}
-      />
-      {showModal && (
-        <div className="modal" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <form onSubmit={handleFormSubmit}>
-                <div className="modal-header">
-                  <h5 className="modal-title">Add Event</h5>
-                  <button type="button" className="btn-close" aria-label="Close" onClick={handleModalClose}></button>
-                </div>
-                <div className="modal-body">
-                  <div className="form-group">
-                    <label>Title</label>
-                    <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
+    <body id='undoBlockContent'>
+      <div className="card ms-5 me-5">
+        <div className="card-body">
+          <div className='container-fluid'>
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                selectable={true}
+                events={[eventSource]}
+                select={handleDateSelect}
+              />
+            {showModal && (
+              <div className="modal" style={{ display: 'block' }}>
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <form onSubmit={handleFormSubmit}>
+                      <div className="modal-header">
+                        <h5 className="modal-title">Esemény hozzáadása</h5>
+                        <button type="button" className="btn-close" aria-label="Close" onClick={handleModalClose}></button>
+                      </div>
+                      <div className="modal-body">
+                        <div className="form-group">
+                          <label>Title</label>
+                          <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                        </div>
+                        <div className="form-group">
+                          <label>Start</label>
+                          <input type="datetime-local" className="form-control" value={start} onChange={(e) => setStart(e.target.value)} required />
+                        </div>
+                        <div className="form-group">
+                          <label>End</label>
+                          <input type="datetime-local" className="form-control" value={end} onChange={(e) => setEnd(e.target.value)} required />
+                        </div>
+                      </div>
+                      <div className="modal-footer">
+                        <button type="submit" className="btn btn-primary">Save</button>
+                        <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Cancel</button>
+                      </div>
+                    </form>
                   </div>
-                  <div className="form-group">
-                    <label>Start</label>
-                    <input type="datetime-local" className="form-control" value={start} onChange={(e) => setStart(e.target.value)} required />
-                  </div>
-                  <div className="form-group">
-                    <label>End</label>
-                    <input type="datetime-local" className="form-control" value={end} onChange={(e) => setEnd(e.target.value)} required />
-                  </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="submit" className="btn btn-primary">Save</button>
-                  <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Cancel</button>
-                </div>
-              </form>
-            </div>
+              </div>
+            )}
+            <ul>
+              {events.map((event, index) => (
+                <li key={index}>
+                  <div>{event.title}</div>
+                  <div>{event.start && event.start.toString()}</div>
+                  <div>{event.end && event.end.toString()}</div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      )}
-      <ul>
-        {events.map((event, index) => (
-          <li key={index}>
-            <div>{event.title}</div>
-            <div>{event.start && event.start.toString()}</div>
-            <div>{event.end && event.end.toString()}</div>
-          </li>
-        ))}
-      </ul>
-    </div>
+      </div>
+    </body>
   );
 };
 
