@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { EventInput } from '@fullcalendar/common';
+import { NONAME } from 'dns';
 
 const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -42,13 +43,13 @@ const MyCalendar = () => {
       <div className="card ms-5 me-5">
         <div className="card-body">
           <div className='container-fluid'>
-              <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
-                selectable={true}
-                events={[eventSource]}
-                select={handleDateSelect}
-              />
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
+              selectable={true}
+              events={[eventSource]}
+              select={handleDateSelect}
+            />
             {showModal && (
               <div className="modal" style={{ display: 'block' }}>
                 <div className="modal-dialog">
@@ -60,8 +61,14 @@ const MyCalendar = () => {
                       </div>
                       <div className="modal-body">
                         <div className="form-group">
-                          <label>Title</label>
-                          <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                          <label htmlFor='selectEvent'>Válasszon eseményt</label>
+                          <select name='selectEvent' className='form-control' onChange={(e) => setTitle(e.target.value)} required >
+                            <option hidden>Válasszon az alábbiak közül</option>
+                            <option value="Tankolás">Tankolás</option>
+                            <option value="Büntetés">Büntetés</option>
+                            <option value="Biztosítás">Biztosítás</option>
+                            <option value="Szervíz">Szervíz</option>
+                          </select>
                         </div>
                         <div className="form-group">
                           <label>Start</label>
@@ -81,15 +88,17 @@ const MyCalendar = () => {
                 </div>
               </div>
             )}
-            <ul>
-              {events.map((event, index) => (
-                <li key={index}>
-                  <div>{event.title}</div>
-                  <div>{event.start && event.start.toString()}</div>
-                  <div>{event.end && event.end.toString()}</div>
-                </li>
-              ))}
-            </ul>
+          </div>
+        </div>
+      </div>
+      <div className="container-fluid">
+        <div className="card ms-4 me-4 mt-4 ">
+          <div className="card-body text-center">
+            {events.map((event, index) => (
+              <div key={index}>
+                <p><strong>{event.title}:</strong> {event.start && event.start.toString()} {event.end && event.end.toString()}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
