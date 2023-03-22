@@ -10,6 +10,7 @@ import Calendar from './components/pages/Calendar';
 import NavbarComponent from './components/Navbar-component';
 import FooterComponent from './components/Footer-component';
 import Garage from './components/pages/Garage';
+import AboutUs from './components/pages/AboutUs';
 
 class App extends Component {
   
@@ -23,6 +24,7 @@ class App extends Component {
           <Route path='/register' element={<Register />} />
           <Route path='/calendar' element={<Calendar />} />
           <Route path='/garage' element={<Garage />} />
+          <Route path='/aboutus' element={<AboutUs />} />
         </Routes>
       </main>
       <FooterComponent></FooterComponent>
