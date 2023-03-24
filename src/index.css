@@ -49,60 +49,6 @@ button.btn-success {
   box-shadow: #d2d2d2 1px 1px 10px 2px;
 }
 
-.calendar-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.calendar {
-  width: 350px;
-  max-width: 100%;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  color: #333;
-}
-
-.react-calendar__navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1em;
-}
-
-.react-calendar__navigation__label {
-  font-weight: bold;
-}
-
-.react-calendar__navigation__arrow {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #999;
-  cursor: pointer;
-}
-
-.react-calendar__navigation__arrow:hover {
-  color: #333;
-}
-
-.react-calendar__tile--now {
-  background-color: #ccc;
-}
-
-.react-calendar__tile--active {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.react-calendar__tile--active:enabled:hover,
-.react-calendar__tile--active:enabled:focus {
-  background-color: #0069d9;
-}
-
 .checkmark{
   height: 1rem;
   width: 1rem;
