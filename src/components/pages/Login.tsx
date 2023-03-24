@@ -1,4 +1,5 @@
 import { render } from "@testing-library/react";
+import axios from "axios";
 import { Component, FormEvent } from "react";
 import { Link } from "react-router-dom";
 
@@ -72,7 +73,25 @@ export default class Login extends Component<{}, ILoginState> {
       localStorage.setItem("accessToken", accessToken);
       // Redirect to dashboard or home page
       window.location.href = "/";
-      console.log('Üdvözöljük!')
+      console.log('Üdvözöljük!');
+      // Handle login form submission
+      const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const loginData = {
+          username: formData.get('username') as string,
+          password: formData.get('password') as string,
+        };
+        axios.post('http://localhost:3001/auth/login', loginData)
+          .then(response => {
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            setIsLoggedIn(true);
+          })
+          .catch(error => {
+            // handle error
+          });
+      };
     } else if (response.status === 401) {
       this.setState({
         errors: {
@@ -100,13 +119,13 @@ export default class Login extends Component<{}, ILoginState> {
                   <h2 className="text-center fw-bold mx-1 mb-3 pt-2">Belépés</h2>
                 </div>
                 <div className="form-outline mb-4">
-                <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
+                  <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
                   <input type="text" id="form3Example3" className="form-control form-control-lg"
                     placeholder="Adja meg a felhsználónevét" value={this.state.username}
                     onChange={this.handleUsernameChange} />
                 </div>
                 <div className="form-outline mb-3">
-                <label className="form-label" htmlFor="form3Example4">Jelszó</label>
+                  <label className="form-label" htmlFor="form3Example4">Jelszó</label>
                   <input type="password" id="form3Example4" className="form-control form-control-lg"
                     placeholder="Adja meg a jelszót" value={this.state.password}
                     onChange={this.handlePasswordChange} />
@@ -136,4 +155,8 @@ export default class Login extends Component<{}, ILoginState> {
 
   }
 
+}
+
+function setIsLoggedIn(arg0: boolean) {
+  throw new Error("Function not implemented.");
 }
