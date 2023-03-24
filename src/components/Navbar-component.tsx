@@ -24,18 +24,17 @@ const NavbarComponent: React.FC = () => {
 
 
 const handleLogout = async () => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('token');
   if (token === null) return;
-
   try {
-    const response = await axios.delete('http://localhost:3001/auth/logout', {
+    const response = await axios.get('http://localhost:3001/login', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     });
 
     if (response.status === 204) {
-      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
       window.location.href = "/";
     }
   } catch (error) {
@@ -72,7 +71,6 @@ return (
                   <li><h6 className="dropdown-header">Profil</h6></li>
                   <li><Link to='/login' className="dropdown-item">Belépés</Link></li>
                   <li><Link to='/register' className="dropdown-item">Regisztráció</Link></li>
-                  <li><a className="dropdown-item" href="#">Profil szerkesztése</a></li>
                   <li><Link to={'/'} className="dropdown-item" onClick={handleLogout} >Kijelentkezés</Link></li>
                 </ul>
               </div>
