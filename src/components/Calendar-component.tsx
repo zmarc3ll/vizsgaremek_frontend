@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { EventInput } from '@fullcalendar/common';
-import { NONAME } from 'dns';
+import huLocale from '@fullcalendar/core/locales/hu';
 
 const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -49,6 +49,8 @@ const MyCalendar = () => {
               selectable={true}
               events={[eventSource]}
               select={handleDateSelect}
+              locale={huLocale}
+              locales={[huLocale]}
             />
             {showModal && (
               <div className="modal" style={{ display: 'block' }}>
