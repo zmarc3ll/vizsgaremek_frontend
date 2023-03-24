@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 interface ILoginState {
   username: string;
   password: string;
-  rememberMe: boolean;
   errors: {
     username: string;
     password: string;
@@ -20,7 +19,6 @@ export default class Login extends Component<{}, ILoginState> {
     this.state = {
       username: "",
       password: "",
-      rememberMe: false,
       errors: {
         username: "",
         password: "",
@@ -49,10 +47,6 @@ export default class Login extends Component<{}, ILoginState> {
     this.setState({ password, errors });
   };
 
-  handleRememberMeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ rememberMe: event.target.checked });
-  };
-
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -65,7 +59,6 @@ export default class Login extends Component<{}, ILoginState> {
       body: JSON.stringify({
         username: this.state.username,
         password: this.state.password,
-        rememberMe: this.state.rememberMe,
       }),
     });
     if (response.ok) {
@@ -134,12 +127,6 @@ export default class Login extends Component<{}, ILoginState> {
                   )}
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
-                  <div className="form-check mb-0">
-                    <input className="form-check-input me-2" type="checkbox" value="" id="form2Example3" onChange={this.handleRememberMeChange} />
-                    <label className="form-check-label" htmlFor="form2Example3">
-                      Emlékezz rám
-                    </label>
-                  </div>
                   <p className="text-body"><em>Üdvözöljük!</em></p>
                 </div>
                 <div className="text-center text-lg-start mt-4 pt-2">
