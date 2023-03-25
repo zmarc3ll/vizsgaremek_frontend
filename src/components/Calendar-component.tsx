@@ -64,8 +64,8 @@ const MyCalendar = () => {
                       <div className="modal-body">
                         <div className="form-group">
                           <label htmlFor='selectEvent'>Válasszon eseményt</label>
-                          <select name='selectEvent' className='form-control' onChange={(e) => setTitle(e.target.value)} required >
-                            <option hidden>Válasszon az alábbiak közül</option>
+                          <select name='selectEvent' className='form-select' onChange={(e) => setTitle(e.target.value)} required>
+                            <option hidden value={''}>Válasszon az alábbiak közül</option>
                             <option value="Tankolás">Tankolás</option>
                             <option value="Büntetés">Büntetés</option>
                             <option value="Biztosítás">Biztosítás</option>
