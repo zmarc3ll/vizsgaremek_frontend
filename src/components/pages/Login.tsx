@@ -62,8 +62,8 @@ export default class Login extends Component<{}, ILoginState> {
       }),
     });
     if (response.ok) {
-      const { accessToken } = await response.json();
-      localStorage.setItem("accessToken", accessToken);
+      const { token } = await response.json();
+      localStorage.setItem("accessToken", token);
       // Redirect to dashboard or home page
       window.location.href = "/";
       console.log('Üdvözöljük!');
