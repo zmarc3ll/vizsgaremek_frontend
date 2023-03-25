@@ -203,7 +203,7 @@ export default class Register extends Component<{}, State> {
                                                             Elfogadom a felhasználói feltételeket ( <a href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Terms of service</a> )
                                                         </label>
                                                         <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                            <div className="modal-dialog">
+                                                            <div className="modal-dialog modal-lg">
                                                                 <div className="modal-content">
                                                                     <div className="modal-header">
                                                                         <h1 className="modal-title fs-5" id="staticBackdropLabel">Felhasználói feltételek</h1>
