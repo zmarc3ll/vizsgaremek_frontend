@@ -52,7 +52,6 @@ export default class Register extends Component<{}, State> {
     async loadUsers() {
         let response = await fetch('http://localhost:3001/user');
         let data = await response.json() as UserListResponse;
-        console.log(data);
         this.setState({
             users: data.users,
         })
