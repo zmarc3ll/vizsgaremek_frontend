@@ -1,10 +1,43 @@
 import axios from "axios";
 import { Component } from "react";
 
+interface Car {
+    id: number;
+    brand: string;
+    model: string;
+    modelYear: number;
+    fuelType: string;
+    carPower: number;
+    gearType: string;
+    color: string;
+    chassisType: string;
+    doors: number;
+    fuelEconomy: string;
+    license_plate: string;
+    carPic: string;
+    givenName: string;
+}
+
 interface State {
     selectedFile: File | null;
     carPic: string;
-    loading: boolean;
+    givenNameInput: string;
+    brandInput: string;
+    modelInput: string;
+    modelYearInput: number;
+    fuelTypeInput: string;
+    carPowerInput: number;
+    gearTypeInput: string;
+    colorInput: string;
+    chassisTypeInput: string;
+    doorsInput: number;
+    fuelEconomyInput: string;
+    licensePlateInput: string;
+    cars: Car[];
+}
+
+interface carListResponse {
+    cars: Car[];
 }
 
 export default class Garage extends Component<{}, State> {
@@ -12,15 +45,85 @@ export default class Garage extends Component<{}, State> {
     state: State = {
         // Initially, no file is selected
         selectedFile: null,
-        carPic: "",
-        loading: true,
+        carPic: '',
+        givenNameInput: '',
+        brandInput: '',
+        modelInput: '',
+        modelYearInput: 0,
+        fuelTypeInput: '',
+        carPowerInput: 0,
+        gearTypeInput: '',
+        colorInput: '',
+        chassisTypeInput: '',
+        doorsInput: 0,
+        fuelEconomyInput: '',
+        licensePlateInput: '',
+        cars: [],
     };
+    async loadCars() {
+        let response = await fetch('http://localhost:3001/car');
+        let data = await response.json() as carListResponse;
+        this.setState({
+            cars: data.cars,
+        })
+    }
+
+    componentDidMount() {
+        this.loadCars();
+    }
+
+    handleUpload = async () => {
+        const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carPic } = this.state;
+        const dbData = {
+            brand: brandInput,
+            model: modelInput,
+            modelYear: modelYearInput,
+            fuelType: fuelTypeInput,
+            carPower: carPowerInput,
+            gearType: gearTypeInput,
+            color: colorInput,
+            chassisType: chassisTypeInput,
+            doors: doorsInput,
+            fuelEconomy: fuelEconomyInput,
+            license_plate: licensePlateInput,
+            givenName: givenNameInput,
+            carPic: carPic,
+        }
+
+        let response = await fetch('http://localhost:3001/car', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dbData),
+        });
+
+        this.setState({
+            givenNameInput: '',
+            brandInput: '',
+            modelInput: '',
+            modelYearInput: 0,
+            fuelTypeInput: '',
+            carPowerInput: 0,
+            gearTypeInput: '',
+            colorInput: '',
+            chassisTypeInput: '',
+            doorsInput: 0,
+            fuelEconomyInput: '',
+            licensePlateInput: '',
+            cars: [],
+            carPic:'',
+        })
+        await this.loadCars();
+    }
+
     onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // Update the state
         this.setState({ selectedFile: event.target.files?.[0] || null });
     };
 
-    onFileUpload = () => {
+
+     onFileUpload = () => {
         // Create an object of formData
         const formData = new FormData();
 
@@ -31,88 +134,129 @@ export default class Garage extends Component<{}, State> {
                 this.state.selectedFile,
                 this.state.selectedFile.name
             );
-
-            // Details of the uploaded file
-
-            // Request made to the backend api
-            // Send formData object
             axios.post("http://localhost:3001/uploadfile", formData).then((res) => {
                 // Set the carPic state to the filename returned by the server
-                this.setState({ carPic: res.data.carPic, loading: false });
+                this.setState({ carPic: res.data.carPic });
             }).catch((err) => {
                 console.log(err);
-                this.setState({ loading: false });
             });
-            this.setState({ loading: true });
         } else {
-            this.setState({ loading: false });
+            console.log('error');
         }
-    };
+    }; 
+
     render() {
-        return <body id="undoBlockContent">
-            <div className="container-fluid" id="garageContainer">
-                <div className="row">
-                    <div className="col-md-4 ps-4">
-                        <div className="card">
-                            {/* cars picture */}
-                            <div className="card-body">
-                                {this.state.loading ? (
-                                    <div>Loading...</div>
-                                ) : (
-                                    <img
-                                        src={`http://localhost:3001/uploadedFiles/cars/${this.state.carPic}`}
-                                        alt=""
-                                        className=" rounded shadow-lg bg-body ms-0 img-fluid"
-                                    />
-                                )}
-                                <div>
-                                    <input type="file" onChange={this.onFileChange} />
-                                    <button onClick={this.onFileUpload}>
-                                        Upload!
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="card mt-4">
-                            <div className="card-body">
-                                {/* cars details */}
-                                <h4 className={'text-center pb-2'}>Az autó adatai:</h4>
-                                <ul id="carDataList">
-                                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. </li>
-                                    <li>Deserunt, ut ducimus! Molestiae laboriosam, dolore rerum perspiciatis ducimus eaque inventore,</li>
-                                    <li>Dolor molestias quidem ex rerum similique, repellendus, ea amet doloribus obcaecati quas </li>
-                                    <li>Magnam earum inventore officia vero quo eos nemo provident molestias nostrum </li>
-                                    <li>Officiis voluptas molestias explicabo. Ut consequuntur omnis quas a doloribus deleniti </li>
-                                </ul>
-                            </div>
-                        </div>
+        const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput } = this.state;
+        const newAlbum =
+            <div className="col">
+                <div className="card">
+                    <img src={'http://localhost:3001/uploadedfiles/cars/${this.state.carPic'} alt="" className="bd-placeholder-img card-img-top" />
+                    <div className="card-body">
+                        <p className="card-text">
+                            autó neve, adatai...
+                        </p>
                     </div>
-                    {/* chart here */}
-                    <div className="col-md-8">
-                        <div className="card">
-                            <div className="card-body">
-                                <img src="https://picsum.photos/id/400/1200/340" alt="" className=" rounded shadow-lg bg-body ms-0 img-fluid" />
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div className="card mt-4">
-                                    <div className="card-body">
-                                        <img src="https://picsum.photos/id/301/400/300" alt="" className=" rounded shadow-lg bg-body ms-0 img-fluid" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="card mt-4">
-                                    <div className="card-body">
-                                        <img src="https://picsum.photos/id/302/400/300" alt="" className=" rounded shadow-lg bg-body ms-0 img-fluid" />
+                </div>
+            </div>
+
+        return <>
+            <body id="undoBlockContent">
+                <div className="container-fluid">
+                    <section className="text-center container">
+                        <h1 className="fw-light">Garázs</h1>
+                        <p className="lead text-muted"> Kezelje autóit, vagy vegyen fel újabbat!</p>
+                    </section>
+                    <div className="album py-5 bg-light">
+                        <div className="container">
+                            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                                {newAlbum}
+                                <div className="col ps-3 mt-5">
+                                    <div className="card">
+                                        <button type="button" className="btn btn-dark mt-5 ms-5 me-5 mb-5" data-bs-toggle="modal" data-bs-target="#addCarModal">+ Autó hozzáadása</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </body>
+                <div className="modal fade" id="addCarModal" aria-labelledby="addCarModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="addCarModalLabel">+ Autó hozzáadása</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <form className="form-control" onSubmit={this.handleUpload}>
+                                      <img src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`}
+                                        alt=""
+                                        className=" rounded shadow-lg bg-body ms-0 img-fluid"
+                                    /> 
+                                    <div>
+                                    <label htmlFor="carPic"><strong>Töltsön fel autójáról egy képet!</strong></label><br />
+                                        <input type="file" required onChange={this.onFileChange} id="carPic"/>
+                                         <button onClick={this.onFileUpload} className="btn btn-dark">
+                                            Feltöltés!
+                                        </button> 
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carName" className="form-label"><strong>Autó neve</strong></label>
+                                        <input type="text" className="form-control" id="carName" placeholder="Írja be az autója nevét" required value={givenNameInput} onChange={e => this.setState({ givenNameInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carBrand" className="form-label"><strong>Autó márkája</strong></label>
+                                        <input type="text" className="form-control" id="carBrand" placeholder="Írja be az autó márkáját" required value={brandInput} onChange={e => this.setState({ brandInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carType" className="form-label"><strong>Autó típusa</strong></label>
+                                        <input type="text" className="form-control" id="carType" placeholder="Írja be az autó típusát" required value={modelInput} onChange={e => this.setState({ modelInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carYear" className="form-label"><strong>Évjárat</strong></label>
+                                        <input type="number" className="form-control" id="carYear" placeholder="Írja be az autó évjáratát" value={modelYearInput} onChange={e => this.setState({ modelYearInput: e.currentTarget.valueAsNumber })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carFuel" className="form-label"><strong>Üzemanyag típusa</strong></label>
+                                        <input type="text" className="form-control" id="carFuel" placeholder="Írja be az autó üzemanyagának a típusát" required value={fuelTypeInput} onChange={e => this.setState({ fuelTypeInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carPower" className="form-label"><strong>Lóerő</strong></label>
+                                        <input type="number" className="form-control" id="carPower" placeholder="Írja be az autó lóerejét" required value={carPowerInput} onChange={e => this.setState({ carPowerInput: e.currentTarget.valueAsNumber })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carGear" className="form-label"><strong>Váltó típusa</strong></label>
+                                        <input type="text" className="form-control" id="carGear" placeholder="Írja be az autó váltójának típusát" required value={gearTypeInput} onChange={e => this.setState({ gearTypeInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carColor" className="form-label"><strong>Adja meg az autó színét</strong></label>
+                                        <input type="text" className="form-control" id="carColor" placeholder="Írja be az autó színét" value={colorInput} onChange={e => this.setState({ colorInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carChassis" className="form-label"><strong>Autó felépítése</strong> <i className="fw-lighter">(Pl.: szedán, kupé, stb...)</i></label>
+                                        <input type="text" className="form-control" id="carChassis" placeholder="Írja be az autó felépítését" value={chassisTypeInput} onChange={e => this.setState({ chassisTypeInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carDoors" className="form-label"><strong>Autó ajtainak száma</strong></label>
+                                        <input type="number" className="form-control" id="carDoors" placeholder="Írja be az autó ajtajainak számát" value={doorsInput} onChange={e => this.setState({ doorsInput: e.currentTarget.valueAsNumber })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carFuele" className="form-label"><strong>Autó fogyasztása</strong></label>
+                                        <input type="text" className="form-control" id="carFuele" placeholder="Írja be az autó fogyasztását" value={fuelEconomyInput} onChange={e => this.setState({ fuelEconomyInput: e.currentTarget.value })}/>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="carLicense" className="form-label"><strong>Autó rendszáma</strong></label>
+                                        <input type="text" className="form-control" id="carLicense" placeholder="Írja be az autó rendszámát" required value={licensePlateInput} onChange={e => this.setState({ licensePlateInput: e.currentTarget.value })}/>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Bezárás</button>
+                                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" onClick={this.handleUpload}>Mentés</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </body>
+        </>
     }
 }
