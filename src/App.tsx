@@ -9,8 +9,9 @@ import Register from './components/pages/Register';
 import Calendar from './components/pages/Calendar';
 import NavbarComponent from './components/Navbar-component';
 import FooterComponent from './components/Footer-component';
-import Garage from './components/pages/Garage';
+import GarageForCar from './components/pages/GarageForCar';
 import AboutUs from './components/pages/AboutUs';
+import Garage from './components/pages/Garage';
 
 class App extends Component {
   
