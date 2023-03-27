@@ -7,7 +7,7 @@ const NavbarComponent: React.FC = () => {
   const [userName, setUserName] = useState<string>('');
 
   // Check if the user is logged in
-   useEffect(() => {
+  useEffect(() => {
       const accessToken = localStorage.getItem('accessToken');
       if (accessToken) {
           setIsLoggedIn(true);
@@ -15,10 +15,10 @@ const NavbarComponent: React.FC = () => {
               headers: {
                   'Authorization': `Bearer ${accessToken}`
               }
-          }).then(response => {
-              setUserName(response.data.username);
+          }).then(async response => {
+              await setUserName(response.data[0].username);              
           }).catch(error => {
-              // error
+              console.log('Failed to get username')
           });
       }
   }, []);
@@ -37,16 +37,12 @@ const NavbarComponent: React.FC = () => {
       if (response.ok) {
         localStorage.removeItem('accessToken');
         setIsLoggedIn(false);
+        setUserName('');
       } else {
         console.log('Failed to logout')
       }
     }
-  }    
-    
-     /* const handleLogout = async () => {
-        localStorage.removeItem('accessToken');
-        setIsLoggedIn(false);
-  }   */ 
+  }     
 
   return (
     <nav className="navbar navbar-expand-sm bg-light fixed-top">
@@ -79,7 +75,10 @@ const NavbarComponent: React.FC = () => {
                 <img className="img-fluid img-thumbnail nav-item" src={'bxs-user-circle.png'} alt="userProfile" title="User" />
               </button>
               <ul className="dropdown-menu">
-                <li><h6 className="dropdown-header">{userName || 'Profil'}</h6></li>
+                {/* Display the username only when it is available */}
+              {userName && (
+                <li><h6 className="dropdown-header">{userName}</h6></li>
+              )}
                 {!isLoggedIn && (
                   <>
                     <li><Link to='/login' className="dropdown-item">Belépés</Link></li>
