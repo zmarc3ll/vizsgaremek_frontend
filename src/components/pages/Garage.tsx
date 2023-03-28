@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Component, ReactFragment } from "react";
+import { Component } from "react";
 
 interface Car {
-    id: number;
+    carId: number;
     brand: string;
     model: string;
     modelYear: number;
@@ -14,8 +14,17 @@ interface Car {
     doors: number;
     fuelEconomy: string;
     license_plate: string;
-    carPic: string;
     givenName: string;
+}
+
+/* interface User {
+    userId:number;
+} */
+
+interface CarPicture {
+    picId: number;
+    carPic: string;
+    carsId: number;
 }
 
 interface State {
@@ -35,10 +44,29 @@ interface State {
     licensePlateInput: string;
     cars: Car[];
     carLoaded: boolean;
+    pictures: CarPicture[];
+    users: User[];
+}
+
+interface User {
+    id: number;
+    username: string;
+    password: string;
+    passwordAuth: string;
+    email: string;
+    birthDate: Date;
+}
+
+interface UserListResponse {
+    users: User[];
 }
 
 interface carListResponse {
     cars: Car[];
+}
+
+interface carPictureResponse {
+    pictures: CarPicture[];
 }
 
 export default class Garage extends Component<{}, State> {
@@ -61,27 +89,48 @@ export default class Garage extends Component<{}, State> {
         licensePlateInput: '',
         cars: [],
         carLoaded: false,
+        pictures: [],
+        users:[],
     };
+
+    
+    async loadCarPics() {
+        let response = await fetch('http://localhost:3001/carPic');
+        let data = await response.json() as carPictureResponse;
+        this.setState({
+            pictures: data.pictures,
+        });
+    }
+
     async loadusersCars() {
-        let response = await fetch('http://localhost:3001/car?userId=${userId}'); // todo atadni az userId t
+        try {
+        const userId = localStorage.getItem('userId');
+        let response = await fetch('http://localhost:3001/usersCar/${userId}'); //cant pass the user id
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
         let data = await response.json() as carListResponse;
         this.setState({
             cars: data.cars,
             carLoaded: true,
         });
-        if (data.cars.length === 0) {
+        if (response == null) {
             this.setState({
                 carLoaded: false,
             });
-        }
+        } 
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
+}
 
     componentDidMount() {
         this.loadusersCars();
+        this.loadCarPics();
     }
 
     handleUpload = async () => {
-        const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carPic } = this.state;
+        const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput } = this.state;
         const dbData = {
             brand: brandInput,
             model: modelInput,
@@ -95,7 +144,6 @@ export default class Garage extends Component<{}, State> {
             fuelEconomy: fuelEconomyInput,
             license_plate: licensePlateInput,
             givenName: givenNameInput,
-            carPic: carPic,
         }
 
         let response = await fetch('http://localhost:3001/car', {
@@ -120,7 +168,6 @@ export default class Garage extends Component<{}, State> {
             fuelEconomyInput: '',
             licensePlateInput: '',
             cars: [],
-            carPic: '',
         })
         await this.loadusersCars();
     }
@@ -155,16 +202,16 @@ export default class Garage extends Component<{}, State> {
 
     render() {
         const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded } = this.state;
-        let newAlbum;
+        let myCar;
         let newCarAdd;
+        console.log('carPicLoaded:',);
         if (carLoaded) {
-            newAlbum = (
+            myCar = (
                 <div className="col">
                     <div className="card">
-                        <img src={'http://localhost:3001/uploadedfiles/cars/${this.state.carPic'} alt="" className="bd-placeholder-img card-img-top" />
+                        <img src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`} alt="" className="bd-placeholder-img card-img-top" />
                         <div className="card-body">
                             <p className="card-text">
-                                autó neve, adatai...
                             </p>
                         </div>
                     </div>
@@ -178,8 +225,6 @@ export default class Garage extends Component<{}, State> {
                 </div>
             )
         }
-
-
 
         let uploadComponent;
         if (this.state.carPic) {
@@ -214,7 +259,7 @@ export default class Garage extends Component<{}, State> {
                     <div className="album py-5 bg-light">
                         <div className="container">
                             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                                {newAlbum}
+                                {myCar}
                                 {newCarAdd}
                             </div>
                         </div>
