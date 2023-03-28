@@ -1,4 +1,3 @@
-import { render } from "@testing-library/react";
 import axios from "axios";
 import { Component, FormEvent } from "react";
 import { Link } from "react-router-dom";
