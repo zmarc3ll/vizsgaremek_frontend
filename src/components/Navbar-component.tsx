@@ -5,6 +5,7 @@ import axios from 'axios';
 const NavbarComponent: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
+  const [id, setId] = useState<number>(0);
 
   // Check if the user is logged in
   useEffect(() => {
@@ -16,7 +17,9 @@ const NavbarComponent: React.FC = () => {
                   'Authorization': `Bearer ${accessToken}`
               }
           }).then(async response => {
-              await setUserName(response.data[0].username);              
+              await setUserName(response.data[0].username);
+              await setId(response.data[0].id);
+              localStorage.setItem('userId', response.data[0].id);//not setting correctly             
           }).catch(error => {
               console.log('Failed to get username')
           });
@@ -36,6 +39,7 @@ const NavbarComponent: React.FC = () => {
       });
       if (response.ok) {
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('userId');
         setIsLoggedIn(false);
         setUserName('');
       } else {
