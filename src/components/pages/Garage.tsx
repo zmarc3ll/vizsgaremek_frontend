@@ -104,12 +104,14 @@ export default class Garage extends Component<{}, State> {
 
     async loadusersCars() {
         try {
-        const userId = localStorage.getItem('userId');
-        let response = await fetch('http://localhost:3001/usersCar/${userId}'); //cant pass the user id
-        if (!response.ok) {
+        const thisUserId = localStorage.getItem('userId');
+        let response = await fetch('http://localhost:3001/usersCar/${thisUserId}');
+        let responseUrl:string = response.url.substring(0,31)+thisUserId; //cant pass the user id
+        let responseOk = await fetch(responseUrl);
+        if (!responseOk.ok) {
             throw new Error('Network response was not ok');
         }
-        let data = await response.json() as carListResponse;
+        let data = await responseOk.json() as carListResponse;
         this.setState({
             cars: data.cars,
             carLoaded: true,
