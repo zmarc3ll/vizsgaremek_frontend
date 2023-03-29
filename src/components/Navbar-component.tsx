@@ -17,9 +17,17 @@ const NavbarComponent: React.FC = () => {
                   'Authorization': `Bearer ${accessToken}`
               }
           }).then(async response => {
-              await setUserName(response.data[0].username);
-              await setId(response.data[0].id);
-              localStorage.setItem('userId', response.data[0].id);//not setting correctly             
+            const username = localStorage.getItem('username');
+            if (username) {
+              setUserName(username);
+            } else {
+              setUserName('');
+            }
+            // const user = response.data.find((user: {id: number}) => user.id === response.data.userId);
+            // setId(user.id);
+            // localStorage.setItem('userId',user.id);
+              // where i want to set the id based on the username
+              //localStorage.setItem('userId',);           
           }).catch(error => {
               console.log('Failed to get username')
           });
@@ -40,6 +48,7 @@ const NavbarComponent: React.FC = () => {
       if (response.ok) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('userId');
+        localStorage.removeItem('username');
         setIsLoggedIn(false);
         setUserName('');
       } else {
