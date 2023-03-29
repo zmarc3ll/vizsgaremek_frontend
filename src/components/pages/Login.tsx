@@ -33,6 +33,8 @@ export default class Login extends Component<{}, ILoginState> {
       errors.username = "";
     }
     this.setState({ username, errors });
+    const usernameStored = username;
+    localStorage.setItem('username', usernameStored);
   };
 
   handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +63,9 @@ export default class Login extends Component<{}, ILoginState> {
       }),
     });
     if (response.ok) {
-      const { token } = await response.json();
+      const { token,userId } = await response.json();
       localStorage.setItem("accessToken", token);
+      localStorage.setItem("userId", userId);
       // Redirect to dashboard or home page
       window.location.href = "/";
       console.log('Üdvözöljük!');
