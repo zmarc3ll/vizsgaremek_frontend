@@ -68,6 +68,10 @@ label.label-valid {
   padding-top: 120px;
 }
 
+#undoBlockContentForCalendar{
+  padding-top: 80px;
+}
+
 .carousel{
   padding-top: 60px;
   box-shadow: #d2d2d2 1px 1px 10px 2px;
@@ -102,6 +106,11 @@ label.label-valid {
  }
 
   li {
+  font-size: 1.2rem;
+  font-weight: 500;
+ }
+  
+ #carDataList li {
   font-size: 1.3rem;
   font-weight: 600;
  }
@@ -117,5 +126,31 @@ label.label-valid {
  }
 
  #carsImage {
-  max-height: 30rem;
+  max-height: 25rem;
+ }
+
+ #albumPicture {
+  max-height: 20rem;
+ }
+
+ #calSplash {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  max-width: 60%;
+ }
+
+ #garageHeight {
+  height: 55rem;
+ }
+
+ #calButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+ }
+
+ #carPageLink {
+  color: black;
  }
