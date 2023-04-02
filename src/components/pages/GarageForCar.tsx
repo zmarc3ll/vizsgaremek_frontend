@@ -119,7 +119,7 @@ export default class GarageForCar extends Component<{}, State> {
                                         </h4>
                                     ))}
                                 <ul id="carDataList">
-                                    <ul id="carDataList">
+                                    <ul id="carDataList" className="ps-3 ms-2">
                                         {this.state.cars.map((car: Car) => (
                                             <><li key={car.carId}>
                                                 <span>Márka: {car.brand}</span><br />
