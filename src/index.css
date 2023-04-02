@@ -105,3 +105,17 @@ label.label-valid {
   font-size: 1.1rem;
   font-weight: 500;
  }
+
+.album {
+  height: 25rem;
+  width: 25rem;
+
+ }
+
+ #carAlbum {
+  height: 35rem;
+ }
+
+ #carsImage {
+  max-height: 30rem;
+ }
