@@ -5,7 +5,6 @@ import axios from 'axios';
 const NavbarComponent: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
-  const [id, setId] = useState<number>(0);
 
   // Check if the user is logged in
   useEffect(() => {
@@ -22,18 +21,12 @@ const NavbarComponent: React.FC = () => {
               setUserName(username);
             } else {
               setUserName('');
-            }
-            // const user = response.data.find((user: {id: number}) => user.id === response.data.userId);
-            // setId(user.id);
-            // localStorage.setItem('userId',user.id);
-              // where i want to set the id based on the username
-              //localStorage.setItem('userId',);           
+            }       
           }).catch(error => {
               console.log('Failed to get username')
           });
       }
   }, []);
-
 
   // Handle logout
      const handleLogout = async () => {
@@ -55,7 +48,7 @@ const NavbarComponent: React.FC = () => {
         console.log('Failed to logout')
       }
     }
-  }     
+  }
 
   return (
     <nav className="navbar navbar-expand-sm bg-light fixed-top">
@@ -77,7 +70,7 @@ const NavbarComponent: React.FC = () => {
                   <Link to='./calendar' className="nav-link">Naptár</Link>
                 </li>
               </>
-            )}
+            )} 
             <li className="nav-item">
               <Link to={'/aboutus'} className="nav-link" >Rólunk</Link>
             </li>
