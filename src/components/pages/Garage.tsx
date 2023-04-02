@@ -119,7 +119,6 @@ export default class Garage extends Component<{}, State> {
             }
             let data = await responseOk.json() as carListResponse;
             let datas = Object.values(data);
-            console.log('data:',data)
             if (data.cars.length > 0) {
             this.setState({
                 cars: data.cars,
@@ -222,9 +221,8 @@ export default class Garage extends Component<{}, State> {
         }
     };
 
-
     render() {
-        const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded, cars } = this.state;
+        const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded } = this.state;
         let uploadComponent;
         if (!this.state.hasCarPic) {
             uploadComponent = (
@@ -244,7 +242,7 @@ export default class Garage extends Component<{}, State> {
                     <div className="card">
                         {uploadComponent}
                         <Link to={'/carPage'}>
-                        <img src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`} alt="" className="bd-placeholder-img card-img-top" />
+                        <img src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`} alt="" className="bd-placeholder-img card-img-top" id="albumPicture" />
                         
                         <div className="card-body">
                             <p className="card-text">
@@ -276,10 +274,9 @@ export default class Garage extends Component<{}, State> {
                 </div>
             )
         }
-
         return <>
             <body id="undoBlockContent">
-                <div className="container-fluid">
+                <div className="container-fluid" id="garageHeight">
                     <section className="text-center container">
                         <h1 className="fw-light">Garázs</h1>
                         <p className="lead text-muted"> Kezelje autóját, vagy vegyen fel újat!</p>
