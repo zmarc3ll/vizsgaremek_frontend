@@ -282,7 +282,7 @@ export default class Garage extends Component<{}, State> {
                 <div className="container-fluid">
                     <section className="text-center container">
                         <h1 className="fw-light">Garázs</h1>
-                        <p className="lead text-muted"> Kezelje autóit, vagy vegyen fel újabbat!</p>
+                        <p className="lead text-muted"> Kezelje autóját, vagy vegyen fel újat!</p>
                     </section>
 
                     <div className="row justify-content-center" id="carAlbum">
