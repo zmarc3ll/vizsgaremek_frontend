@@ -26,6 +26,7 @@ class App extends Component {
           <Route path='/calendar' element={<Calendar />} />
           <Route path='/garage' element={<Garage />} />
           <Route path='/aboutus' element={<AboutUs />} />
+          <Route path='/carPage' element={<GarageForCar />} />
         </Routes>
       </main>
       <FooterComponent></FooterComponent>
