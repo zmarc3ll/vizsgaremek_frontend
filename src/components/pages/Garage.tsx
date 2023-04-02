@@ -1,5 +1,18 @@
 import axios from "axios";
 import { Component } from "react";
+import { Link } from "react-router-dom";
+
+interface UserListResponse {
+    users: User[];
+}
+
+interface carListResponse {
+    cars: Car[];
+}
+
+interface carPictureResponse {
+    pictures: CarPicture[];
+}
 
 interface Car {
     carId: number;
@@ -16,10 +29,6 @@ interface Car {
     license_plate: string;
     givenName: string;
 }
-
-/* interface User {
-    userId:number;
-} */
 
 interface CarPicture {
     picId: number;
@@ -46,7 +55,7 @@ interface State {
     carLoaded: boolean;
     pictures: CarPicture[];
     users: User[];
-    filesUploaded: boolean;
+    hasCarPic: boolean;
 }
 
 interface User {
@@ -56,18 +65,6 @@ interface User {
     passwordAuth: string;
     email: string;
     birthDate: Date;
-}
-
-interface UserListResponse {
-    users: User[];
-}
-
-interface carListResponse {
-    cars: Car[];
-}
-
-interface carPictureResponse {
-    pictures: CarPicture[];
 }
 
 export default class Garage extends Component<{}, State> {
@@ -91,63 +88,45 @@ export default class Garage extends Component<{}, State> {
         carLoaded: false,
         pictures: [],
         users: [],
-        filesUploaded: false,
+        hasCarPic: false,
     };
 
 
     async loadCarPics() {
-        try{
-        const response = await fetch('http://localhost:3001/carPic');
-        const data = await response.json() as carPictureResponse;
-        console.log('dataPic:', data);
-        if(response.ok && data.pictures.length > 0) {
-            const image = new Image();
-            image.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = image.naturalWidth;
-                canvas.height = image.naturalHeight;
-                const context = canvas.getContext('2d');
-                if (context) {
-                    context.drawImage(image, 0, 0);
-                    const dataUrl = canvas.toDataURL();
-                    this.setState({
-                        carPic: dataUrl,
-                        filesUploaded: false
-                    });
-                } else {
-                    console.log('Failed to get canvas context');
-                    this.setState({
-                        filesUploaded: false
-                    });
-                }
-            };
-            image.onerror = () => {
-              console.log('Failed to load image');
-            };
-            image.src = data.pictures[0].carPic;
-          } else {
-            console.log('No car pictures found');
-          }
-        } catch (error) {
-          console.error('Error loading car pictures:', error);
+        let userId = localStorage.getItem('userId');
+        let response = await fetch('http://localhost:3001/carPic/${userId}');
+        let responseUrl: string = response.url.substring(0, 29) + userId;
+        let responseOk = await fetch(responseUrl);
+        let data = await responseOk.json() as carPictureResponse;
+        if (responseOk.ok && Object.keys(data).length > 0) {
+            let datas = Object.values(data);
+            const carPic = datas[0].carPic;
+            this.setState({
+                carPic: carPic,
+                hasCarPic: true,
+            })
         }
     }
 
-    async loadusersCars() {
+    async loadUsersCars() {
         try {
             const thisUserId = localStorage.getItem('userId');
             let response = await fetch('http://localhost:3001/usersCar/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 31) + thisUserId; //cant pass the user id
+            let responseUrl: string = response.url.substring(0, 31) + thisUserId;
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
                 throw new Error('Network response was not ok');
             }
             let data = await responseOk.json() as carListResponse;
+            let datas = Object.values(data);
+            console.log('data:',data)
+            if (data.cars.length > 0) {
             this.setState({
                 cars: data.cars,
                 carLoaded: true,
             });
-            if (response == null) {
+        }
+            if (response === null) {
                 this.setState({
                     carLoaded: false,
                 });
@@ -157,8 +136,9 @@ export default class Garage extends Component<{}, State> {
         }
     }
 
+
     componentDidMount() {
-        this.loadusersCars();
+        this.loadUsersCars();
         this.loadCarPics();
     }
 
@@ -178,8 +158,11 @@ export default class Garage extends Component<{}, State> {
             license_plate: licensePlateInput,
             givenName: givenNameInput,
         }
-
-        let response = await fetch('http://localhost:3001/car', {
+        let userId = localStorage.getItem('userId');
+        let responseOk = await fetch('http://localhost:3001/car/${userId}')
+        let responseUrl: string = responseOk.url.substring(0, 26) + userId;
+        console.log('url:', responseUrl);
+        let response = await fetch(responseUrl,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -202,7 +185,7 @@ export default class Garage extends Component<{}, State> {
             licensePlateInput: '',
             cars: [],
         })
-        await this.loadusersCars();
+        await this.loadUsersCars();
     }
 
     onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,7 +194,7 @@ export default class Garage extends Component<{}, State> {
     };
 
 
-    onFileUpload = () => {
+    onFileUpload = async () => {
         // Create an object of formData
         const formData = new FormData();
 
@@ -222,11 +205,14 @@ export default class Garage extends Component<{}, State> {
                 this.state.selectedFile,
                 this.state.selectedFile.name
             );
-            axios.post("http://localhost:3001/uploadfile", formData).then((res) => {
+            let userId = localStorage.getItem('userId');
+            let responseOk = await fetch('http://localhost:3001/uploadfile/${userId}')
+            let responseUrl: string = responseOk.url.substring(0, 33) + userId;
+            axios.post(responseUrl, formData).then((res) => {
                 // Set the carPic state to the filename returned by the server
-                this.setState({ 
-                    carPic: res.data.carPic, 
-                    filesUploaded: true,
+                this.setState({
+                    carPic: res.data.carPic,
+                    hasCarPic: true,
                 });
             }).catch((err) => {
                 console.log(err);
@@ -239,30 +225,46 @@ export default class Garage extends Component<{}, State> {
 
     render() {
         const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded, cars } = this.state;
-
         let uploadComponent;
-        if (this.state.filesUploaded) {
+        if (!this.state.hasCarPic) {
             uploadComponent = (
                 <div className="ps-3 pe-3 pt-2 pb-2 row">
                     <label htmlFor="carPic" className="text-center"><strong>Töltsön fel autójáról egy képet!</strong></label><br />
                     <input type="file" required onChange={this.onFileChange} id="carPic" />
-                    <button onClick={this.onFileUpload} className="btn btn-dark">
+                    <button onClick={this.onFileUpload} onInput={this.loadCarPics} className="btn btn-dark">
                         Feltöltés!
-                    </button> 
+                    </button>
                 </div>)
-        } 
+        }
         let myCar;
         let newCarAdd;
         if (carLoaded) {
             myCar = (
-                <div className="col">
+                <div className="col container-fluid">
                     <div className="card">
-                         <img src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`} alt="" className="bd-placeholder-img card-img-top" />
                         {uploadComponent}
+                        <Link to={'/carPage'}>
+                        <img src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`} alt="" className="bd-placeholder-img card-img-top" />
+                        
                         <div className="card-body">
                             <p className="card-text">
+                                <ul id="carDataList" className="text-center">
+                                {this.state.cars.map((car: Car) => (
+                                            <li key={car.carId}>
+                                                <span className="text-center"><strong>{car.givenName}</strong></span><br />
+                                                <span>Márka: <i>{car.brand}</i></span><br />
+                                                <span>Modell: <i>{car.model}</i></span><br />
+                                                <span>Évjárat: <i>{car.modelYear}</i></span><br />
+                                                <span>Üzemanyag típusa: <i>{car.fuelType}</i></span><br />
+                                                <span>Lóerő: <i>{car.carPower}</i></span><br />
+                                                <span>Váltó típusa: <i>{car.gearType}</i></span><br />
+                                                <span>Rendszám: <i>{car.license_plate}</i></span><br />
+                                            </li>
+                                        ))}
+                                </ul>
                             </p>
-                        </div>
+
+                        </div></Link>
                     </div>
                 </div>)
         } else {
@@ -282,11 +284,14 @@ export default class Garage extends Component<{}, State> {
                         <h1 className="fw-light">Garázs</h1>
                         <p className="lead text-muted"> Kezelje autóit, vagy vegyen fel újabbat!</p>
                     </section>
-                    <div className="album py-5 bg-light">
-                        <div className="container">
-                            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                                {myCar}
-                                {newCarAdd}
+
+                    <div className="row justify-content-center" id="carAlbum">
+                        <div className="album py-5 bg-light">
+                            <div className="container">
+                                <div className="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1">
+                                    {myCar}
+                                    {newCarAdd}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -301,7 +306,7 @@ export default class Garage extends Component<{}, State> {
                             <div className="modal-body">
                                 <form className="form-control" onSubmit={(e) => {
                                     this.handleUpload();
-                                    window.location.href='/garage';
+                                    window.location.href = '/garage';
                                 }}>
                                     <div className="mb-3">
                                         <label htmlFor="carName" className="form-label"><strong>Autó neve</strong></label>
