@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { EventInput } from '@fullcalendar/common';
+import { EventApi, EventInput } from '@fullcalendar/common';
 import huLocale from '@fullcalendar/core/locales/hu';
+
 const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -36,9 +37,38 @@ const MyCalendar = () => {
   };
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(e.target.value);
     setComment(e.target.value);
   };
+
+  const sortedEvents = [...events].sort((a, b) => {
+    if (a.date && b.date) {
+      return new Date(a.date?.toString()).getTime() - new Date(b.date?.toString()).getTime();
+    }
+    return 0;
+  });
+
+  const renderEventContent = (eventInfo: any) => {
+    return (
+      <>
+        <b>{eventInfo.timeText}</b>
+        <br />
+        <span>{eventInfo.event.title}</span>
+        {eventInfo.event.extendedProps && eventInfo.event.extendedProps.comment && (
+          <>
+            <br />
+            <small>{eventInfo.event.extendedProps.comment}</small>
+          </>
+        )}
+      </>
+    );
+  };
+
+  const calendarEvents = events.map((event, index) => ({
+    id: index,
+    title: event.title,
+    date: event.date,
+  }));
+
 
   const eventSource = { events };
   return (
@@ -49,7 +79,9 @@ const MyCalendar = () => {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             selectable={true}
+            editable={true}
             events={[eventSource]}
+            eventContent={renderEventContent}
             select={handleDateSelect}
             locale={huLocale}
             locales={[huLocale]} />
@@ -71,11 +103,17 @@ const MyCalendar = () => {
                           <option value="Büntetés">Büntetés</option>
                           <option value="Biztosítás">Biztosítás</option>
                           <option value="Szervíz">Szervíz</option>
+                          <option value="Műszaki vizsga">Műszaki vizsga</option>
+                          <option value="Havi szemle">Havi szemle</option>
+                          <option value="Pályamatrica">Pályamatrica</option>
+                          <option value="Gépjárműadó">Gépjárműadó</option>
+                          <option value="Parkolás">Parkolás</option>
+                          <option value="Egyéb">Egyéb</option>
                         </select>
                       </div>
                       <div className="input-group ms-1 me-1 pt-3">
                         <span className='input-group-text'>További információk:</span>
-                        <textarea className='form-control' aria-label='További információk:' onChange={(e) => setComment(e.target.value)}></textarea>
+                        <textarea className='form-control' aria-label='További információk:' onChange={handleTextareaChange}></textarea>
                         </div>
                     </div>
                     <div className="modal-footer">
@@ -92,14 +130,25 @@ const MyCalendar = () => {
     </div><div className="container-fluid">
         <div className="card ms-4 me-4 mt-4 ">
           <div className="card-body text-center">
+            <h4 className='fw-light mb-3'>Felvett események</h4>
             {events.map((event, index) => (
               <div key={index}>
-                <p><strong>{event.title}:</strong> {event.start && event.start.toString()} {event.end && event.end.toString()}</p>
+                <p className='bg-light rounded'><strong>{event.title}:</strong><p className='text-success'>{event.comment}</p> <i className='text-danger'>{event.date?.toString()}</i> </p>
               </div>
             ))}
           </div>
+          <ul className='text-start'>
+            <p className='fw-lighter'>Jelmagyarázat:</p>
+              <li><strong>Esemény</strong></li>
+              <li className='text-success'>Infó</li>
+              <li className='text-danger'><i>Dátum</i></li>
+            </ul>
         </div>
       </div></>
   );
 };
 export default MyCalendar;
+function setCurrentEvents(events: EventApi[]): any {
+  throw new Error('Function not implemented.');
+}
+
