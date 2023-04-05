@@ -159,3 +159,17 @@ label.label-valid {
   font-size: 1.1rem;
   font-weight: 500;
  }
+
+ #cardImg {
+  margin: auto;
+  display: block;
+ }
+
+ .text-white {
+  color: white;
+ }
+
+ /* #reasonGallery {
+  background-image: url("/public/mechanicSplashart.png");
+  background-repeat: no-repeat;
+ } */

@@ -59,45 +59,98 @@ export default class Main extends Component {
       </div>
       <div className="row container-fluid mt-5 mx-auto" id="reasonGallery">
         <div className="col-lg-4 col-md-12 mb-4 mb-lg-0">
-          <img
+          {/* <img
             src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
             className="w-100 shadow-1-strong rounded mb-4"
             alt="Boat on Calm Water"
-          />
-
-          <img
+          /> */}
+            <div className="card bg-dark text-white mb-4">
+              <img src={'carList.png'} alt="" className="float-start ms-3 mt-2" id="cardImg"/>
+              <div className="card-body">
+                <div className="card-text">
+                  <h4 className="fw-light">Könnyítheti autója majdani eladását az autó adatai részletes nyomonkövetésével.</h4>
+                </div>
+              </div>
+            </div>
+          {/* <img
             src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
             className="w-100 shadow-1-strong rounded mb-4"
             alt="Wintry Mountain Landscape"
-          />
+          /> */}
+          <div className="card bg-light mb-4">
+              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <div className="card-body">
+                <div className="card-text">
+                  <h3>Hatékony, gyors flottakezelés</h3>
+                  <h4 className="fw-light">
+                  A flottakezelő rendszerünk lehetővé teszi az autók rendelkezésre állásának ellenőrzését, a költségek nyomon követését és a bérleti szerződések kezelését is. Az egyszerű és intuitív kezelőfelület segítségével a felhasználók könnyen és hatékonyan kezelhetik flottájukat.
+                     </h4>
+                </div>
+              </div>
+            </div>
         </div>
 
         <div className="col-lg-4 mb-4 mb-lg-0">
-          <img
+          {/* <img
             src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
             className="w-100 shadow-1-strong rounded mb-4"
             alt="Mountains in the Clouds"
-          />
-
-          <img
+          /> */}
+            <div className="card bg-light mb-4 pb-3">
+              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <div className="card-body">
+                <div className="card-text">
+                  <h4 className="fw-light">
+                   <strong>Az oldalunkon könnyen nyomon követheti járműveit</strong>, kezelheti azok karbantartását, ellenőrizheti az üzemanyagfogyasztást, és még sok más hasznos funkciót talál. Bízunk benne, hogy az általunk kínált szolgáltatásokkal sikerül majd javítani autóparkja hatékonyságát és csökkenteni az üzemeltetési költségeket.
+                     </h4>
+                </div>
+              </div>
+            </div>
+         {/*  <img
             src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
             className="w-100 shadow-1-strong rounded mb-4"
             alt="Boat on Calm Water"
-          />
+          /> */}
+          <div className="card bg-dark text-white mb-4">
+              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <div className="card-body">
+                <div className="card-text">
+                  <h4 className="fw-light">Tartsa számon a legfontosabb információkt a diagramm és naptár segítségével! </h4>
+                </div>
+              </div>
+            </div>
         </div>
 
         <div className="col-lg-4 mb-4 mb-lg-0">
-          <img
+          {/* <img
             src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
             className="w-100 shadow-1-strong rounded mb-4"
             alt="Waves at Sea"
-          />
-
-          <img
+          /> */}
+          <div className="card bg-dark text-white mb-4">
+              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <div className="card-body">
+                <div className="card-text">
+                  <h4 className="fw-light">Tegye könnyebé és érdekesebbé az autóival kapcsolatos teendők, információk vezetését.</h4>
+                </div>
+              </div>
+            </div>
+          {/* <img
             src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
             className="w-100 shadow-1-strong rounded mb-4"
             alt="Yosemite National Park"
-          />
+          /> */}
+          <div className="card bg-light mb-4">
+              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <div className="card-body">
+                <div className="card-text">
+                <h3>Hatékony, gyors flottakezelés</h3>
+                  <h4 className="fw-light">
+                  A flottakezelő rendszerünk lehetővé teszi az autók rendelkezésre állásának ellenőrzését, a költségek nyomon követését és a bérleti szerződések kezelését is. Az egyszerű és intuitív kezelőfelület segítségével a felhasználók könnyen és hatékonyan kezelhetik flottájukat.
+                     </h4>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
       <div className="card  mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
