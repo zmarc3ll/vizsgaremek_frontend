@@ -111,18 +111,20 @@ label.label-valid {
  }
 
  #cardImg {
-  margin: auto;
-  display: block;
+  height: 12%;
+  width: 12%;
  }
 
  .text-white {
   color: white;
  }
 
- /* #reasonGallery {
-  background-image: url("/public/mechanicSplashart.png");
+  #reasonGallery {
+  background-image: url("/public/carBackground.jpg");
   background-repeat: no-repeat;
- } */
+  background-position: center;
+  background-size: 80%;
+ } 
   
  #carDataList li {
   font-size: 1.3rem;

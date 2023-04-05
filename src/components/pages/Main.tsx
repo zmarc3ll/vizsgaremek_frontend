@@ -83,26 +83,16 @@ export default class Main extends Component {
       </div>
       <div className="row container-fluid mt-5 mx-auto" id="reasonGallery">
         <div className="col-lg-4 col-md-12 mb-4 mb-lg-0">
-          {/* <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-            className="w-100 shadow-1-strong rounded mb-4"
-            alt="Boat on Calm Water"
-          /> */}
             <div className="card bg-dark text-white mb-4">
-              <img src={'carList.png'} alt="" className="float-start ms-3 mt-2" id="cardImg"/>
+              <img src={'money.png'} alt="" className="float-start ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
-                  <h4 className="fw-light">Könnyítheti autója majdani eladását az autó adatai részletes nyomonkövetésével.</h4>
+                  <h4 className="fw-light">Könnyítheti autója majdani <strong>eladását</strong> az autó adatai részletes nyomonkövetésével.</h4>
                 </div>
               </div>
             </div>
-          {/* <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
-            className="w-100 shadow-1-strong rounded mb-4"
-            alt="Wintry Mountain Landscape"
-          /> */}
           <div className="card bg-light mb-4">
-              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <img src={'clock.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
                   <h3>Hatékony, gyors flottakezelés</h3>
@@ -115,13 +105,8 @@ export default class Main extends Component {
         </div>
 
         <div className="col-lg-4 mb-4 mb-lg-0">
-          {/* <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
-            className="w-100 shadow-1-strong rounded mb-4"
-            alt="Mountains in the Clouds"
-          /> */}
             <div className="card bg-light mb-4 pb-3">
-              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <img src={'car.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
                   <h4 className="fw-light">
@@ -130,42 +115,27 @@ export default class Main extends Component {
                 </div>
               </div>
             </div>
-         {/*  <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-            className="w-100 shadow-1-strong rounded mb-4"
-            alt="Boat on Calm Water"
-          /> */}
           <div className="card bg-dark text-white mb-4">
-              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <img src={'information.png'} alt="i" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
-                  <h4 className="fw-light">Tartsa számon a legfontosabb információkt a diagramm és naptár segítségével! </h4>
+                  <h4 className="fw-light">Tartsa számon a legfontosabb <strong>információkat</strong> a diagramm és naptár segítségével! </h4>
                 </div>
               </div>
             </div>
         </div>
 
         <div className="col-lg-4 mb-4 mb-lg-0">
-          {/* <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
-            className="w-100 shadow-1-strong rounded mb-4"
-            alt="Waves at Sea"
-          /> */}
           <div className="card bg-dark text-white mb-4">
-              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <img src={'easy.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
-                  <h4 className="fw-light">Tegye könnyebé és érdekesebbé az autóival kapcsolatos teendők, információk vezetését.</h4>
+                  <h4 className="fw-light">Tegye <strong>könnyebé</strong> és érdekesebbé az autóival kapcsolatos teendők, információk vezetését.</h4>
                 </div>
               </div>
             </div>
-          {/* <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
-            className="w-100 shadow-1-strong rounded mb-4"
-            alt="Yosemite National Park"
-          /> */}
           <div className="card bg-light mb-4">
-              <img src={'carList.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <img src={'calendar.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
                 <h3>Hatékony, gyors flottakezelés</h3>
