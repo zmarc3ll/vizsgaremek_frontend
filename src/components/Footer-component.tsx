@@ -26,7 +26,7 @@ const FooterComponent: React.FC = () => {
                   <Link to='./calendar' className="text-reset">Naptár</Link>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">Rólunk</a>
+                  <Link to='/aboutus' className="text-reset">Rólunk</Link>
                 </p>
               </div>
               <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">

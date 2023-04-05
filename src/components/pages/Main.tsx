@@ -3,6 +3,30 @@ import { Link } from "react-router-dom";
 
 export default class Main extends Component {
   render() {
+    let endOfPage
+    if(localStorage.getItem('userId')) {
+      endOfPage = (
+        <div className="card  mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
+        <div className="card-body text-center">
+        <img src={'mechanicSplashart.png'} alt="" className="img-fluid"/> <br />
+          <h5 className="card-title">Online flottakezelés</h5>
+          <p className="card-text fw-light">Kezdje meg akár mátol autói karbantartását!</p>
+          <Link to={'/garage'}><button className="btn btn-success">Garázs</button></Link>
+        </div>
+      </div>
+      )
+    } else {
+      endOfPage = (
+        <div className="card  mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
+        <div className="card-body text-center">
+        <img src={'mechanicSplashart.png'} alt="" className="img-fluid"/> <br />
+          <h5 className="card-title">Online flottakezelés</h5>
+          <p className="card-text fw-light">Kezdje meg akár mátol autói karbantartását!</p>
+          <Link to={'/register'}><button className="btn btn-success">Regisztrálok</button></Link>
+        </div>
+      </div>
+      )
+    }
     return <><div id="carouselExampleCaptions" className="carousel slide " data-bs-ride="false">
       <div className="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
@@ -14,7 +38,7 @@ export default class Main extends Component {
           <img src={'slideshow1.jpg'} className="d-block w-100" alt="..." />
           <div className="carousel-caption d-none d-md-block">
             <h5>TeAutod.hu</h5>
-            <p>Megbízható flottakezelés, akár több autóra is</p>
+            <p>Megbízható flottakezelés, hasznos információk</p>
           </div>
         </div>
         <div className="carousel-item">
@@ -28,7 +52,7 @@ export default class Main extends Component {
           <img src={'slideshow3.jpg'} className="d-block w-100" alt="..." />
           <div className="carousel-caption d-none d-md-block">
             <h5>TeAutod.hu</h5>
-            <p>Mobil és asztali alkalmazás is, a felhasználók kénylmére</p>
+            <p>Mobilos kinézet és asztali alkalmazás is, a felhasználók kénylmére</p>
           </div>
         </div>
       </div>
@@ -153,14 +177,7 @@ export default class Main extends Component {
             </div>
         </div>
       </div>
-      <div className="card  mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
-        <div className="card-body text-center">
-        <img src={'mechanicSplashart.png'} alt="" className="img-fluid"/> <br />
-          <h5 className="card-title">Online flottakezelés</h5>
-          <p className="card-text fw-light">Kezdje meg akár mátol autói karbantartását!</p>
-          <Link to={'/register'}><button className="btn btn-success">Regisztrálok</button></Link>
-        </div>
-      </div>
+      {endOfPage}
     </>
   };
 

@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import './App.css';
-import { Link, Route, Routes } from 'react-router-dom';
+import {Route, Routes } from 'react-router-dom';
 import Main from './components/pages/Main';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Calendar from './components/pages/Calendar';
 import NavbarComponent from './components/Navbar-component';
 import FooterComponent from './components/Footer-component';
-import Garage from './components/pages/Garage';
+import GarageForCar from './components/pages/GarageForCar';
 import AboutUs from './components/pages/AboutUs';
+import Garage from './components/pages/Garage';
 
 class App extends Component {
   
@@ -25,6 +26,7 @@ class App extends Component {
           <Route path='/calendar' element={<Calendar />} />
           <Route path='/garage' element={<Garage />} />
           <Route path='/aboutus' element={<AboutUs />} />
+          <Route path='/carPage' element={<GarageForCar />} />
         </Routes>
       </main>
       <FooterComponent></FooterComponent>

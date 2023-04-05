@@ -1,11 +1,10 @@
-import { render } from "@testing-library/react";
+import axios from "axios";
 import { Component, FormEvent } from "react";
 import { Link } from "react-router-dom";
 
 interface ILoginState {
   username: string;
   password: string;
-  rememberMe: boolean;
   errors: {
     username: string;
     password: string;
@@ -19,7 +18,6 @@ export default class Login extends Component<{}, ILoginState> {
     this.state = {
       username: "",
       password: "",
-      rememberMe: false,
       errors: {
         username: "",
         password: "",
@@ -35,6 +33,8 @@ export default class Login extends Component<{}, ILoginState> {
       errors.username = "";
     }
     this.setState({ username, errors });
+    const usernameStored = username;
+    localStorage.setItem('username', usernameStored);
   };
 
   handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,10 +46,6 @@ export default class Login extends Component<{}, ILoginState> {
       errors.password = "";
     }
     this.setState({ password, errors });
-  };
-
-  handleRememberMeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ rememberMe: event.target.checked });
   };
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -64,15 +60,33 @@ export default class Login extends Component<{}, ILoginState> {
       body: JSON.stringify({
         username: this.state.username,
         password: this.state.password,
-        rememberMe: this.state.rememberMe,
       }),
     });
     if (response.ok) {
-      const { accessToken } = await response.json();
-      localStorage.setItem("accessToken", accessToken);
+      const { token,userId } = await response.json();
+      localStorage.setItem("accessToken", token);
+      localStorage.setItem("userId", userId);
       // Redirect to dashboard or home page
       window.location.href = "/";
-      console.log('Üdvözöljük!')
+      console.log('Üdvözöljük!');
+      // Handle login form submission
+      const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const loginData = {
+          username: formData.get('username') as string,
+          password: formData.get('password') as string,
+        };
+        axios.post('http://localhost:3001/auth/login', loginData)
+          .then(response => {
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            setIsLoggedIn(true);
+          })
+          .catch(error => {
+            // handle error
+          });
+      };
     } else if (response.status === 401) {
       this.setState({
         errors: {
@@ -100,13 +114,13 @@ export default class Login extends Component<{}, ILoginState> {
                   <h2 className="text-center fw-bold mx-1 mb-3 pt-2">Belépés</h2>
                 </div>
                 <div className="form-outline mb-4">
-                <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
+                  <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
                   <input type="text" id="form3Example3" className="form-control form-control-lg"
                     placeholder="Adja meg a felhsználónevét" value={this.state.username}
                     onChange={this.handleUsernameChange} />
                 </div>
                 <div className="form-outline mb-3">
-                <label className="form-label" htmlFor="form3Example4">Jelszó</label>
+                  <label className="form-label" htmlFor="form3Example4">Jelszó</label>
                   <input type="password" id="form3Example4" className="form-control form-control-lg"
                     placeholder="Adja meg a jelszót" value={this.state.password}
                     onChange={this.handlePasswordChange} />
@@ -115,12 +129,6 @@ export default class Login extends Component<{}, ILoginState> {
                   )}
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
-                  <div className="form-check mb-0">
-                    <input className="form-check-input me-2" type="checkbox" value="" id="form2Example3" onChange={this.handleRememberMeChange} />
-                    <label className="form-check-label" htmlFor="form2Example3">
-                      Emlékezz rám
-                    </label>
-                  </div>
                   <p className="text-body"><em>Üdvözöljük!</em></p>
                 </div>
                 <div className="text-center text-lg-start mt-4 pt-2">
@@ -136,4 +144,8 @@ export default class Login extends Component<{}, ILoginState> {
 
   }
 
+}
+
+function setIsLoggedIn(arg0: boolean) {
+  throw new Error("Function not implemented.");
 }
