@@ -84,7 +84,7 @@ export default class Main extends Component {
       <div className="row container-fluid mt-5 mx-auto" id="reasonGallery">
         <div className="col-lg-4 col-md-12 mb-4 mb-lg-0">
             <div className="card bg-dark text-white mb-4">
-              <img src={'money.png'} alt="" className="float-start ms-3 mt-2" id="cardImg"/>
+              <div className="card-header"><img src={'money.png'} alt="" className="float-start ms-3 mt-2" id="cardImg"/></div>
               <div className="card-body">
                 <div className="card-text">
                   <h4 className="fw-light">Könnyítheti autója majdani <strong>eladását</strong> az autó adatai részletes nyomonkövetésével.</h4>
@@ -116,7 +116,7 @@ export default class Main extends Component {
               </div>
             </div>
           <div className="card bg-dark text-white mb-4">
-              <img src={'information.png'} alt="i" className="float-end ms-3 mt-2" id="cardImg"/>
+              <div className="card-header"><img src={'information.png'} alt="i" className="float-end ms-3 mt-2" id="cardImg"/></div>
               <div className="card-body">
                 <div className="card-text">
                   <h4 className="fw-light">Tartsa számon a legfontosabb <strong>információkat</strong> a diagramm és naptár segítségével! </h4>
@@ -127,7 +127,7 @@ export default class Main extends Component {
 
         <div className="col-lg-4 mb-4 mb-lg-0">
           <div className="card bg-dark text-white mb-4">
-              <img src={'easy.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
+              <div className="card-header"><img src={'easy.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/></div>
               <div className="card-body">
                 <div className="card-text">
                   <h4 className="fw-light">Tegye <strong>könnyebé</strong> és érdekesebbé az autóival kapcsolatos teendők, információk vezetését.</h4>
@@ -138,9 +138,9 @@ export default class Main extends Component {
               <img src={'calendar.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
-                <h3>Hatékony, gyors flottakezelés</h3>
+                <h3>Hatékony naptár a weboldalunkon</h3>
                   <h4 className="fw-light">
-                  A flottakezelő rendszerünk lehetővé teszi az autók rendelkezésre állásának ellenőrzését, a költségek nyomon követését és a bérleti szerződések kezelését is. Az egyszerű és intuitív kezelőfelület segítségével a felhasználók könnyen és hatékonyan kezelhetik flottájukat.
+                  Az oldal kiválóan alkalmas autókezelésre, valamint egy funkcionális naptárral rendelkezik, amely lehetővé teszi az új események hozzáadását a karbantartáshoz és bármely más tevékenységhez. A naptár használata egyszerű, így a felhasználóknak könnyedén használható.
                      </h4>
                 </div>
               </div>
