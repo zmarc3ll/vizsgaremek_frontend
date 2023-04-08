@@ -162,13 +162,11 @@ export default class GarageForCar extends Component<{}, State> {
                                     <div className="card-body">
                                         <h5 className="text-center mb-4">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
                                         <ul className="mb-4">
-                                            <li>Tankolas - 2023.05.06 - Teli tank, 20000 Ft</li>
+                                            <li>Tankolás - 2023.05.06 - Teli tank,20000Ft</li>
                                             <hr />
-                                            <li>Egyéb - Dátum - Comment</li>
+                                            <li>Bizotsítás - 2023.07.09 - Befizetni a casco-t</li>
                                             <hr />
-                                            <li>Bizotsítás - Dátum - Comment</li>
-                                            <hr />
-                                            <li>Szervíz - Dátum - Comment</li>
+                                            <li>Szervíz - 2023.08.24 - Zuglói utca 14.</li>
                                         </ul>
                                         <Link to={'/calendar'}><button className="btn btn-dark" id="calButton">Ugrás a naptárra</button></Link>
                                     </div>
