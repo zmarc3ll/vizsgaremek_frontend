@@ -72,7 +72,7 @@ export default class Calendar extends Component<{}, State> {
             return <body id="undoBlockContentForCalendar">
                     {this.state.cars.map((car: Car) => (
                         <h1 key={car.carId} className=" text-center">
-                            <Link to={'/carpage'} id="carPageLink"><span>{car.givenName}</span></Link>
+                            <Link to={'/carpage'} id="carPageLink"><span><img src={'car.png'} alt="" className="img-fluid me-3"/>{car.givenName}<img src={'car.png'} alt="" className="img-fluid ms-3" id="flippedCar"/></span></Link>
                         </h1>
                 ))}
                 <div className="container-fluid">
