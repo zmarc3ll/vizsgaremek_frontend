@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import LineChart from "../Chart-component";
 
 interface carPictureResponse {
     pictures: CarPicture[];
@@ -93,6 +94,8 @@ export default class GarageForCar extends Component<{}, State> {
     }
 
     render() {
+        const data = [12, 19, 3, 5, 2, 3];
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
         return <body id="undoBlockContent">
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
@@ -112,10 +115,10 @@ export default class GarageForCar extends Component<{}, State> {
                             <div className="card-body">
                                 {/* cars details */}
                                 {this.state.cars.map((car: Car) => (
-                                        <h4 key={car.carId} className={'text-center pb-2'}>
-                                            <span><strong>{car.givenName} adatai:</strong></span>
-                                        </h4>
-                                    ))}
+                                    <h4 key={car.carId} className={'text-center pb-2'}>
+                                        <span><img src={'informationBlack.png'} alt="i" className="img-fluid float-start"/><strong>{car.givenName} adatai:</strong></span>
+                                    </h4>
+                                ))}
                                 <ul id="carDataList">
                                     <ul id="carDataList" className="ps-3 ms-2">
                                         {this.state.cars.map((car: Car) => (
@@ -150,16 +153,22 @@ export default class GarageForCar extends Component<{}, State> {
                     <div className="col-lg-8">
                         <div className="card">
                             <div className="card-body">
-                                <img src="https://picsum.photos/id/400/1200/340" alt="" className=" rounded shadow-lg bg-body ms-0 img-fluid" />
+                            <LineChart data={data} labels={labels} />
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="card mt-4">
                                     <div className="card-body">
-                                        <h5 className="text-center">Közelgő események</h5>
-                                        <ul>
-                                            <li></li>
+                                        <h5 className="text-center mb-4">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
+                                        <ul className="mb-4">
+                                            <li>Tankolas - 2023.05.06 - Teli tank, 20000 Ft</li>
+                                            <hr />
+                                            <li>Egyéb - Dátum - Comment</li>
+                                            <hr />
+                                            <li>Bizotsítás - Dátum - Comment</li>
+                                            <hr />
+                                            <li>Szervíz - Dátum - Comment</li>
                                         </ul>
                                         <Link to={'/calendar'}><button className="btn btn-dark" id="calButton">Ugrás a naptárra</button></Link>
                                     </div>
@@ -168,7 +177,12 @@ export default class GarageForCar extends Component<{}, State> {
                             <div className="col-lg-6">
                                 <div className="card mt-4">
                                     <div className="card-body">
-                                        <img src="https://picsum.photos/id/302/400/300" alt="" className=" rounded shadow-lg bg-body ms-0 img-fluid" />
+                                        <h5 className="text-center mb-4">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5>
+                                        <form className="form-control text-center">
+                                            <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
+                                            <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-3"/>
+                                            <input type="submit" value='Rögzítés' className="btn btn-dark form-control"/>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
