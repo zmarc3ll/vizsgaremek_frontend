@@ -170,3 +170,7 @@ label.label-valid {
  #carPageLink {
   color: black;
  }
+
+ #flippedCar {
+  transform: scaleX(-1);
+ }
