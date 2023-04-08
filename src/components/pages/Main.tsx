@@ -73,7 +73,7 @@ export default class Main extends Component {
             <p className="text-center fst-italic">Ennyire könnyű és átlátható még sosem volt! <br />Mutatjuk mit nyer ha minket választ!</p>
           </div>
           <div className="col-lg-12 row mt-5">
-            <img src={'example.jpg'} alt="" className="shadow-lg p-3 mb-5 bg-body mx-auto d-block" id="exampleImg" />
+            <img src={'carPage.png'} alt="" className="shadow-lg p-3 mb-5 bg-body mx-auto d-block" id="exampleImg" />
           </div>
         </div>
       </div>
