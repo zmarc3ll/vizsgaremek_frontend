@@ -9,7 +9,7 @@ import huLocale from '@fullcalendar/core/locales/hu';
 const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
+  const [start, setDate] = useState('');
   const [comment, setComment] = useState('');
   const [events, setEvents] = useState<EventInput[]>([]);
 
@@ -29,8 +29,10 @@ const MyCalendar = () => {
     event.preventDefault();
     const newEvent = {
       title,
-      date,
-      comment
+      start: new Date(Date.parse(start)),
+      extendedProps: {
+        comment
+      }
     };
     setEvents([...events, newEvent]);
     handleModalClose();
@@ -40,18 +42,16 @@ const MyCalendar = () => {
     setComment(e.target.value);
   };
 
-  const sortedEvents = [...events].sort((a, b) => {
+  /* const sortedEvents = [...events].sort((a, b) => {
     if (a.date && b.date) {
       return new Date(a.date?.toString()).getTime() - new Date(b.date?.toString()).getTime();
     }
     return 0;
-  });
+  }); */
 
   const renderEventContent = (eventInfo: any) => {
     return (
       <>
-        <b>{eventInfo.timeText}</b>
-        <br />
         <span>{eventInfo.event.title}</span>
         {eventInfo.event.extendedProps && eventInfo.event.extendedProps.comment && (
           <>
@@ -63,14 +63,23 @@ const MyCalendar = () => {
     );
   };
   
-  const calendarEvents = events.map((event, index) => ({
+  
+  /* const calendarEvents = events.map((event, index) => ({
     id: index,
     title: event.title,
     date: event.date,
+  })); */
+
+  const calendarEvents = events.map((event, index) => ({
+    id: index.toString(),
+    title: event.title,
+    start: event.start,
+    extendedProps: {
+      comment: event.comment
+    },
+    classNames: ['event-' + index % 3]
   }));
-
-
-  const eventSource = { events };
+  
   return (
       <><div className="card ms-5 me-5 pt-2 mt-4">
       <div className="card-body">
@@ -80,8 +89,9 @@ const MyCalendar = () => {
             initialView="dayGridMonth"
             selectable={true}
             editable={true}
-            events={[eventSource]}
+            events={calendarEvents}
             eventContent={renderEventContent}
+            eventClassNames={['event-2']}
             select={handleDateSelect}
             locale={huLocale}
             locales={[huLocale]} />
@@ -91,7 +101,7 @@ const MyCalendar = () => {
                 <div className="modal-content">
                   <form onSubmit={handleFormSubmit}>
                     <div className="modal-header">
-                      <h5 className="modal-title">Esemény hozzáadása - {date}</h5>
+                      <h5 className="modal-title">Esemény hozzáadása - {start}</h5>
                       <button type="button" className="btn-close" aria-label="Close" onClick={handleModalClose}></button>
                     </div>
                     <div className="modal-body">
@@ -133,7 +143,8 @@ const MyCalendar = () => {
             <h4 className='fw-light mb-3'>Felvett események</h4>
             {events.map((event, index) => (
               <div key={index}>
-                <p className='bg-light rounded'><strong>{event.title}:</strong><p className='text-success'>{event.comment}</p> <i className='text-danger'>{event.date?.toString()}</i> </p>
+                <p className='bg-light rounded'><strong>{event.title}:</strong><p className='text-success'>{event.extendedProps?.comment}</p> <i className='text-danger'>{event.start && new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.')}
+</i> </p>
               </div>
             ))}
           </div>

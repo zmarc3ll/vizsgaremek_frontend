@@ -174,3 +174,8 @@ label.label-valid {
  #flippedCar {
   transform: scaleX(-1);
  }
+
+.event-2 {
+  background-color: transparent;
+  color: rgb(255, 0, 0);
+}
