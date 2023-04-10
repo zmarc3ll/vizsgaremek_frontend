@@ -94,8 +94,8 @@ export default class GarageForCar extends Component<{}, State> {
     }
 
     render() {
-        const data = [12, 19, 3, 5, 2, 3];
-        const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+        const data = [100, 50, 70, 200, 40, 10, 90, 250, 30, 80, 150, 40];
+        const labels = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember','Október','November','December'];
         return <body id="undoBlockContent">
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
@@ -111,7 +111,7 @@ export default class GarageForCar extends Component<{}, State> {
                                 />
                             </div>
                         </div>
-                        <div className="card mt-4">
+                        <div className="card mt-4 mb-4">
                             <div className="card-body">
                                 {/* cars details */}
                                 {this.state.cars.map((car: Car) => (
@@ -153,14 +153,14 @@ export default class GarageForCar extends Component<{}, State> {
                     <div className="col-lg-8">
                         <div className="card">
                             <div className="card-body">
-                            <LineChart data={data} labels={labels} />
+                              <LineChart data={data} labels={labels}/>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="card mt-4">
                                     <div className="card-body">
-                                        <h5 className="text-center mb-4">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
+                                        <h5 className="text-center mb-4 mt-4">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
                                         <ul className="mb-4">
                                             <li>Tankolás - 2023.05.06 - Teli tank,20000Ft</li>
                                             <hr />
@@ -180,6 +180,7 @@ export default class GarageForCar extends Component<{}, State> {
                                             <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
                                             <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-3"/>
                                             <input type="submit" value='Rögzítés' className="btn btn-dark form-control"/>
+                                            <p className="fw-lighter mt-3"><i>(Ajánlott minden hónap végén megadni!)</i></p>
                                         </form>
                                     </div>
                                 </div>
