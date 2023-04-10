@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default class Main extends Component {
   render() {
     let endOfPage
-    if(localStorage.getItem('userId')) {
+    if(localStorage.getItem('accessToken')) {
       endOfPage = (
         <div className="card  mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
         <div className="card-body text-center">
