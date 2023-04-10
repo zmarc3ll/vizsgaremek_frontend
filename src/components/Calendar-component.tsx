@@ -15,8 +15,8 @@ const MyCalendar = () => {
 
   const handleDateSelect = (selectInfo: any) => {
     setDate(selectInfo.start.toLocaleDateString());
-    setShowModal(true);
-  };
+      setShowModal(true);
+    };
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -62,7 +62,7 @@ const MyCalendar = () => {
       </>
     );
   };
-
+  
   const calendarEvents = events.map((event, index) => ({
     id: index,
     title: event.title,
@@ -148,7 +148,4 @@ const MyCalendar = () => {
   );
 };
 export default MyCalendar;
-function setCurrentEvents(events: EventApi[]): any {
-  throw new Error('Function not implemented.');
-}
 
