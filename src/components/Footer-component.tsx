@@ -20,10 +20,10 @@ const FooterComponent: React.FC = () => {
                   <Link to={'/'} className="text-reset">Főoldal</Link>
                 </p>
                 <p>
-                  <a href="#!" className="text-reset">Garázs</a>
+                  <a href="#" className="text-reset">Garázs</a>
                 </p>
                 <p>
-                  <Link to='./calendar' className="text-reset">Naptár</Link>
+                  <a href="#" className="text-reset">Naptár</a>
                 </p>
                 <p>
                   <Link to='/aboutus' className="text-reset">Rólunk</Link>
