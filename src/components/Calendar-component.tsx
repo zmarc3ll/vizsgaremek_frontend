@@ -3,10 +3,35 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { EventApi, EventInput } from '@fullcalendar/common';
+import { EventInput } from '@fullcalendar/common';
 import huLocale from '@fullcalendar/core/locales/hu';
 
-const MyCalendar = () => {
+//--TODO:-- valahogy megtudni component be hogyan kell state et atadni, majd megcsinalni az eventek fetltését.
+interface calendarDataResponse {
+  calDatas: CalendarData[]
+}
+
+interface CalendarData {
+    calId:number;
+    eventName: string;
+    eventDate: Date;
+    comment: string;
+}
+
+interface State {
+  calDatas: CalendarData[];
+  eventName: string;
+  evetDate: Date;
+  comment: string;
+}
+
+const MyCalendar = (State: {}) => {
+  state: State = {
+    calDatas:[],
+    eventName: '',
+    eventDate: '',
+    comment: '',
+  }
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [start, setDate] = useState('');
@@ -41,6 +66,20 @@ const MyCalendar = () => {
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
+
+  const handleUpload = async () => {
+    // const {eventName, eventDate, comment} = this.state
+    /* const dbData = {
+      title: eventName,
+      start: eventDate,
+      comment: comment,
+    } */
+  }
+  let userId = localStorage.getItem('userId');
+
+  /* const handleEventDelete {
+    //TODO
+  } */
 
   /* const sortedEvents = [...events].sort((a, b) => {
     if (a.date && b.date) {
@@ -79,6 +118,7 @@ const MyCalendar = () => {
     },
     classNames: ['event-' + index % 3]
   }));
+
   
   return (
       <><div className="card ms-5 me-5 pt-2 mt-4">
@@ -88,7 +128,8 @@ const MyCalendar = () => {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             selectable={true}
-            editable={true}
+            editable={false}
+            droppable={false}
             events={calendarEvents}
             eventContent={renderEventContent}
             eventClassNames={['event-2']}
@@ -138,13 +179,14 @@ const MyCalendar = () => {
         </div>
       </div>
     </div><div className="container-fluid">
-        <div className="card ms-4 me-4 mt-4 ">
-          <div className="card-body text-center">
+        <div className="ms-4 me-4 mt-4 ">
+          <div className="text-center">
             <h4 className='fw-light mb-3'>Felvett események</h4>
             {events.map((event, index) => (
               <div key={index}>
                 <p className='bg-light rounded'><strong>{event.title}:</strong><p className='text-success'>{event.extendedProps?.comment}</p> <i className='text-danger'>{event.start && new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.')}
-</i> </p>
+</i></p><button className='btn btn-danger float-end' /* onClick={handleEventDelete} */><strong>törlés</strong></button> <br />
+<hr className='mt-4'/>
               </div>
             ))}
           </div>
