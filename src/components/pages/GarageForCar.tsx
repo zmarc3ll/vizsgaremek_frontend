@@ -122,26 +122,26 @@ export default class GarageForCar extends Component<{}, State> {
                                 <ul id="carDataList">
                                     <ul id="carDataList" className="ps-3 ms-2">
                                         {this.state.cars.map((car: Car) => (
-                                            <><li key={car.carId}>
+                                            <><li key={car.carId} className={'mt-1'}>
                                                 <span>Márka: {car.brand}</span><br />
-                                            </li><li key={car.carId}>
+                                            </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Modell: {car.model}</span><br />
-                                                </li><li key={car.carId}>
+                                                </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Évjárat: {car.modelYear}</span><br />
-                                                </li><li key={car.carId}>
+                                                </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Üzemanyag típusa: {car.fuelType}</span><br />
-                                                </li><li key={car.carId}>
+                                                </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Lóerő: {car.carPower}</span><br />
-                                                </li><li key={car.carId}>
+                                                </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Váltó típusa: {car.gearType}</span><br />
-                                                </li><li key={car.carId}><span>Szín: {car.color}</span><br />
-                                                </li><li key={car.carId}>
-                                                    <span>Kaszni típusa: {car.chassisType}</span><br />
-                                                </li><li key={car.carId}>
+                                                </li><li key={car.carId} className={'mt-1'}><span>Szín: {car.color}</span><br />
+                                                </li><li key={car.carId} className={'mt-1'}>
+                                                    <span>Autó felépítése: {car.chassisType}</span><br />
+                                                </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Ajtók száma: {car.doors}</span><br />
-                                                </li><li key={car.carId}>
+                                                </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Fogyasztás: {car.fuelEconomy}</span><br />
-                                                </li><li key={car.carId}>
+                                                </li><li key={car.carId} className={'mt-1'}>
                                                     <span>Rendszám: {car.license_plate}</span><br />
                                                 </li></>
                                         ))}
