@@ -246,7 +246,7 @@ export default class Register extends Component<{}, State> {
                                                 </form>
                                             </div>
                                             <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                                                <img src={'register-splashart.avif'} className="img-fluid" alt="register_plashart" />
+                                                <img src={'register-splashart.png'} className="img-fluid" alt="register_plashart" />
                                             </div>
                                         </div>
                                     </div>
