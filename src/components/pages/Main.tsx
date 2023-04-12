@@ -96,9 +96,8 @@ export default class Main extends Component {
               <div className="card-body">
                 <div className="card-text">
                   <h3>Hatékony, gyors flottakezelés</h3>
-                  <h4 className="fw-light">
-                  A flottakezelő rendszerünk lehetővé teszi az autók rendelkezésre állásának ellenőrzését, a költségek nyomon követését és a bérleti szerződések kezelését is. Az egyszerű és intuitív kezelőfelület segítségével a felhasználók könnyen és hatékonyan kezelhetik flottájukat.
-                     </h4>
+                  <h4 className="fw-light pb-5 pt-1">
+                  A flottakezelő rendszerünk lehetővé teszi az autók rendelkezésre állásának ellenőrzését, a költségek nyomon követését és a bérleti szerződések kezelését is. Az egyszerű és intuitív kezelőfelület segítségével a felhasználók könnyen és hatékonyan kezelhetik flottájukat.</h4>
                 </div>
               </div>
             </div>
@@ -119,7 +118,7 @@ export default class Main extends Component {
               <div className="card-header"><img src={'information.png'} alt="i" className="float-end ms-3 mt-2" id="cardImg"/></div>
               <div className="card-body">
                 <div className="card-text">
-                  <h4 className="fw-light">Tartsa számon a legfontosabb <strong>információkat</strong> a diagramm és naptár segítségével! </h4>
+                  <h4 className="fw-light pb-4">Tartsa számon a legfontosabb <strong>információkat</strong> a diagramm és naptár segítségével! </h4>
                 </div>
               </div>
             </div>
