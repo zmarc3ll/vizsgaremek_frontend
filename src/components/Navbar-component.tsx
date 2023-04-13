@@ -44,6 +44,7 @@ const NavbarComponent: React.FC = () => {
         localStorage.removeItem('username');
         setIsLoggedIn(false);
         setUserName('');
+        window.location.reload();
       } else {
         console.log('Failed to logout')
       }
