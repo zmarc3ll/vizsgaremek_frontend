@@ -179,3 +179,9 @@ label.label-valid {
   background-color: transparent;
   color: rgb(255, 0, 0);
 }
+
+@media screen and (max-width: 768px) {
+  .modal {
+    display: block !important;
+  }
+}
