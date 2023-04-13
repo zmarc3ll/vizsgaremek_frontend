@@ -81,13 +81,6 @@ const MyCalendar = (State: {}) => {
     //TODO
   } */
 
-  /* const sortedEvents = [...events].sort((a, b) => {
-    if (a.date && b.date) {
-      return new Date(a.date?.toString()).getTime() - new Date(b.date?.toString()).getTime();
-    }
-    return 0;
-  }); */
-
   const renderEventContent = (eventInfo: any) => {
     return (
       <>
@@ -101,7 +94,6 @@ const MyCalendar = (State: {}) => {
       </>
     );
   };
-  
   
   /* const calendarEvents = events.map((event, index) => ({
     id: index,
