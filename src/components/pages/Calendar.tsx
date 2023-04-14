@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, FormEvent } from "react";
 import CalendarComponent from "../Calendar-component";
 import MyCalendar from "../Calendar-component";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import huLocale from '@fullcalendar/core/locales/hu';
-import events from "events";
 
 interface carListResponse {
     cars: Car[];
@@ -35,7 +34,7 @@ interface calendarDataResponse {
 }
 
 interface CalendarData {
-    calId: number;
+    id: number
     title: string;
     start: string;
     comment: string;
@@ -49,7 +48,8 @@ interface State {
     start: string;
     comment: string;
     showModal: boolean;
-    events: EventInput[]
+    events: EventInput[];
+    eventsLoaded:boolean;
 }
 
 export default class Calendar extends Component<{}, State> {
@@ -63,6 +63,7 @@ export default class Calendar extends Component<{}, State> {
         comment: '',
         showModal: false,
         events: [],
+        eventsLoaded:false,
     }
 
     async loadUsersCars() {
@@ -91,17 +92,44 @@ export default class Calendar extends Component<{}, State> {
         }
     }
 
+    async loadCarsEvents() {
+        try {
+            const thisUserId = localStorage.getItem('userId');
+            let response = await fetch('http://localhost:3001/calendarEvent/${thisUserId}');
+            let responseUrl: string = response.url.substring(0, 36) + thisUserId;
+            let responseOk = await fetch(responseUrl);
+            if (!responseOk.ok) {
+                throw new Error('Network response was not ok');
+            }
+            let data = await responseOk.json() as calendarDataResponse;
+            if (data.calDatas.length > 0) {
+            this.setState({
+                calDatas: data.calDatas,
+                eventsLoaded: true,
+            });
+        }
+            if (response === null) {
+                this.setState({
+                    eventsLoaded: false,
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
     handleDateClick = (selectInfo: any) => {
             this.setState({
-                //start: selectInfo.start.toLocaleDateString(), 
+                start: selectInfo.start.toLocaleDateString(), 
                 showModal: true,
             });
-    };
+    }; 
     
     handleDateSelect = (selectInfo: any) => {
         this.setState({
             start: selectInfo.start.toLocaleDateString(),
-            showModal: true
+            showModal: true,
+            
         })
     };
 
@@ -113,6 +141,35 @@ export default class Calendar extends Component<{}, State> {
             comment: '',
         })
     };
+
+    handleUpload = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const { title, start, comment } = this.state;
+        const dbData = {
+            title: title,
+            start: start,
+            comment: comment,
+        }
+        let userId = localStorage.getItem('userId');
+        let responseOk = await fetch('http://localhost:3001/calendarEvent/${userId}')
+        let responseUrl: string = responseOk.url.substring(0, 36) + userId;
+        console.log('url:', responseUrl);
+        let response = await fetch(responseUrl,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dbData),
+        });
+        this.setState({
+           title:'',
+           start:'',
+           comment:'',
+           //events[] maybe
+        })
+        await this.handleModalClose();
+        await this.loadCarsEvents();
+    }
 
     handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -133,19 +190,22 @@ export default class Calendar extends Component<{}, State> {
 
     componentDidMount() {
         this.loadUsersCars();
+        this.loadCarsEvents();
     }
 
     render() {
         
-        let calendarEvents = this.state.events.map((event, index) => ({
+        const calendarEvents = this.state.events.map((event, index) => ({
             id: index.toString(),
             title: event.title,
             start: event.start,
             extendedProps: {
-                comment: event.comment
+              comment: event.comment
             },
             classNames: ['event-' + index % 3]
-        }));
+          }));
+          
+        console.log('calData:',this.state.calDatas);
         if (this.state.carLoaded) {
             return <body id="undoBlockContentForCalendar">
                 {this.state.cars.map((car: Car) => (
@@ -169,12 +229,12 @@ export default class Calendar extends Component<{}, State> {
                                     select={this.handleDateSelect}
                                     locale={huLocale}
                                     locales={[huLocale]}
-                                    dateClick={this.handleDateClick} />
+                                    dateClick={this.handleDateClick}/>
                                 {this.state.showModal && (
                                     <div className="modal" style={{ display: 'block' }}>
                                         <div className="modal-dialog modal-dialog-centered">
                                             <div className="modal-content">
-                                                <form onSubmit={this.handleFormSubmit}>
+                                                <form onSubmit={this.handleUpload}>
                                                     <div className="modal-header">
                                                         <h5 className="modal-title">Esemény hozzáadása - {this.state.start}</h5>
                                                         <button type="button" className="btn-close" aria-label="Close" onClick={this.handleModalClose}></button>
@@ -216,9 +276,9 @@ export default class Calendar extends Component<{}, State> {
                         <div className="ms-4 me-4 mt-4 ">
                             <div className="text-center">
                                 <h4 className='fw-light mb-3'>Felvett események</h4>
-                                {this.state.events.map((event, index) => (
+                                {this.state.calDatas.map((event, index) => (
                                     <div key={index}>
-                                        <p className='bg-light rounded'><strong>{event.title}:</strong><p className='text-success'>{event.extendedProps?.comment}</p> <i className='text-danger'>{event.start && new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.')}
+                                        <p className='bg-light rounded'><strong>{event.title}:</strong><p className='text-success'>{event.comment}</p> <i className='text-danger'>{event.start && new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.')}
                                         </i></p><button className='btn btn-danger float-end' /* onClick={handleEventDelete} */><strong>törlés</strong></button> <br />
                                         <hr className='mt-4' />
                                     </div>
