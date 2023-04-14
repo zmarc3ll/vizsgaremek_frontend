@@ -91,7 +91,6 @@ export default class Garage extends Component<{}, State> {
         hasCarPic: false,
     };
 
-
     async loadCarPics() {
         let userId = localStorage.getItem('userId');
         let response = await fetch('http://localhost:3001/carPic/${userId}');
