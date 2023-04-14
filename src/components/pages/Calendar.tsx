@@ -91,6 +91,13 @@ export default class Calendar extends Component<{}, State> {
         }
     }
 
+    handleDateClick = (selectInfo: any) => {
+            this.setState({
+                //start: selectInfo.start.toLocaleDateString(), 
+                showModal: true,
+            });
+    };
+    
     handleDateSelect = (selectInfo: any) => {
         this.setState({
             start: selectInfo.start.toLocaleDateString(),
@@ -129,6 +136,7 @@ export default class Calendar extends Component<{}, State> {
     }
 
     render() {
+        
         let calendarEvents = this.state.events.map((event, index) => ({
             id: index.toString(),
             title: event.title,
@@ -160,7 +168,8 @@ export default class Calendar extends Component<{}, State> {
                                     eventClassNames={['event-2']}
                                     select={this.handleDateSelect}
                                     locale={huLocale}
-                                    locales={[huLocale]} />
+                                    locales={[huLocale]}
+                                    dateClick={this.handleDateClick} />
                                 {this.state.showModal && (
                                     <div className="modal" style={{ display: 'block' }}>
                                         <div className="modal-dialog modal-dialog-centered">
