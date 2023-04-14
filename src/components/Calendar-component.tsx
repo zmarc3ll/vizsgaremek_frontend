@@ -7,7 +7,7 @@ import { EventInput } from '@fullcalendar/common';
 import huLocale from '@fullcalendar/core/locales/hu';
 
 //--TODO:-- valahogy megtudni component be hogyan kell state et atadni, majd megcsinalni az eventek fetltését.
-interface calendarDataResponse {
+/* interface calendarDataResponse {
   calDatas: CalendarData[]
 }
 
@@ -24,14 +24,9 @@ interface State {
   evetDate: Date;
   comment: string;
 }
+ */
+const MyCalendar = () => {
 
-const MyCalendar = (State: {}) => {
-  state: State = {
-    calDatas:[],
-    eventName: '',
-    eventDate: '',
-    comment: '',
-  }
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [start, setDate] = useState('');
@@ -67,40 +62,6 @@ const MyCalendar = (State: {}) => {
     setComment(e.target.value);
   };
 
-  const handleUpload = async () => {
-    // const {eventName, eventDate, comment} = this.state
-    /* const dbData = {
-      title: eventName,
-      start: eventDate,
-      comment: comment,
-    } */
-  }
-  let userId = localStorage.getItem('userId');
-
-  /* const handleEventDelete {
-    //TODO
-  } */
-
-  const renderEventContent = (eventInfo: any) => {
-    return (
-      <>
-        <span>{eventInfo.event.title}</span>
-        {eventInfo.event.extendedProps && eventInfo.event.extendedProps.comment && (
-          <>
-            <br />
-            <small>{eventInfo.event.extendedProps.comment}</small>
-          </>
-        )}
-      </>
-    );
-  };
-  
-  /* const calendarEvents = events.map((event, index) => ({
-    id: index,
-    title: event.title,
-    date: event.date,
-  })); */
-
   const calendarEvents = events.map((event, index) => ({
     id: index.toString(),
     title: event.title,
@@ -111,7 +72,6 @@ const MyCalendar = (State: {}) => {
     classNames: ['event-' + index % 3]
   }));
 
-  
   return (
       <><div className="card ms-5 me-5 pt-2 mt-4">
       <div className="card-body">
@@ -123,7 +83,6 @@ const MyCalendar = (State: {}) => {
             editable={false}
             droppable={false}
             events={calendarEvents}
-            eventContent={renderEventContent}
             eventClassNames={['event-2']}
             select={handleDateSelect}
             locale={huLocale}
