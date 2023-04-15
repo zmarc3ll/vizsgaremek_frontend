@@ -185,3 +185,7 @@ label.label-valid {
     display: block !important;
   }
 }
+
+#closeEvents {
+  font-size: 1.2rem;
+}
