@@ -96,7 +96,7 @@ export default class Calendar extends Component<{}, State> {
         try {
             const thisUserId = localStorage.getItem('userId');
             let response = await fetch('http://localhost:3001/calendarEvent/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 36) + thisUserId;
+            let responseUrl: string = response.url.substring(0, 36) + thisUserId+"?limit=50"; /* max 50 */
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
                 throw new Error('Network response was not ok');
@@ -120,7 +120,7 @@ export default class Calendar extends Component<{}, State> {
 
     handleDateClick = (selectInfo: any) => {
             this.setState({
-                start: selectInfo.start.toLocaleDateString(), 
+                //start: selectInfo.start.toLocaleDateString(), 
                 showModal: true,
             });
     }; 
@@ -153,7 +153,6 @@ export default class Calendar extends Component<{}, State> {
         let userId = localStorage.getItem('userId');
         let responseOk = await fetch('http://localhost:3001/calendarEvent/${userId}')
         let responseUrl: string = responseOk.url.substring(0, 36) + userId;
-        console.log('url:', responseUrl);
         let response = await fetch(responseUrl,{
             method: 'POST',
             headers: {
@@ -194,18 +193,20 @@ export default class Calendar extends Component<{}, State> {
     }
 
     render() {
-        
-        const calendarEvents = this.state.events.map((event, index) => ({
-            id: index.toString(),
-            title: event.title,
-            start: event.start,
-            extendedProps: {
-              comment: event.comment
-            },
-            classNames: ['event-' + index % 3]
-          }));
+        const calendarEvents = this.state.calDatas.map((event, index) => {
+            const startParts = event.start.split('. '); // Split the string into parts using the period and space characters
+            const startDate = new Date(`${startParts[0]}-${startParts[1]}-${startParts[2]}`); // Create a Date object from the formatted string
+            return {
+              id: index.toString(),
+              title: event.title,
+              start: startDate,
+              extendedProps: {
+                comment: event.comment
+              },
+              classNames: ['event-' + index % 3]
+            };
+          });
           
-        console.log('calData:',this.state.calDatas);
         if (this.state.carLoaded) {
             return <body id="undoBlockContentForCalendar">
                 {this.state.cars.map((car: Car) => (
@@ -224,6 +225,7 @@ export default class Calendar extends Component<{}, State> {
                                     selectable={true}
                                     editable={false}
                                     droppable={false}
+                                    displayEventTime={false}
                                     events={calendarEvents}
                                     eventClassNames={['event-2']}
                                     select={this.handleDateSelect}
@@ -258,7 +260,7 @@ export default class Calendar extends Component<{}, State> {
                                                         </div>
                                                         <div className="input-group ms-1 me-1 pt-3">
                                                             <span className='input-group-text'>További információk:</span>
-                                                            <textarea className='form-control' aria-label='További információk:' onChange={this.handleTextareaChange}></textarea>
+                                                            <textarea className='form-control' aria-label='További információk:' onChange={this.handleTextareaChange} maxLength={100}></textarea>
                                                         </div>
                                                     </div>
                                                     <div className="modal-footer">
