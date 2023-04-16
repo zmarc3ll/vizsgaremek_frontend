@@ -34,7 +34,7 @@ interface calendarDataResponse {
 }
 
 interface CalendarData {
-    id: number
+    calId: number
     title: string;
     start: string;
     comment: string;
@@ -49,7 +49,7 @@ interface State {
     comment: string;
     showModal: boolean;
     events: EventInput[];
-    eventsLoaded:boolean;
+    eventsLoaded: boolean;
 }
 
 export default class Calendar extends Component<{}, State> {
@@ -63,7 +63,7 @@ export default class Calendar extends Component<{}, State> {
         comment: '',
         showModal: false,
         events: [],
-        eventsLoaded:false,
+        eventsLoaded: false,
     }
 
     async loadUsersCars() {
@@ -96,18 +96,18 @@ export default class Calendar extends Component<{}, State> {
         try {
             const thisUserId = localStorage.getItem('userId');
             let response = await fetch('http://localhost:3001/calendarEvent/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 36) + thisUserId+"?limit=50"; /* max 50 */
+            let responseUrl: string = response.url.substring(0, 36) + thisUserId + "?limit=50"; /* max 50 */
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
                 throw new Error('Network response was not ok');
             }
             let data = await responseOk.json() as calendarDataResponse;
             if (data.calDatas.length > 0) {
-            this.setState({
-                calDatas: data.calDatas,
-                eventsLoaded: true,
-            });
-        }
+                this.setState({
+                    calDatas: data.calDatas,
+                    eventsLoaded: true,
+                });
+            }
             if (response === null) {
                 this.setState({
                     eventsLoaded: false,
@@ -119,17 +119,17 @@ export default class Calendar extends Component<{}, State> {
     }
 
     handleDateClick = (selectInfo: any) => {
-            this.setState({
-                //start: selectInfo.start.toLocaleDateString(), 
-                showModal: true,
-            });
-    }; 
-    
+        this.setState({
+            //start: selectInfo.start.toLocaleDateString(), 
+            showModal: true,
+        });
+    };
+
     handleDateSelect = (selectInfo: any) => {
         this.setState({
             start: selectInfo.start.toLocaleDateString(),
             showModal: true,
-            
+
         })
     };
 
@@ -142,6 +142,24 @@ export default class Calendar extends Component<{}, State> {
         })
     };
 
+    handleEventDelete = async (eventId: number) => {
+        try {
+            const response = await fetch(`http://localhost:3001/calendarEvent/${eventId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            await this.loadCarsEvents();
+            window.location.reload();
+        } catch (error) {
+            console.error('Error deleting event:', error);
+        }
+    }
+
     handleUpload = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const { title, start, comment } = this.state;
@@ -153,7 +171,7 @@ export default class Calendar extends Component<{}, State> {
         let userId = localStorage.getItem('userId');
         let responseOk = await fetch('http://localhost:3001/calendarEvent/${userId}')
         let responseUrl: string = responseOk.url.substring(0, 36) + userId;
-        let response = await fetch(responseUrl,{
+        let response = await fetch(responseUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -161,10 +179,10 @@ export default class Calendar extends Component<{}, State> {
             body: JSON.stringify(dbData),
         });
         this.setState({
-           title:'',
-           start:'',
-           comment:'',
-           //events[] maybe
+            title: '',
+            start: '',
+            comment: '',
+            //events[] maybe
         })
         await this.handleModalClose();
         await this.loadCarsEvents();
@@ -197,16 +215,16 @@ export default class Calendar extends Component<{}, State> {
             const startParts = event.start.split('. '); // Split the string into parts using the period and space characters
             const startDate = new Date(`${startParts[0]}-${startParts[1]}-${startParts[2]}`); // Create a Date object from the formatted string
             return {
-              id: index.toString(),
-              title: event.title,
-              start: startDate,
-              extendedProps: {
-                comment: event.comment
-              },
-              classNames: ['event-' + index % 3]
+                id: index.toString(),
+                title: event.title,
+                start: startDate,
+                extendedProps: {
+                    comment: event.comment
+                },
+                classNames: ['event-' + index % 3]
             };
-          });
-          
+        });
+
         if (this.state.carLoaded) {
             return <body id="undoBlockContentForCalendar">
                 {this.state.cars.map((car: Car) => (
@@ -231,7 +249,7 @@ export default class Calendar extends Component<{}, State> {
                                     select={this.handleDateSelect}
                                     locale={huLocale}
                                     locales={[huLocale]}
-                                    dateClick={this.handleDateClick}/>
+                                    dateClick={this.handleDateClick} />
                                 {this.state.showModal && (
                                     <div className="modal" style={{ display: 'block' }}>
                                         <div className="modal-dialog modal-dialog-centered">
@@ -255,6 +273,7 @@ export default class Calendar extends Component<{}, State> {
                                                                 <option value="Pályamatrica">Pályamatrica</option>
                                                                 <option value="Gépjárműadó">Gépjárműadó</option>
                                                                 <option value="Parkolás">Parkolás</option>
+                                                                <option value="Autómosás">Autómosás</option>
                                                                 <option value="Egyéb">Egyéb</option>
                                                             </select>
                                                         </div>
@@ -280,10 +299,22 @@ export default class Calendar extends Component<{}, State> {
                                 <h4 className='fw-light mb-3'>Felvett események</h4>
                                 {this.state.calDatas.map((event, index) => (
                                     <div key={index}>
-                                        <p className='bg-light rounded'><strong>{event.title}:</strong><p className='text-success'>{event.comment}</p> <i className='text-danger'>{event.start && new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.')}
-                                        </i></p><button className='btn btn-danger float-end' /* onClick={handleEventDelete} */><strong>törlés</strong></button> <br />
-                                        <hr className='mt-4' />
-                                    </div>
+                                    <p className='bg-light rounded'>
+                                      <strong>{event.title}:</strong>
+                                      <p className='text-success'>{event.comment}</p>
+                                      <i className='text-danger'>
+                                        {event.start &&
+                                          (new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.') === new Date().toLocaleDateString('hu-HU').replace(/\./g, '.')
+                                            ? <strong>Mai napon!</strong> /* wrap the text in a strong tag */
+                                            : new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.'))
+                                        }
+                                      </i>
+                                    </p>
+                                    <button className='btn btn-danger float-end' onClick={()=> this.handleEventDelete(event.calId)}><strong>törlés</strong></button>
+                                    <br />
+                                    <hr className='mt-4' />
+                                  </div>
+                                     
                                 ))}
                             </div>
                             <ul className='text-start'>
