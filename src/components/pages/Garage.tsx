@@ -305,15 +305,15 @@ export default class Garage extends Component<{}, State> {
                                     window.location.href = '/garage';
                                 }}>
                                     <div className="mb-3">
-                                        <label htmlFor="carName" className="form-label"><strong>Autó neve</strong></label>
+                                        <label htmlFor="carName" className="form-label"><strong>Autó neve*</strong></label>
                                         <input type="text" className="form-control" id="carName" placeholder="Írja be az autója nevét" required value={givenNameInput} onChange={e => this.setState({ givenNameInput: e.currentTarget.value })} />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="carBrand" className="form-label"><strong>Autó márkája</strong></label>
+                                        <label htmlFor="carBrand" className="form-label"><strong>Autó márkája*</strong></label>
                                         <input type="text" className="form-control" id="carBrand" placeholder="Írja be az autó márkáját" required value={brandInput} onChange={e => this.setState({ brandInput: e.currentTarget.value })} />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="carType" className="form-label"><strong>Autó típusa</strong></label>
+                                        <label htmlFor="carType" className="form-label"><strong>Autó típusa*</strong></label>
                                         <input type="text" className="form-control" id="carType" placeholder="Írja be az autó típusát" required value={modelInput} onChange={e => this.setState({ modelInput: e.currentTarget.value })} />
                                     </div>
                                     <div className="mb-3">
@@ -321,15 +321,15 @@ export default class Garage extends Component<{}, State> {
                                         <input type="number" className="form-control" id="carYear" placeholder="Írja be az autó évjáratát" value={modelYearInput} onChange={e => this.setState({ modelYearInput: e.currentTarget.valueAsNumber })} />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="carFuel" className="form-label"><strong>Üzemanyag típusa</strong></label>
+                                        <label htmlFor="carFuel" className="form-label"><strong>Üzemanyag típusa*</strong></label>
                                         <input type="text" className="form-control" id="carFuel" placeholder="Írja be az autó üzemanyagának a típusát" required value={fuelTypeInput} onChange={e => this.setState({ fuelTypeInput: e.currentTarget.value })} />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="carPower" className="form-label"><strong>Lóerő</strong></label>
+                                        <label htmlFor="carPower" className="form-label"><strong>Lóerő*</strong></label>
                                         <input type="number" className="form-control" id="carPower" placeholder="Írja be az autó lóerejét" required value={carPowerInput} onChange={e => this.setState({ carPowerInput: e.currentTarget.valueAsNumber })} />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="carGear" className="form-label"><strong>Váltó típusa</strong></label>
+                                        <label htmlFor="carGear" className="form-label"><strong>Váltó típusa*</strong></label>
                                         <input type="text" className="form-control" id="carGear" placeholder="Írja be az autó váltójának típusát" required value={gearTypeInput} onChange={e => this.setState({ gearTypeInput: e.currentTarget.value })} />
                                     </div>
                                     <div className="mb-3">
@@ -349,11 +349,11 @@ export default class Garage extends Component<{}, State> {
                                         <input type="text" className="form-control" id="carFuele" placeholder="Írja be az autó fogyasztását" value={fuelEconomyInput} onChange={e => this.setState({ fuelEconomyInput: e.currentTarget.value })} />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="carKm" className="form-label"><strong>Autó kilóméteróra állása</strong> <i className="fw-lighter"></i></label>
+                                        <label htmlFor="carKm" className="form-label"><strong>Autó kilóméteróra állása*</strong> <i className="fw-lighter"></i></label>
                                         <input type="number" className="form-control" id="carKm" placeholder="Írja be az autó kilóméterórájának jelenlegi állását" required /* value={fuelEconomyInput} onChange={e => this.setState({ fuelEconomyInput: e.currentTarget.value }) }*/ />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="carLicense" className="form-label"><strong>Autó rendszáma</strong></label>
+                                        <label htmlFor="carLicense" className="form-label"><strong>Autó rendszáma*</strong></label>
                                         <input type="text" className="form-control" id="carLicense" placeholder="Írja be az autó rendszámát" required value={licensePlateInput} onChange={e => this.setState({ licensePlateInput: e.currentTarget.value })} />
                                     </div>
 
