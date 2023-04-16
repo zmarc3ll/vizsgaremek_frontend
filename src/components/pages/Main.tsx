@@ -35,10 +35,10 @@ export default class Main extends Component {
       </div>
       <div className="carousel-inner">
         <div className="carousel-item active">
-          <img src={'slideshow1.jpg'} className="d-block w-100" alt="..." />
+          <img src={'header2.jpg'} className="d-block w-100" alt="..." />
           <div className="carousel-caption d-none d-md-block">
             <h5>TeAutod.hu</h5>
-            <p>Megbízható flottakezelés, hasznos információk</p>
+            <p>Megbízható autókezelés, hasznos információk</p>
           </div>
         </div>
         <div className="carousel-item">
@@ -49,10 +49,10 @@ export default class Main extends Component {
           </div>
         </div>
         <div className="carousel-item">
-          <img src={'slideshow3.jpg'} className="d-block w-100" alt="..." />
+          <img src={'header3.jpg'} className="d-block w-100" alt="..." />
           <div className="carousel-caption d-none d-md-block">
             <h5>TeAutod.hu</h5>
-            <p>Mobilos kinézet és asztali alkalmazás is, a felhasználók kénylmére</p>
+            <p>Mobilos kinézet és asztali alkalmazás is, a felhasználók kényelmére</p>
           </div>
         </div>
       </div>
