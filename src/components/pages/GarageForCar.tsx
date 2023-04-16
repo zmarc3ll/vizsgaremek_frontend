@@ -214,13 +214,13 @@ export default class GarageForCar extends Component<{}, State> {
                             <div className="col-lg-6">
                                 <div className="card mt-4">
                                     <div className="card-body">
-                                        <h5 className="text-center mb-4 mt-1">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
+                                        <h5 className="text-center mb-4 mt-1 fw-semibold">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
                                      {/* i want to map cars calendar events here */}
                                      <div>
                                        { this.state.calDatas.map((caldatas: CalendarData) => (
                                             <>
                                             <div key={caldatas.id} className="mb-4 ms-4 me-4" id="closeEvents">
-                                                <span><strong>{caldatas.title}</strong> - <i>{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
+                                                <span><strong>{caldatas.title}</strong> - <i className="text-danger">{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
                                             </div>
                                             <hr />
                                             </>
@@ -233,7 +233,7 @@ export default class GarageForCar extends Component<{}, State> {
                             <div className="col-lg-6">
                                 <div className="card mt-4">
                                     <div className="card-body">
-                                        <h5 className="text-center mb-4">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5>
+                                        <h5 className="text-center mb-4 fw-semibold">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5>
                                         <form className="form-control text-center">
                                             <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
                                             <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-3"/>
