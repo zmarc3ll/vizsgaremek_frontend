@@ -6,18 +6,18 @@ export default class Main extends Component {
     let endOfPage
     if(localStorage.getItem('accessToken')) {
       endOfPage = (
-        <div className="card  mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
+        <div className="card bg-dark mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
         <div className="card-body text-center">
         <img src={'mechanicSplashart.png'} alt="" className="img-fluid"/> <br />
-          <h5 className="card-title">Online flottakezelés</h5>
-          <p className="card-text fw-light">Kezdje meg akár mátol autói karbantartását!</p>
-          <Link to={'/garage'}><button className="btn btn-success">Garázs</button></Link>
+          <h5 className="card-title text-white">Online flottakezelés</h5>
+          <p className="card-text fw-light text-white">Lépjen be a garázsba autója karbantartásához!</p>
+          <Link to={'/garage'}><button className="btn btn-info">Garázs</button></Link>
         </div>
       </div>
       )
     } else {
       endOfPage = (
-        <div className="card  mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
+        <div className="card bg-light mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
         <div className="card-body text-center">
         <img src={'mechanicSplashart.png'} alt="" className="img-fluid"/> <br />
           <h5 className="card-title">Online flottakezelés</h5>
@@ -133,7 +133,7 @@ export default class Main extends Component {
                 </div>
               </div>
             </div>
-          <div className="card bg-light mb-4">
+          <div className="card bg-light mb-5">
               <img src={'calendar.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
