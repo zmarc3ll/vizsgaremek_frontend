@@ -238,9 +238,7 @@ export default class Register extends Component<{}, State> {
                                                         </div>
                                                     </div>
                                                     <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                        {/* <Link to={'/login'}> */}
                                                         {isValid ? <button type="submit" className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button> : <button type="submit" disabled className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button>}
-                                                        {/* </Link> */}
                                                     </div>
                                                     <p className="small fw-bold mt-2 pt-1 mb-0" id="hasAccount">Van már fiókja? <Link to={'/login'} className="link-danger">Bejelentkezés</Link></p>
                                                 </form>
