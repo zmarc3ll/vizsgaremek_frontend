@@ -6,25 +6,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { EventInput } from '@fullcalendar/common';
 import huLocale from '@fullcalendar/core/locales/hu';
 
-//--TODO:-- valahogy megtudni component be hogyan kell state et atadni, majd megcsinalni az eventek fetltését.
-/* interface calendarDataResponse {
-  calDatas: CalendarData[]
-}
-
-interface CalendarData {
-    calId:number;
-    eventName: string;
-    eventDate: Date;
-    comment: string;
-}
-
-interface State {
-  calDatas: CalendarData[];
-  eventName: string;
-  evetDate: Date;
-  comment: string;
-}
- */
 const MyCalendar = () => {
 
   const [showModal, setShowModal] = useState(false);
