@@ -154,7 +154,6 @@ export default class Calendar extends Component<{}, State> {
                 throw new Error('Network response was not ok');
             }
             await this.loadCarsEvents();
-            window.location.reload();
         } catch (error) {
             console.error('Error deleting event:', error);
         }
