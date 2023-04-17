@@ -149,6 +149,8 @@ export default class GarageForCar extends Component<{}, State> {
     render() {
         const data = [100, 50, 70, 200, 40, 10, 90, 250, 30, 80, 150, 40];
         const labels = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember','Október','November','December'];
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 10); // format: "YYYY-MM-DD"
         return <body id="undoBlockContent">
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
@@ -236,9 +238,10 @@ export default class GarageForCar extends Component<{}, State> {
                                         <h5 className="text-center mb-4 fw-semibold">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5>
                                         <form className="form-control text-center">
                                             <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
-                                            <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-3"/>
-                                            <input type="submit" value='Rögzítés' className="btn btn-dark form-control"/>
-                                            <p className="fw-lighter mt-3"><i>(Ajánlott minden hónap végén megadni!)</i></p>
+                                            <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2"/>
+                                            <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
+                                            <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" value={formattedDate}/>
+                                            <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2"/>
                                         </form>
                                     </div>
                                 </div>
