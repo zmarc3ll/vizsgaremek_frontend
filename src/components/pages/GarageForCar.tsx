@@ -240,7 +240,7 @@ export default class GarageForCar extends Component<{}, State> {
                                             <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
                                             <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2"/>
                                             <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
-                                            <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" value={formattedDate}/>
+                                            <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" defaultValue={formattedDate}/>
                                             <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2"/>
                                         </form>
                                     </div>
