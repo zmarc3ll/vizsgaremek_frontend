@@ -1,6 +1,7 @@
-import { Component } from "react";
+import { Component, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import LineChart from "../Chart-component";
+import * as bootstrap from 'bootstrap';
 
 interface chartDataResponse {
     chart: ChartData[];
@@ -62,12 +63,20 @@ interface State {
     title: string;
     start: string;
     comment: string;
-    eventsLoaded:boolean;
+    eventsLoaded: boolean;
     chart: ChartData[];
+    hasSpeedometer: boolean;
+    speedometer: number;
+    date: string;
 }
+
+const currentDate = new Date();
+const formattedDate = currentDate.toISOString().slice(0, 10);
+
 
 export default class GarageForCar extends Component<{}, State> {
 
+    tooltipList: bootstrap.Tooltip[] = [];
     state: State = {
         carPic: '',
         cars: [],
@@ -79,6 +88,9 @@ export default class GarageForCar extends Component<{}, State> {
         comment: '',
         eventsLoaded: false,
         chart: [],
+        hasSpeedometer: false,
+        speedometer: 0,
+        date: formattedDate,
     }
 
     async loadCarPics() {
@@ -130,21 +142,50 @@ export default class GarageForCar extends Component<{}, State> {
             console.log('date:', dateString)
             const thisUserId = localStorage.getItem('userId');
             let response = await fetch('http://localhost:3001/calendarEvent/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 36) + thisUserId+"?limit=3&from="+dateString;
+            let responseUrl: string = response.url.substring(0, 36) + thisUserId + "?limit=3&from=" + dateString;
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
                 throw new Error('Network response was not ok');
             }
             let data = await responseOk.json() as calendarDataResponse;
             if (data.calDatas.length > 0) {
-            this.setState({
-                calDatas: data.calDatas,
-                eventsLoaded: true,
-            });
-        }
+                this.setState({
+                    calDatas: data.calDatas,
+                    eventsLoaded: true,
+                });
+            }
             if (response === null) {
                 this.setState({
                     eventsLoaded: false,
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    async loadChartData() {
+        try {
+            const thisUserId = localStorage.getItem('userId');
+            let response = await fetch('http://localhost:3001/chart/${thisUserId}');
+            let responseUrl: string = response.url.substring(0, 28) + thisUserId;
+            let responseOk = await fetch(responseUrl);
+            if (!responseOk.ok) {
+                throw new Error('Network response was not ok');
+            }
+            let data = await responseOk.json() as chartDataResponse;
+            this.setState({
+                chart: data.chart,
+                hasSpeedometer: true,
+            });
+            if (data.chart.length <= 0) {
+                this.setState({
+                    hasSpeedometer: false,
+                });
+            }
+            if (response === null) {
+                this.setState({
+                    hasSpeedometer: false,
                 });
             }
         } catch (error) {
@@ -156,19 +197,71 @@ export default class GarageForCar extends Component<{}, State> {
         this.loadUsersCars();
         this.loadCarPics();
         this.loadCarsEvents();
+        this.loadChartData();
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        this.tooltipList = Array.from(tooltipTriggerList).map(
+            (tooltipTriggerEl: Element) => new bootstrap.Tooltip(tooltipTriggerEl)
+        );
     }
 
+    handleUpload = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const { speedometer, date } = this.state;
+        const dbData = {
+            speedometer: speedometer,
+            date: date,
+        }
+        let userId = localStorage.getItem('userId');
+        let responseOk = await fetch('http://localhost:3001/chart/${userId}')
+        let responseUrl: string = responseOk.url.substring(0, 28) + userId;
+        let response = await fetch(responseUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dbData),
+        });
+        this.setState({
+            speedometer: 0,
+            date: formattedDate,
+        })
+        window.location.reload();
+        await this.loadChartData();
+    }
+
+
     render() {
-        const data = [100, 50, 70, 200, 40, 10, 90, 250, 30, 80, 150, 40];
-        const labels = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember','Október','November','December'];
+        // const data = [100, 50, 70, 200, 40, 10, 90, 250, 30, 80, 150, 40];
+        //const labels = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember','Október','November','December'];
+        const data = this.state.chart.map((chart) => (chart.speedometer));
+        const labels = this.state.chart.map((chart) => (chart.date));
+
         const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().slice(0, 10); // format: "YYYY-MM-DD"
+        const formattedDate = currentDate.toISOString().slice(0, 10);
+        let kmSection;
+        if (this.state.hasSpeedometer) {
+            kmSection = (<><h5 className="text-center mb-4 fw-semibold">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5>
+                <form className="form-control text-center" onSubmit={this.handleUpload}>
+                    <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
+                    <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2" onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
+                    <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
+                    <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
+                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2" data-bs-toggle='tooltip' data-bs-title="Érdemes minden hónap végén megadni!" data-bs-placement="bottom" />
+                </form></>)
+        } else {
+            kmSection = (<><h5 className="text-center mb-4 fw-semibold">Kilóméter óra bállítása<img src={'chart.png'} className="img-fluid float-end" /></h5>
+                <form className="form-control text-center" onSubmit={this.handleUpload}>
+                    <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
+                    <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-4" onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
+                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-4" data-bs-toggle='tooltip' data-bs-title="Érdemes minden hónap végén megadni!" data-bs-placement="bottom" />
+                </form></>)
+        }
+
         return <body id="undoBlockContent">
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
                     <div className="col-lg-4 ps-4">
                         <div className="card">
-                            {/* cars picture */}
                             <div className="card-body">
                                 <img
                                     src={`http://localhost:3001/uploadedFiles/cars/${this.state.carPic}`}
@@ -184,7 +277,7 @@ export default class GarageForCar extends Component<{}, State> {
                                 {this.state.cars.map((car: Car) => (
                                     <h4 key={car.carId} className={'text-center pb-2'}>
                                         <span><strong>{car.givenName} adatai:</strong></span>
-                                        <img src={'informationBlack.png'} alt="i" className="img-fluid float-end position-absoulute"/>
+                                        <img src={'informationBlack.png'} alt="i" className="img-fluid float-end position-absoulute" />
                                     </h4>
                                 ))}
                                 <ul id="carDataList">
@@ -221,7 +314,7 @@ export default class GarageForCar extends Component<{}, State> {
                     <div className="col-lg-8">
                         <div className="card">
                             <div className="card-body">
-                              <LineChart data={data} labels={labels}/>
+                                <LineChart data={data} labels={labels} />
                             </div>
                         </div>
                         <div className="row">
@@ -229,17 +322,17 @@ export default class GarageForCar extends Component<{}, State> {
                                 <div className="card mt-4">
                                     <div className="card-body">
                                         <h5 className="text-center mb-4 mt-1 fw-semibold">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
-                                     {/* i want to map cars calendar events here */}
-                                     <div>
-                                       { this.state.calDatas.map((caldatas: CalendarData) => (
-                                            <>
-                                            <div key={caldatas.id} className="mb-4 ms-4 me-4" id="closeEvents">
-                                                <span><strong>{caldatas.title}</strong> - <i className="text-danger">{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
-                                            </div>
-                                            <hr />
-                                            </>
-                                       ))}
-                                     </div>
+                                        {/* i want to map cars calendar events here */}
+                                        <div>
+                                            {this.state.calDatas.map((caldatas: CalendarData) => (
+                                                <>
+                                                    <div key={caldatas.id} className="mb-4 ms-4 me-4" id="closeEvents">
+                                                        <span><strong>{caldatas.title}</strong> - <i className="text-danger">{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
+                                                    </div>
+                                                    <hr />
+                                                </>
+                                            ))}
+                                        </div>
                                         <Link to={'/calendar'}><button className="btn btn-dark" id="calButton">Ugrás a naptárra</button></Link>
                                     </div>
                                 </div>
@@ -247,14 +340,7 @@ export default class GarageForCar extends Component<{}, State> {
                             <div className="col-lg-6">
                                 <div className="card mt-4">
                                     <div className="card-body">
-                                        <h5 className="text-center mb-4 fw-semibold">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5>
-                                        <form className="form-control text-center">
-                                            <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
-                                            <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2"/>
-                                            <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
-                                            <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" defaultValue={formattedDate} required/>
-                                            <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2"/>
-                                        </form>
+                                        {kmSection}
                                     </div>
                                 </div>
                             </div>
