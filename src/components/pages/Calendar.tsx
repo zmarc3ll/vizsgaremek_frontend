@@ -232,7 +232,6 @@ export default class Calendar extends Component<{}, State> {
                     </h1>
                 ))}
                 <div className="container-fluid">
-                    {/* <CalendarComponent/> */}
                     <div className="card ms-5 me-5 pt-2 mt-4">
                         <div className="card-body">
                             <div className='container-fluid'>
