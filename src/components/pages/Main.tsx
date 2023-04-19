@@ -1,7 +1,9 @@
-import { Component } from "react";
+import { Component, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Carousel } from "bootstrap";
 
 export default class Main extends Component {
+
   render() {
     let endOfPage
     if(localStorage.getItem('accessToken')) {
@@ -27,7 +29,7 @@ export default class Main extends Component {
       </div>
       )
     }
-    return <><div id="carouselExampleCaptions" className="carousel slide " data-bs-ride="false">
+    return <><div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
       <div className="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -66,13 +68,13 @@ export default class Main extends Component {
       </button>
     </div>
       <br />
-      <div className="container mt-5" >
+      <div className="container mt-5 mb-3" >
         <div className="row">
           <div className="col-lg-12">
             <h2 className="text-center">Kezelje autóját velünk!</h2>
             <p className="text-center fst-italic">Ennyire könnyű és átlátható még sosem volt! <br />Mutatjuk mit nyer ha minket választ!</p>
           </div>
-          <div className="col-lg-12 row mt-5">
+          <div className="col-lg-12 row mt-5 mb-3">
             <img src={'carPage.png'} alt="" className="shadow-lg p-3 mb-5 bg-body mx-auto d-block" id="exampleImg" />
           </div>
         </div>
@@ -95,9 +97,9 @@ export default class Main extends Component {
               <img src={'clock.png'} alt="" className="float-end ms-3 mt-2" id="cardImg"/>
               <div className="card-body">
                 <div className="card-text">
-                  <h3>Hatékony, gyors flottakezelés</h3>
+                  <h3>Hatékony, gyors autókezelés</h3>
                   <h4 className="fw-light pb-5 pt-1">
-                  A flottakezelő rendszerünk lehetővé teszi az autók rendelkezésre állásának ellenőrzését, a költségek nyomon követését és a bérleti szerződések kezelését is. Az egyszerű és intuitív kezelőfelület segítségével a felhasználók könnyen és hatékonyan kezelhetik flottájukat.</h4>
+                  A z autókezelő rendszerünk lehetővé teszi az autója rendelkezésre állásának ellenőrzését, a költségek nyomon követését és a bérleti szerződések kezelését is. Az egyszerű és intuitív kezelőfelület segítségével a felhasználók könnyen és hatékonyan kezelhetik autóikat.</h4>
                 </div>
               </div>
             </div>
