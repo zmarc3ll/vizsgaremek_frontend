@@ -371,7 +371,7 @@ export default class Garage extends Component<{}, State> {
                                         <label htmlFor="carLicense" className="form-label ms-2 me-2"><strong>Autó rendszáma*</strong></label>
                                         <input type="text" className="form-control" id="carLicense" placeholder="Írja be az autó rendszámát" required value={licensePlateInput} onChange={e => this.setState({ licensePlateInput: e.currentTarget.value })} />
                                     </div>
-                                    <button type="submit" className="btn btn-primary fw-semibold mb-3 mt-3" id="saveBtn">Mentés</button>
+                                    <button type="submit" className="btn btn-primary fw-semibold mb-3 mt-3" id="saveBtn">Felvétel</button>
                                 </form>
                             </div>
                             <div className="modal-footer bg-dark border-0">
