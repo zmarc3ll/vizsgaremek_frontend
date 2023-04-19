@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import './App.css';
-import {Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Main from './components/pages/Main';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
@@ -12,11 +12,16 @@ import FooterComponent from './components/Footer-component';
 import GarageForCar from './components/pages/GarageForCar';
 import AboutUs from './components/pages/AboutUs';
 import Garage from './components/pages/Garage';
+import Helmet from 'react-helmet';
 
 class App extends Component {
-  
+
   render() {
     return <div>
+      <Helmet>
+        <title>TeAutod.hu</title>
+      </Helmet>
+
       <NavbarComponent></NavbarComponent>
       <main>
         <Routes>
