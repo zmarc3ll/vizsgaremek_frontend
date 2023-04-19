@@ -76,7 +76,6 @@ const formattedDate = currentDate.toISOString().slice(0, 10);
 
 export default class GarageForCar extends Component<{}, State> {
 
-    tooltipList: bootstrap.Tooltip[] = [];
     state: State = {
         carPic: '',
         cars: [],
@@ -198,10 +197,7 @@ export default class GarageForCar extends Component<{}, State> {
         this.loadCarPics();
         this.loadCarsEvents();
         this.loadChartData();
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        this.tooltipList = Array.from(tooltipTriggerList).map(
-            (tooltipTriggerEl: Element) => new bootstrap.Tooltip(tooltipTriggerEl)
-        );
+        window.scrollTo(0, 0);
     }
 
     handleUpload = async (event: FormEvent<HTMLFormElement>) => {
@@ -246,7 +242,7 @@ export default class GarageForCar extends Component<{}, State> {
                     <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
                     <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
                     <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
-                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2" data-bs-toggle='tooltip' data-bs-title="Érdemes minden hónap végén megadni!" data-bs-placement="bottom" />
+                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2" />
                     <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
                 </form></>)
         } else {
@@ -254,7 +250,7 @@ export default class GarageForCar extends Component<{}, State> {
                 <form className="form-control text-center" onSubmit={this.handleUpload}>
                     <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
                     <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-4" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
-                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-4" data-bs-toggle='tooltip' data-bs-title="Érdemes minden hónap végén megadni!" data-bs-placement="bottom" />
+                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-4"/>
                     <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
                 </form></>)
         }
