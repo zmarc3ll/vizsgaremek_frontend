@@ -158,7 +158,7 @@ label.label-valid {
  }
 
  #garageHeight {
-  height: 55rem;
+  height: 50rem;
  }
 
  #calButton {
@@ -192,4 +192,13 @@ label.label-valid {
 
 #carAlbum {
   position: relative
+}
+
+#addCarCard {
+  background-color: #f7f7f7;
+}
+
+#saveBtn {
+    display: block;
+    margin: 0 auto;
 }
