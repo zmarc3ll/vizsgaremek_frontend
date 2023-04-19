@@ -2,6 +2,9 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 
 export default class AboutUs extends Component {
+    componentDidMount() {
+        window.scroll(0, 0);
+    }
     render() {
         return <><div className="bg-light">
                 <div className="container py-5">
@@ -81,5 +84,4 @@ export default class AboutUs extends Component {
                 </div>
             </div></>
     }
-    
 }
