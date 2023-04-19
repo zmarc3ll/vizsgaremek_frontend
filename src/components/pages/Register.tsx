@@ -121,7 +121,7 @@ export default class Register extends Component<{}, State> {
             emailWrong: '',
             birthDateWrong: '',
         })
-
+        window.location.href = '/login';
         await this.loadUsers();
     };
 
@@ -129,7 +129,7 @@ export default class Register extends Component<{}, State> {
         const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput, usernameWrong, passwordWrong, emailWrong, birthDateWrong, passwordAuthWrong } = this.state;
         const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         const usernameReg = /^[a-zA-Z0-9]{3,10}$/;
-        let isValid;
+        let isValid = false;
         return <>
             <body id="undoBlockContent">
                 <section className="vh-200">
@@ -141,13 +141,6 @@ export default class Register extends Component<{}, State> {
                                         <div className="row justify-content-center">
                                             <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                                                 <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Regisztráció</p>
-                                                <> {(() => {
-                                                    if (usernameWrong === '' || emailWrong === '' || passwordWrong === '' || passwordAuthWrong === '' || birthDateWrong === '') {
-                                                        isValid = true
-                                                    } else {
-                                                        isValid = false;
-                                                    }
-                                                })()}</>
                                                 <form className="mx-1 mx-md-4" onSubmit={this.handleUpload}>
                                                     <div className="d-flex flex-row align-items-center mb-4">
                                                         <i className="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -184,7 +177,7 @@ export default class Register extends Component<{}, State> {
                                                         <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" htmlFor="form3Example4cd">Jelszó újra</label>
-                                                            <input type="password" id="form3Example4cd" className="form-control" value={passwordAuthInput} required onChange={e => this.setState({ passwordAuthInput: e.currentTarget.value })} />
+                                                            <input type="password" id="form3Example4cd" className="form-control" value={passwordAuthInput} required onInput={this.handleValidation} onChange={e => this.setState({ passwordAuthInput: e.currentTarget.value })} />
                                                             {passwordAuthInput !== passwordInput ? <label htmlFor="form3Example1c" className="form-label label-valid">{passwordAuthWrong}</label> : (passwordInput ? <img className="checkmark" src={'check-mark.png'} /> : null)}
                                                         </div>
                                                     </div>
@@ -197,7 +190,7 @@ export default class Register extends Component<{}, State> {
                                                         </div>
                                                     </div>
                                                     <div className="form-check d-flex justify-content-center mb-5">
-                                                        <input className="form-check-input me-2" type="checkbox" required value="" id="form2Example3c" />
+                                                        <input className="form-check-input me-2" type="checkbox" required value="" id="form2Example3c" onChange={this.handleValidation}/>
                                                         <label className="form-check-label" htmlFor="form2Example3">
                                                             Elfogadom a felhasználói feltételeket ( <a href="/" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Terms of service</a> )
                                                         </label>
@@ -238,6 +231,13 @@ export default class Register extends Component<{}, State> {
                                                         </div>
                                                     </div>
                                                     <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                                        <> {(() => {
+                                                            if (usernameWrong === '' || emailWrong === '' || passwordWrong === '' || passwordAuthWrong === '' || birthDateWrong === '') {
+                                                                isValid = true
+                                                            } else {
+                                                                isValid = false;
+                                                            }
+                                                        })()}</>
                                                         {isValid ? <button type="submit" className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button> : <button type="submit" disabled className="btn btn-success btn-lg" onClick={this.handleValidation}>Regisztrálás</button>}
                                                     </div>
                                                     <p className="small fw-bold mt-2 pt-1 mb-0" id="hasAccount">Van már fiókja? <Link to={'/login'} className="link-danger">Bejelentkezés</Link></p>
