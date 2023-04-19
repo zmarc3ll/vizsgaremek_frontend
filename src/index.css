@@ -118,13 +118,6 @@ label.label-valid {
  .text-white {
   color: white;
  }
-
-  #reasonGallery {
-  background-image: url("/public/carBackground.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 70%;
- } 
   
  #carDataList li {
   font-size: 1.3rem;
