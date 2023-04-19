@@ -111,8 +111,8 @@ label.label-valid {
  }
 
  #cardImg {
-  height: 12%;
-  width: 12%;
+  height: 10%;
+  width: 10%;
  }
 
  .text-white {
@@ -188,4 +188,8 @@ label.label-valid {
 
 #closeEvents {
   font-size: 1.2rem;
+}
+
+#carAlbum {
+  position: relative
 }
