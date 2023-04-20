@@ -173,12 +173,6 @@ label.label-valid {
   color: rgb(255, 0, 0);
 }
 
-@media screen and (max-width: 768px) {
-  .modal {
-    display: block !important;
-  }
-}
-
 #closeEvents {
   font-size: 1.2rem;
 }
