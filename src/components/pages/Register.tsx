@@ -121,8 +121,8 @@ export default class Register extends Component<{}, State> {
             emailWrong: '',
             birthDateWrong: '',
         })
-        window.location.href = '/login';
         await this.loadUsers();
+        window.location.href = '/login';
     };
 
     render() {
