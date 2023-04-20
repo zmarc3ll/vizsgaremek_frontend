@@ -118,13 +118,16 @@ export default class Calendar extends Component<{}, State> {
         }
     }
 
-    handleDateClick = (selectInfo: any) => {
+      handleDateClick = (selectInfo: any) => {
+        const selectedDate = new Date(selectInfo.date);
+        const formattedDate = selectedDate.toLocaleDateString("hu-HU").split('.').join('. ');
         this.setState({
-            //start: selectInfo.start.toLocaleDateString(), 
+            start: formattedDate,
             showModal: true,
         });
     };
-
+    
+    
     handleDateSelect = (selectInfo: any) => {
         this.setState({
             start: selectInfo.start.toLocaleDateString(),
