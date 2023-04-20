@@ -44,7 +44,7 @@ export default class Main extends Component {
           </div>
         </div>
         <div className="carousel-item">
-          <img src={'slideshow2.jpg'} className="d-block w-100" alt="..." />
+          <img src={'bmw-header.jpg'} className="d-block w-100 mt-1" alt="..." />
           <div className="carousel-caption d-none d-md-block">
             <h5>TeAutod.hu</h5>
             <p>Felhasználó barát felület, a legjobb élményért</p>
