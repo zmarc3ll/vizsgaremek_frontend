@@ -155,7 +155,9 @@ export default class Calendar extends Component<{}, State> {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            await this.loadCarsEvents();
+            this.setState(prevState => ({
+                calDatas: prevState.calDatas.filter(event => event.calId !== eventId)
+            }));
         } catch (error) {
             console.error('Error deleting event:', error);
         }
