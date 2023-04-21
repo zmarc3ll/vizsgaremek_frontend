@@ -11,7 +11,7 @@ export default class Main extends Component {
         <div className="card bg-dark mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
         <div className="card-body text-center">
         <img src={'mechanicSplashart.png'} alt="" className="img-fluid"/> <br />
-          <h5 className="card-title text-white">Online flottakezelés</h5>
+          <h5 className="card-title text-white">Online autókezelés</h5>
           <p className="card-text fw-light text-white">Lépjen be a garázsba autója karbantartásához!</p>
           <Link to={'/garage'}><button className="btn btn-info">Garázs</button></Link>
         </div>
@@ -22,8 +22,8 @@ export default class Main extends Component {
         <div className="card bg-light mx-auto d-block mt-5 mb-3" id="homeRegisterCard">
         <div className="card-body text-center">
         <img src={'mechanicSplashart.png'} alt="" className="img-fluid"/> <br />
-          <h5 className="card-title">Online flottakezelés</h5>
-          <p className="card-text fw-light">Kezdje meg akár mátol autói karbantartását!</p>
+          <h5 className="card-title">Online autókezelés</h5>
+          <p className="card-text fw-light">Kezdje meg akár mátol autója karbantartását!</p>
           <Link to={'/register'}><button className="btn btn-success">Regisztrálok</button></Link>
         </div>
       </div>

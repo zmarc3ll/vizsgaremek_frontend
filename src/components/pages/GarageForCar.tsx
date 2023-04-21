@@ -320,7 +320,6 @@ export default class GarageForCar extends Component<{}, State> {
                                 <div className="card mt-4">
                                     <div className="card-body">
                                         <h5 className="text-center mb-4 mt-1 fw-semibold">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
-                                        {/* i want to map cars calendar events here */}
                                         <div>
                                             {this.state.calDatas.map((caldatas: CalendarData) => (
                                                 <>
