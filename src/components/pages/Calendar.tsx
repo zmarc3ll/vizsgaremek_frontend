@@ -274,6 +274,7 @@ export default class Calendar extends Component<{}, State> {
                                                                 <option value="Gépjárműadó">Gépjárműadó</option>
                                                                 <option value="Parkolás">Parkolás</option>
                                                                 <option value="Autómosás">Autómosás</option>
+                                                                <option value="Befizetés">Befizetés</option>
                                                                 <option value="Egyéb">Egyéb</option>
                                                             </select>
                                                         </div>
