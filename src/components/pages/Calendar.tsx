@@ -118,16 +118,15 @@ export default class Calendar extends Component<{}, State> {
         }
     }
 
-      handleDateClick = (selectInfo: any) => {
+       handleDateClick = (selectInfo: any) => {
         const selectedDate = new Date(selectInfo.date);
-        const formattedDate = selectedDate.toLocaleDateString("hu-HU").split('.').join('. ');
+        const formattedDate = selectedDate.toLocaleDateString("hu-HU").split('.').join('.');
         this.setState({
             start: formattedDate,
             showModal: true,
         });
     };
-    
-    
+      
     handleDateSelect = (selectInfo: any) => {
         this.setState({
             start: selectInfo.start.toLocaleDateString(),
@@ -275,6 +274,7 @@ export default class Calendar extends Component<{}, State> {
                                                                 <option value="Gépjárműadó">Gépjárműadó</option>
                                                                 <option value="Parkolás">Parkolás</option>
                                                                 <option value="Autómosás">Autómosás</option>
+                                                                <option value="Befizetés">Befizetés</option>
                                                                 <option value="Egyéb">Egyéb</option>
                                                             </select>
                                                         </div>

@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, FormEvent } from "react";
 import { Link } from "react-router-dom";
 
 interface State {
@@ -59,6 +59,7 @@ export default class Register extends Component<{}, State> {
 
     componentDidMount() {
         this.loadUsers();
+        window.scrollTo(0, 0);
     }
 
     handleValidation = async () => {
@@ -86,7 +87,8 @@ export default class Register extends Component<{}, State> {
         }
     }
 
-    handleUpload = async () => {
+    handleUpload = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput } = this.state;
         const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         const usernameReg = /^[a-zA-Z0-9]{3,10}$/;
