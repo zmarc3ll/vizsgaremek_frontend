@@ -236,23 +236,30 @@ export default class GarageForCar extends Component<{}, State> {
         const formattedDate = currentDate.toISOString().slice(0, 10);
         let kmSection;
         if (this.state.hasSpeedometer) {
-            kmSection = (<><h5 className="text-center mb-4 fw-semibold">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5>
-                <form className="form-control text-center" onSubmit={this.handleUpload}>
-                    <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
-                    <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
-                    <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
-                    <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
-                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2" />
-                    <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
-                </form></>)
+            kmSection = (<>
+            <div className="card-header"><h5 className="text-center mb-3 mt-3 fw-semibold">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5></div>
+                <div className="card-body">
+                    <form className="form-control text-center" onSubmit={this.handleUpload}>
+                        <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
+                        <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
+                        <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
+                        <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
+                        <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2" />
+                        <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
+                    </form>
+                </div></>)
         } else {
-            kmSection = (<><h5 className="text-center mb-4 fw-semibold">Kilóméter óra bállítása<img src={'chart.png'} className="img-fluid float-end" /></h5>
-                <form className="form-control text-center" onSubmit={this.handleUpload}>
-                    <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
-                    <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-4" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
-                    <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-4"/>
-                    <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
-                </form></>)
+            kmSection = (<><div className="card-header">
+                <h5 className="text-center mb-3 mt-3 fw-semibold">Kilóméter óra bállítása<img src={'chart.png'} className="img-fluid float-end" /></h5>
+            </div>
+                <div className="card-body">
+                    <form className="form-control text-center" onSubmit={this.handleUpload}>
+                        <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
+                        <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-4" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
+                        <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-4" />
+                        <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
+                    </form>
+                </div></>)
         }
 
         return <body id="undoBlockContent">
@@ -270,43 +277,45 @@ export default class GarageForCar extends Component<{}, State> {
                             </div>
                         </div>
                         <div className="card mt-4 mb-4">
-                            <div className="card-body">
+                            <div className="card-header">
                                 {/* cars details */}
                                 {this.state.cars.map((car: Car) => (
-                                    <h4 key={car.carId} className={'text-center pb-2'}>
+                                    <h4 key={car.carId} className={'text-center pb-2 mt-3'}>
                                         <span><strong>{car.givenName} adatai:</strong></span>
                                         <img src={'informationBlack.png'} alt="i" className="img-fluid float-end position-absoulute" />
                                     </h4>
                                 ))}
-                                <ul id="carDataList">
-                                    <ul id="carDataList" className="ps-3 ms-2">
-                                        {this.state.cars.map((car: Car) => (
-                                            <><li key={car.carId} className={'mt-2'}>
-                                                <span>Márka: {car.brand}</span>
-                                            </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Modell: {car.model}</span>
+                                </div>
+                                <div className="card-body">
+                                    <ul id="carDataList">
+                                        <ul id="carDataList" className="ps-3 ms-2">
+                                            {this.state.cars.map((car: Car) => (
+                                                <><li key={car.carId} className={'mt-2'}>
+                                                    <span>Márka: {car.brand}</span>
                                                 </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Évjárat: {car.modelYear}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Üzemanyag típusa: {car.fuelType}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Lóerő: {car.carPower}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Váltó típusa: {car.gearType}</span>
-                                                </li><li key={car.carId} className={'mt-2'}><span>Szín: {car.color}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Autó felépítése: {car.chassisType}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Ajtók száma: {car.doors}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Fogyasztás: {car.fuelEconomy}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Rendszám: {car.license_plate}</span>
-                                                </li></>
-                                        ))}
+                                                        <span>Modell: {car.model}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Évjárat: {car.modelYear}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Üzemanyag típusa: {car.fuelType}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Lóerő: {car.carPower}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Váltó típusa: {car.gearType}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}><span>Szín: {car.color}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Autó felépítése: {car.chassisType}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Ajtók száma: {car.doors}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Fogyasztás: {car.fuelEconomy}</span>
+                                                    </li><li key={car.carId} className={'mt-2'}>
+                                                        <span>Rendszám: {car.license_plate}</span>
+                                                    </li></>
+                                            ))}
+                                        </ul>
                                     </ul>
-                                </ul>
-                            </div>
+                                </div>
                         </div>
                     </div>
                     <div className="col-lg-8">
@@ -318,27 +327,25 @@ export default class GarageForCar extends Component<{}, State> {
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="card mt-4">
+                                    <div className="card-header">
+                                        <h5 className="text-center mb-3 mt-3 fw-semibold">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
+                                    </div>
                                     <div className="card-body">
-                                        <h5 className="text-center mb-4 mt-1 fw-semibold">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
-                                        <div>
-                                            {this.state.calDatas.map((caldatas: CalendarData) => (
-                                                <>
-                                                    <div key={caldatas.id} className="mb-4 ms-4 me-4" id="closeEvents">
-                                                        <span><strong>{caldatas.title}</strong> - <i className="text-danger">{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
-                                                    </div>
-                                                    <hr />
-                                                </>
-                                            ))}
-                                        </div>
+                                        {this.state.calDatas.map((caldatas: CalendarData) => (
+                                            <>
+                                                <div key={caldatas.id} className="mb-4 ms-4 me-4" id="closeEvents">
+                                                    <span><strong>{caldatas.title}</strong> - <i className="text-danger">{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
+                                                </div>
+                                                <hr />
+                                            </>
+                                        ))}
                                         <Link to={'/calendar'}><button className="btn btn-dark" id="calButton">Ugrás a naptárra</button></Link>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-lg-6">
-                                <div className="card mt-4">
-                                    <div className="card-body">
+                                <div className="card mt-4">     
                                         {kmSection}
-                                    </div>
                                 </div>
                             </div>
                         </div>
