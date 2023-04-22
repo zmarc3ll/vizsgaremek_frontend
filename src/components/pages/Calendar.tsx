@@ -1,6 +1,4 @@
 import { Component, FormEvent } from "react";
-import CalendarComponent from "../Calendar-component";
-import MyCalendar from "../Calendar-component";
 import { Link } from "react-router-dom";
 import { EventInput } from "@fullcalendar/common";
 import FullCalendar from '@fullcalendar/react';
@@ -40,6 +38,16 @@ interface CalendarData {
     comment: string;
 }
 
+interface documentDataResponse {
+    docDatas: DocumentData[]
+}
+
+interface DocumentData {
+    docId: number;
+    name: string;
+    date: string;
+}
+
 interface State {
     cars: Car[];
     carLoaded: boolean;
@@ -50,10 +58,17 @@ interface State {
     showModal: boolean;
     events: EventInput[];
     eventsLoaded: boolean;
+    docDatas: DocumentData[];
+    name: string;
+    date: string;
+    docsLoaded: boolean;
 }
 
-export default class Calendar extends Component<{}, State> {
+const currentDate = new Date();
+const formattedDate = currentDate.toISOString().slice(0, 10);
 
+export default class Calendar extends Component<{}, State> {
+    
     state: State = {
         cars: [],
         carLoaded: false,
@@ -64,6 +79,10 @@ export default class Calendar extends Component<{}, State> {
         showModal: false,
         events: [],
         eventsLoaded: false,
+        docDatas: [],
+        name: '',
+        date: formattedDate,
+        docsLoaded: false,
     }
 
     async loadUsersCars() {
@@ -118,7 +137,38 @@ export default class Calendar extends Component<{}, State> {
         }
     }
 
-       handleDateClick = (selectInfo: any) => {
+    async loadDocuments() {
+        try {
+            const thisUserId = localStorage.getItem('userId');
+            let response = await fetch('http://localhost:3001/documents/${thisUserId}');
+            let responseUrl: string = response.url.substring(0, 32) + thisUserId
+            let responseOk = await fetch(responseUrl);
+            if (!responseOk.ok) {
+                throw new Error('Network response was not ok');
+            }
+            let data = await responseOk.json() as documentDataResponse;
+            if (data.docDatas.length > 0) {
+                this.setState({
+                    docDatas: data.docDatas,
+                    docsLoaded: true,
+                });
+            }
+            if (data.docDatas.length <= 0) {
+                this.setState({
+                    docsLoaded: false,
+                });
+            }
+            if (response === null) {
+                this.setState({
+                    docsLoaded: false,
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    handleDateClick = (selectInfo: any) => {
         const selectedDate = new Date(selectInfo.date);
         const formattedDate = selectedDate.toLocaleDateString("hu-HU").split('.').join('.');
         this.setState({
@@ -126,7 +176,7 @@ export default class Calendar extends Component<{}, State> {
             showModal: true,
         });
     };
-      
+
     handleDateSelect = (selectInfo: any) => {
         this.setState({
             start: selectInfo.start.toLocaleDateString(),
@@ -163,6 +213,49 @@ export default class Calendar extends Component<{}, State> {
         }
     }
 
+    handleDocsUpload = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const {name, date} = this.state;
+        const dbData = {
+            name: name,
+            date: date,
+        }
+        let userId = localStorage.getItem('userId');
+        let responseOk = await fetch('http://localhost:3001/documents/${userId}')
+        let responseUrl: string = responseOk.url.substring(0, 32) + userId;
+        let response = await fetch(responseUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dbData),
+        });
+        this.setState({
+            name: '',
+            date: formattedDate,
+        })
+        await this.loadDocuments();
+    }
+
+    handleDocsDelete = async (docsId: number) => {
+        try {
+            const response = await fetch(`http://localhost:3001/documents/${docsId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            this.setState(prevState => ({
+                docDatas: prevState.docDatas.filter(event => event.docId !== docsId)
+            }));
+        } catch (error) {
+            console.error('Error deleting event:', error);
+        }
+    }
+
     handleUpload = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const { title, start, comment } = this.state;
@@ -185,7 +278,6 @@ export default class Calendar extends Component<{}, State> {
             title: '',
             start: '',
             comment: '',
-            //events[] maybe
         })
         await this.handleModalClose();
         await this.loadCarsEvents();
@@ -211,6 +303,7 @@ export default class Calendar extends Component<{}, State> {
     componentDidMount() {
         this.loadUsersCars();
         this.loadCarsEvents();
+        this.loadDocuments();
     }
 
     render() {
@@ -227,6 +320,75 @@ export default class Calendar extends Component<{}, State> {
                 classNames: ['event-' + index % 3]
             };
         });
+
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 10);
+        function calculateDaysLeft(expirationDate: Date): string {
+            const currentDate = new Date();
+            const daysLeft = Math.ceil(
+              (expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+            );
+            return daysLeft <= 0 ? 'Már lejárt' : `${daysLeft} nap múlva.`;
+          }
+        let docs;
+        if (this.state.docsLoaded) {
+            docs = (
+              <>
+                {this.state.docDatas.map((docs: DocumentData) => {
+                  const expirationDate = new Date(docs.date);
+                  const daysLeft = Math.ceil(
+                    (expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+                  );
+                  let status;
+                  let statusClass;
+                  let statusClassDate;
+                  if (daysLeft < 0) {
+                    status = "Már lejárt.";
+                    statusClass = "text-danger";
+                    statusClassDate = "text-danger"
+                  } else if (daysLeft === 0) {
+                    status = "Mai napon jár le!";
+                    statusClass = "text-danger";
+                    statusClassDate = "text-warning"
+                  } else {
+                    status = `${daysLeft} nap múlva`;
+                    statusClass = "text-primary";
+                    statusClassDate = "text-success"
+                  }
+                  return (
+                    <div className="contriner-fluid text-center" key={docs.docId}>
+                      <span>
+                        <strong>{docs.name}</strong>&emsp;
+                        <i className={statusClassDate}>
+                          {new Date(docs.date).toLocaleDateString("hu-HU", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          }).replace(/\//g, ". ")}
+                        </i>
+                      </span>
+                      <br />
+                      <span>
+                        <h6 className="mt-3">
+                          Lejár: &ensp;<b className={statusClass}>{status}</b>
+                        </h6>
+                        <button className="link-danger float-end pt-2 border-0 bg-white" onClick={() => this.handleDocsDelete(docs.docId)}>Törlés</button>
+                      </span>
+                      <hr className="mt-5"/>
+                    </div>
+                  );
+                })}
+              </>
+            );
+          } else {
+            docs = (
+              <>
+                <h6 className="text-center text-warning mt-3">
+                  Még nincs felvéve dokument.
+                </h6>
+              </>
+            );
+          }
 
         if (this.state.carLoaded) {
             return <body id="undoBlockContentForCalendar">
@@ -298,29 +460,53 @@ export default class Calendar extends Component<{}, State> {
                         </div>
                     </div><div className="container-fluid">
                         <div className="ms-4 me-4 mt-4 ">
-                            <div className="text-center">
-                                <h4 className='fw-light mb-3'>Felvett események</h4>
-                                {this.state.calDatas.map((event, index) => (
-                                    <div key={index}>
-                                    <p className='bg-light rounded'>
-                                      <strong>{event.title}:</strong>
-                                      <p className='text-success'>{event.comment}</p>
-                                      <i className='text-danger'>
-                                        {event.start &&
-                                          (new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.') === new Date().toLocaleDateString('hu-HU').replace(/\./g, '.')
-                                            ? <strong>Mai napon!</strong> /* wrap the text in a strong tag */
-                                            : new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.'))
-                                        }
-                                      </i>
-                                    </p>
-                                    <button className='btn btn-danger float-end' onClick={()=> this.handleEventDelete(event.calId)}><strong>törlés</strong></button>
-                                    <br />
-                                    <hr className='mt-4' />
-                                  </div>
-                                     
-                                ))}
+                                <div className="col-lg-12">
+
+                                    <div className="row">
+                                        <div className="col-lg-3">
+                                            <div className="card mt-5 ms-3">
+                                                <div className="card-header">
+                                                    <h5 className="fw-semibold mt-3 mb-3 ms-4 text-center">Dokumentumok <img src={'document.png'} alt="" className="img-fluid float-end" /></h5>
+                                                </div>
+                                                <div className="card-body">
+                                                   {docs}
+                                                </div>
+                                                <div className="card-footer">
+                                                    <h5 className="fw-semibold mb-3 mt-2 text-center">+ Dokumentum hozzáadása</h5>
+                                                   <form action="submit" className="form-control bg-light border-0" onSubmit={this.handleDocsUpload}>
+                                                    <label htmlFor="documentName" className="form-label fw-light">Dokumentum neve:</label>
+                                                    <input type="text" id="documentName" className="form-control fw-lighter" required placeholder="Adja meg a dokumentum nevét!" onChange={(e) => this.setState({ name: e.target.value })}/>
+                                                    <label htmlFor="documentDate" className="fw-light mt-3 mb-2">Lejárati dátum:</label>
+                                                    <input type="date" id="documentDate" className="form-control fw-lighter" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })}/>
+                                                    <button type="submit" className="btn btn-dark mt-4 mb-1 d-block m-auto"> Hozzáadás </button>
+                                                   </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-9 text-center">
+                                            <h4 className='fw-light mb-5'>Felvett események</h4>
+                                            {this.state.calDatas.map((event, index) => (
+                                                <div key={index}>
+                                                    <p className='bg-light rounded'>
+                                                        <strong>{event.title}:</strong>
+                                                        <p className='text-success'>{event.comment}</p>
+                                                        <i className='text-danger'>
+                                                            {event.start &&
+                                                                (new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.') === new Date().toLocaleDateString('hu-HU').replace(/\./g, '.')
+                                                                    ? <strong>Mai napon!</strong> /* wrap the text in a strong tag */
+                                                                    : new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.'))
+                                                            }
+                                                        </i>
+                                                    </p>
+                                                    <button className='btn btn-danger float-end' onClick={() => this.handleEventDelete(event.calId)}><strong>törlés</strong></button>
+                                                    <br />
+                                                    <hr className='mt-4' />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                             </div>
-                            <ul className='text-start'>
+                            <ul className='text-start mt-3'>
                                 <p className='fw-lighter'>Jelmagyarázat:</p>
                                 <li><strong>Esemény</strong></li>
                                 <li className='text-success'>Infó</li>
