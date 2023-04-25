@@ -66,10 +66,8 @@ export default class Login extends Component<{}, ILoginState> {
       const { token,userId } = await response.json();
       localStorage.setItem("accessToken", token);
       localStorage.setItem("userId", userId);
-      // Redirect to dashboard or home page
       window.location.href = "/";
       console.log('Üdvözöljük!');
-      // Handle login form submission
       const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -84,7 +82,7 @@ export default class Login extends Component<{}, ILoginState> {
             setIsLoggedIn(true);
           })
           .catch(error => {
-            // handle error
+            console.log('Error during login: ',error);
           });
       };
     } else if (response.status === 401) {
@@ -101,7 +99,7 @@ export default class Login extends Component<{}, ILoginState> {
 
 
   render() {
-    return <><body id="undoBlockContent">
+    return <><main id="undoBlockContent">
       <section>
         <div className="container-fluid h-custom">
           <div className="row d-flex justify-content-center align-items-center h-100" id="fillPage">
@@ -140,7 +138,7 @@ export default class Login extends Component<{}, ILoginState> {
           </div>
         </div>
       </section>
-    </body></>
+    </main></>
 
   }
 

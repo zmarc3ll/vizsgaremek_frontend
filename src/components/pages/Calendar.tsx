@@ -391,7 +391,7 @@ export default class Calendar extends Component<{}, State> {
           }
 
         if (this.state.carLoaded) {
-            return <body id="undoBlockContentForCalendar">
+            return <main id="undoBlockContentForCalendar">
                 {this.state.cars.map((car: Car) => (
                     <h1 key={car.carId} className=" text-center">
                         <Link to={'/carpage'} id="carPageLink"><span><img src={'car.png'} alt="" className="img-fluid me-3" />{car.givenName}<img src={'car.png'} alt="" className="img-fluid ms-3" id="flippedCar" /></span></Link>
@@ -515,7 +515,7 @@ export default class Calendar extends Component<{}, State> {
                         </div>
                     </div>
                 </div>
-            </body>
+            </main>
         } else {
             return <body id="undoBlockContent">
                 <div className="container text-center">

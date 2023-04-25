@@ -133,7 +133,7 @@ export default class Register extends Component<{}, State> {
         const usernameReg = /^[a-zA-Z0-9]{3,10}$/;
         let isValid = false;
         return <>
-            <body id="undoBlockContent">
+            <main id="undoBlockContent">
                 <section className="vh-200">
                     <div className="container h-100">
                         <div className="row d-flex justify-content-center align-items-center h-100">
@@ -255,6 +255,6 @@ export default class Register extends Component<{}, State> {
                         </div>
                     </div>
                 </section>
-            </body></>
+            </main></>
     }
 }

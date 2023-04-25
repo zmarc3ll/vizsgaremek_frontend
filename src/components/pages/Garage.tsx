@@ -281,7 +281,7 @@ export default class Garage extends Component<{}, State> {
             )
         }
         return <>
-            <body id="undoBlockContent">
+            <main id="undoBlockContent">
                 <div className="container-fluid" id="garageHeight">
                     <section className="text-center container">
                         <h1 className="fw-light">Garázs</h1>
@@ -379,7 +379,7 @@ export default class Garage extends Component<{}, State> {
                         </div>
                     </div>
                 </div>
-            </body>
+            </main>
         </>
     }
 }
