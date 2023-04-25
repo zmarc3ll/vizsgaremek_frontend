@@ -262,7 +262,28 @@ export default class GarageForCar extends Component<{}, State> {
                 </div></>)
         }
 
-        return <body id="undoBlockContent">
+        let closeEventsCard;
+          if(this.state.eventsLoaded){
+            closeEventsCard = (<div className="card-body">
+            {this.state.calDatas.map((caldatas: CalendarData) => (
+                <>
+                    <div key={caldatas.id} className="mb-4 ms-4 me-4" id="closeEvents">
+                        <span><strong>{caldatas.title}</strong> - <i className="text-danger">{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
+                    </div>
+                    <hr />
+                </>
+            ))}
+            <Link to={'/calendar'}><button className="btn btn-dark" id="calButton">Ugrás a naptárra</button></Link>
+        </div>)
+          } else {
+           closeEventsCard = ( <div className="card-body">
+                <p className="fw-semibold text-success text-center mt-3 mb-4">Minden kész, <br /> Nincsen kőzelgő esemény!</p>
+                <Link to={'/calendar'}><button className="btn btn-dark" id="calButton">Ugrás a naptárra</button></Link>
+            </div>)
+          }
+
+
+        return <main id="undoBlockContent">
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
                     <div className="col-lg-4 ps-4">
@@ -330,17 +351,7 @@ export default class GarageForCar extends Component<{}, State> {
                                     <div className="card-header">
                                         <h5 className="text-center mb-3 mt-3 fw-semibold">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
                                     </div>
-                                    <div className="card-body">
-                                        {this.state.calDatas.map((caldatas: CalendarData) => (
-                                            <>
-                                                <div key={caldatas.id} className="mb-4 ms-4 me-4" id="closeEvents">
-                                                    <span><strong>{caldatas.title}</strong> - <i className="text-danger">{caldatas.start}</i><p className="fw-light mt-2">{caldatas.comment}</p></span>
-                                                </div>
-                                                <hr />
-                                            </>
-                                        ))}
-                                        <Link to={'/calendar'}><button className="btn btn-dark" id="calButton">Ugrás a naptárra</button></Link>
-                                    </div>
+                                    {closeEventsCard}
                                 </div>
                             </div>
                             <div className="col-lg-6">
@@ -352,6 +363,6 @@ export default class GarageForCar extends Component<{}, State> {
                     </div>
                 </div>
             </div>
-        </body>
+        </main>
     }
 }
