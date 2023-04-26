@@ -64,7 +64,7 @@ export default class Register extends Component<{}, State> {
 
     handleValidation = async () => {
         const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-        const usernameReg = /^[a-zA-Z0-9]{3,10}$/;
+        const usernameReg = /^[a-zA-Z0-9]{3,20}$/;
         const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput } = this.state;
         if (!usernameReg.test(usernameInput) || passwordInput.length < 6 || passwordAuthInput.length < 6 || passwordInput !== passwordAuthInput || !emailReg.test(emailInput) || (new Date(birthDateInput).getFullYear() > new Date().getFullYear() - 18)) {
             this.setState({
