@@ -384,7 +384,7 @@ export default class Calendar extends Component<{}, State> {
             docs = (
               <>
                 <h6 className="text-center text-warning mt-3">
-                  Még nincs felvéve dokument.
+                  Még nincs felvéve dokumentum.
                 </h6>
               </>
             );
