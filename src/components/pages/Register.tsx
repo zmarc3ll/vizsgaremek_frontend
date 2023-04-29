@@ -91,7 +91,7 @@ export default class Register extends Component<{}, State> {
         event.preventDefault();
         const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput } = this.state;
         const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-        const usernameReg = /^[a-zA-Z0-9]{3,10}$/;
+        const usernameReg = /^[a-zA-Z0-9]{3,20}$/;
         if (!usernameReg.test(usernameInput) || passwordInput.length < 6 || passwordAuthInput.length < 6 || passwordInput !== passwordAuthInput || !emailReg.test(emailInput) || (new Date(birthDateInput).getFullYear() > new Date().getFullYear() - 18)) {
             return;
         }
@@ -130,7 +130,7 @@ export default class Register extends Component<{}, State> {
     render() {
         const { usernameInput, passwordInput, passwordAuthInput, emailInput, birthDateInput, usernameWrong, passwordWrong, emailWrong, birthDateWrong, passwordAuthWrong } = this.state;
         const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-        const usernameReg = /^[a-zA-Z0-9]{3,10}$/;
+        const usernameReg = /^[a-zA-Z0-9]{3,20}$/;
         let isValid = false;
         return <>
             <main id="undoBlockContent">
