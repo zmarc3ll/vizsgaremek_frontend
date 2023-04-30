@@ -227,8 +227,6 @@ export default class GarageForCar extends Component<{}, State> {
 
 
     render() {
-        // const data = [100, 50, 70, 200, 40, 10, 90, 250, 30, 80, 150, 40];
-        //const labels = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember','Október','November','December'];
         const data = this.state.chart.map((chart) => (chart.speedometer));
         const labels = this.state.chart.map((chart) => (chart.date));
 
@@ -292,7 +290,7 @@ export default class GarageForCar extends Component<{}, State> {
                                 <img
                                     src={`http://localhost:3001/uploadedFiles/cars/${this.state.carPic}`}
                                     alt="Töltsön fel autójáról képet!"
-                                    className=" rounded shadow-lg bg-body ms-0 img-fluid"
+                                    className=" rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
                                     id="carsImage"
                                 />
                             </div>
