@@ -346,10 +346,14 @@ export default class Calendar extends Component<{}, State> {
                     status = "Már lejárt.";
                     statusClass = "text-danger";
                     statusClassDate = "text-danger"
+                  } else if (daysLeft <= 30) {
+                    status = `${daysLeft} nap múlva`;
+                    statusClass = "text-warning";
+                    statusClassDate = "text-success"
                   } else if (daysLeft === 0) {
                     status = "Mai napon jár le!";
-                    statusClass = "text-danger";
-                    statusClassDate = "text-warning"
+                    statusClass = "text-warning";
+                    statusClassDate = "text-danger"
                   } else {
                     status = `${daysLeft} nap múlva`;
                     statusClass = "text-primary";
