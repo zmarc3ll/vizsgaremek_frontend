@@ -1,5 +1,6 @@
 import { Component, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
 interface State {
     users: User[];
@@ -124,7 +125,7 @@ export default class Register extends Component<{}, State> {
             birthDateWrong: '',
         })
         await this.loadUsers();
-        window.location.href = '/login';
+        window.location.href = '/login?registered=true'; //window.location.href = '/login';
     };
 
     render() {
@@ -234,7 +235,11 @@ export default class Register extends Component<{}, State> {
                                                     </div>
                                                     <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                                         <> {(() => {
-                                                            if (usernameWrong === '' || emailWrong === '' || passwordWrong === '' || passwordAuthWrong === '' || birthDateWrong === '') {
+                                                            if (usernameWrong === '' &&
+                                                                emailWrong === '' &&
+                                                                passwordWrong === '' &&
+                                                                passwordAuthWrong === '' &&
+                                                                birthDateWrong === '') { //usernameWrong === '' || emailWrong === '' || passwordWrong === '' || passwordAuthWrong === '' || birthDateWrong === ''
                                                                 isValid = true
                                                             } else {
                                                                 isValid = false;

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 interface ILoginState {
   username: string;
   password: string;
+  successMessage: string;
   errors: {
     username: string;
     password: string;
@@ -18,6 +19,7 @@ export default class Login extends Component<{}, ILoginState> {
     this.state = {
       username: "",
       password: "",
+      successMessage: "",
       errors: {
         username: "",
         password: "",
@@ -63,7 +65,7 @@ export default class Login extends Component<{}, ILoginState> {
       }),
     });
     if (response.ok) {
-      const { token,userId } = await response.json();
+      const { token, userId } = await response.json();
       localStorage.setItem("accessToken", token);
       localStorage.setItem("userId", userId);
       window.location.href = "/";
@@ -82,7 +84,7 @@ export default class Login extends Component<{}, ILoginState> {
             setIsLoggedIn(true);
           })
           .catch(error => {
-            console.log('Error during login: ',error);
+            console.log('Error during login: ', error);
           });
       };
     } else if (response.status === 401) {
@@ -97,6 +99,17 @@ export default class Login extends Component<{}, ILoginState> {
     }
   };
 
+  componentDidMount() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("registered") === "true") {
+      this.setState({
+        successMessage: "Sikeres regisztráció! Most bejelentkezhet.",
+      });
+
+      window.history.replaceState({}, document.title, "/login");
+    }
+  }
+
 
   render() {
     return <><main id="undoBlockContent">
@@ -108,6 +121,11 @@ export default class Login extends Component<{}, ILoginState> {
             </div>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <form onSubmit={this.handleSubmit}>
+                {this.state.successMessage && (
+                  <div className="alert alert-success text-center">
+                    {this.state.successMessage}
+                  </div>
+                )}
                 <div className="divider d-flex align-items-center my-4">
                   <h2 className="text-center fw-bold mx-1 mb-3 pt-2">Belépés</h2>
                 </div>
