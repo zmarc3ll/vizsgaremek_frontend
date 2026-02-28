@@ -74,3 +74,45 @@
     transform: translateX(-50%) translateY(0px) scale(1);
   }
 }
+
+.logout-toast {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px) scale(0.95);
+  background: linear-gradient(135deg, #f44336, #c62828); /* piros árnyalat */
+  color: white;
+  padding: 18px 30px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+  opacity: 0;
+  z-index: 9999;
+  animation: floatIn 0.5s forwards;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.logout-toast .logout-text {
+  display: inline-block;
+}
+
+.fade-out-logout {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-50px) scale(0.8);
+}
+
+@keyframes floatIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-40px) scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0px) scale(1);
+  }
+}

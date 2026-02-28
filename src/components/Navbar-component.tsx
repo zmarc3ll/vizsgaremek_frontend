@@ -5,31 +5,33 @@ import axios from 'axios';
 const NavbarComponent: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>('');
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const [fadeOutLogout, setFadeOutLogout] = useState(false);
 
   // Check if the user is logged in
   useEffect(() => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (accessToken) {
-          setIsLoggedIn(true);
-          axios.get('http://localhost:3001/user', {
-              headers: {
-                  'Authorization': `Bearer ${accessToken}`
-              }
-          }).then(async response => {
-            const username = localStorage.getItem('username');
-            if (username) {
-              setUserName(username);
-            } else {
-              setUserName('');
-            }       
-          }).catch(error => {
-              console.log('Failed to get username')
-          });
-      }
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      setIsLoggedIn(true);
+      axios.get('http://localhost:3001/user', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }).then(async response => {
+        const username = localStorage.getItem('username');
+        if (username) {
+          setUserName(username);
+        } else {
+          setUserName('');
+        }
+      }).catch(error => {
+        console.log('Failed to get username')
+      });
+    }
   }, []);
 
   // Handle logout
-     const handleLogout = async () => {
+  const handleLogout = async () => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       const response = await fetch('http://localhost:3001/auth/logout', {
@@ -44,7 +46,17 @@ const NavbarComponent: React.FC = () => {
         localStorage.removeItem('username');
         setIsLoggedIn(false);
         setUserName('');
-        window.location.reload();
+        setShowLogoutPopup(true);
+        setFadeOutLogout(false);
+
+        // 2.5 mp után fade-out
+        setTimeout(() => setFadeOutLogout(true), 2500);
+
+        // 3 mp után eltüntetjük a popupot
+        setTimeout(() => setShowLogoutPopup(false), 3000);
+
+        // opcionálisan ne reload-oljunk, maradjon SPA
+        // window.location.reload();
       } else {
         console.log('Failed to logout')
       }
@@ -54,6 +66,11 @@ const NavbarComponent: React.FC = () => {
   return (
     <nav className="navbar navbar-expand-sm bg-light fixed-top">
       <div className="container-fluid">
+        {showLogoutPopup && (
+          <div className={`logout-toast ${fadeOutLogout ? "fade-out-logout" : ""}`}>
+            <span className="logout-text">Sikeresen kijelentkezett!</span>
+          </div>
+        )}
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -71,7 +88,7 @@ const NavbarComponent: React.FC = () => {
                   <Link to='./calendar' className="nav-link">Naptár</Link>
                 </li>
               </>
-            )} 
+            )}
             <li className="nav-item">
               <Link to={'/aboutus'} className="nav-link" >Rólunk</Link>
             </li>
@@ -83,9 +100,9 @@ const NavbarComponent: React.FC = () => {
               </button>
               <ul className="dropdown-menu">
                 {/* Display the username only when it is available */}
-              {userName && (
-                <li><h6 className="dropdown-header">{userName}</h6></li>
-              )}
+                {userName && (
+                  <li><h6 className="dropdown-header">{userName}</h6></li>
+                )}
                 {!isLoggedIn && (
                   <>
                     <li><Link to='/login' className="dropdown-item">Belépés</Link></li>
@@ -99,8 +116,8 @@ const NavbarComponent: React.FC = () => {
             </div>
           </ul>
         </div>
-        </div>
-      </nav>
-    );
+      </div>
+    </nav>
+  );
 };
 export default NavbarComponent;
