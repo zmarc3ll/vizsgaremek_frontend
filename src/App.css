@@ -364,3 +364,400 @@
 .my-calendar-wrapper .fc-daygrid-day {
   background: #ffffff10; /* halvány háttér, vagy teljesen átlátszó: transparent */
 }
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* kicsit nagyobb kártyák */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.event-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 20px; /* nagyobb padding */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08); /* enyhe árnyék */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  position: relative;
+}
+
+.event-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  background-color: #e3f2fd;
+}
+
+.event-card-content {
+  margin-bottom: 12px;
+}
+
+.event-title {
+  font-size: 1.15rem; /* nagyobb cím */
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 8px;
+}
+
+.event-comment {
+  font-size: 0.95rem; /* nagyobb szöveg */
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.event-date {
+  font-size: 0.85rem; /* kicsit nagyobb dátum */
+  color: #555;
+}
+
+.event-delete-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px; /* nagyobb gomb */
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.event-delete-btn:hover {
+  background-color: #b71c1c;
+}
+
+/* Mobilra */
+@media (max-width: 768px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .event-card {
+    padding: 16px;
+  }
+
+  .event-title {
+    font-size: 1.05rem;
+  }
+
+  .event-comment {
+    font-size: 0.9rem;
+  }
+
+  .event-date {
+    font-size: 0.8rem;
+  }
+
+  .event-delete-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* nagyobb kártyák */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.doc-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  position: relative;
+}
+
+.doc-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  background-color: #fce4ec;
+}
+
+.doc-card-content {
+  margin-bottom: 12px;
+}
+
+.doc-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #c2185b;
+  margin-bottom: 8px;
+}
+
+.doc-date {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.doc-status {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.doc-delete-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.doc-delete-btn:hover {
+  background-color: #b71c1c;
+}
+
+/* Mobilra */
+@media (max-width: 768px) {
+  .docs-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .doc-card {
+    padding: 16px;
+  }
+
+  .doc-name {
+    font-size: 1.05rem;
+  }
+
+  .doc-date, .doc-status {
+    font-size: 0.8rem;
+  }
+
+  .doc-delete-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+button,
+.btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+button:hover,
+.btn:hover {
+  transform: scale(1.05); /* kicsit megnő */
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2); /* finom árnyék */
+}
+
+button:active,
+.btn:active {
+  transform: scale(0.97); /* kattintásnál picit vissza */
+}
+
+button:focus,
+.btn:focus {
+  outline: none;
+}
+
+#undoBlockContentForCalendar button,
+#undoBlockContentForCalendar .btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+#undoBlockContentForCalendar button:hover,
+#undoBlockContentForCalendar .btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Dropdown animáció */
+.dropdown-menu {
+  transform-origin: top;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transform: scaleY(0);
+  opacity: 0;
+  pointer-events: none; /* alapban ne lehessen rá kattintani */
+}
+
+.dropdown-menu.show {
+  transform: scaleY(1);
+  opacity: 1;
+  pointer-events: auto; /* ha látható, lehessen kattintani */
+}
+
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  transition: all 0.25s ease;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #4caf50; /* vagy bármilyen fő szín */
+  box-shadow: 0 4px 12px rgba(76,175,80,0.3);
+  transform: scale(1.02); /* picit megnő */
+  outline: none;
+}
+
+/* Alap text mező */
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  transition: all 0.25s ease;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background-color: #fff;
+}
+
+/* Hover és focus effekt */
+input[type="text"]:hover,
+input[type="date"]:hover,
+textarea:hover,
+select:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transform: scale(1.02);
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #4caf50;       /* fő szín */
+  box-shadow: 0 4px 12px rgba(76,175,80,0.3);
+  transform: scale(1.02);
+  outline: none;
+}
+
+/* Alap kártya stílus minden kártyára */
+.card,
+.event-card,
+.doc-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  background-color: #fff; /* egységes fehér háttér */
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Hover effekt */
+.card:hover,
+.event-card:hover,
+.doc-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Kártya belső tartalom */
+.card-body,
+.event-card-body,
+.doc-card-body {
+  transition: all 0.3s ease;
+  padding: 16px;
+  font-size: 0.95rem;
+}
+
+/* Címek */
+.card-title,
+.event-card-title,
+.doc-card-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Leírás / információ */
+.card-text,
+.event-card-text,
+.doc-card-text {
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Mobilra kisebb padding és méret */
+@media (max-width: 768px) {
+  .card,
+  .event-card,
+  .doc-card {
+    padding: 12px;
+  }
+  .card-body,
+  .event-card-body,
+  .doc-card-body {
+    font-size: 0.9rem;
+  }
+}
+
+/* Alap interactive stílus minden gombra, inputra, textarea-ra, select-re, dropdown-item-re */
+.interactive {
+  background-color: #ffffff; /* fehér hátter */
+  color: #333; /* sötétebb szöveg */
+  border: 1px solid #ccc; /* alap szegély */
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  transform: scale(1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  outline: none;
+}
+
+/* Hover és fókusz effekt */
+.interactive:hover,
+.interactive:focus {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-color: #4caf50; /* zöld keret */
+  background-color: #ffffff; /* maradjon fehér */
+}
+
+/* Dropdown item speciális eset */
+.dropdown-item.interactive {
+  background-color: #ffffff;
+  color: #333;
+}
+
+.dropdown-item.interactive:hover,
+.dropdown-item.interactive:focus {
+  background-color: #f1fdf5; /* enyhén zöldes hover */
+  color: #333;
+}
+
+/* Alap card hover effekt */
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.25s ease;
+}
+
+/* Carousel gombokat kizárjuk */
+#carouselExampleCaptions .carousel-control-prev,
+#carouselExampleCaptions .carousel-control-next {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Ha valami miatt hover-ra is emelkedne */
+#carouselExampleCaptions .carousel-control-prev:hover,
+#carouselExampleCaptions .carousel-control-next:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}

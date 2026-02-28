@@ -164,7 +164,7 @@ export default class Register extends Component<{}, State> {
                                                         <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" htmlFor="form3Example3c">Email</label>
-                                                            <input type="email" id="form3Example3c" className="form-control" value={emailInput} required onChange={e => this.setState({ emailInput: e.currentTarget.value })} />
+                                                            <input type="email" id="form3Example3c" className="form-control interactive" value={emailInput} required onChange={e => this.setState({ emailInput: e.currentTarget.value })} />
                                                             {!emailReg.test(emailInput) ? <label htmlFor="form3Example1c" className="form-label label-valid">{emailWrong}</label> : <img className="checkmark" src={'check-mark.png'} />}
                                                         </div>
                                                     </div>
@@ -172,7 +172,7 @@ export default class Register extends Component<{}, State> {
                                                         <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" htmlFor="form3Example4c">Jelszó</label>
-                                                            <input type="password" id="form3Example4c" className="form-control" value={passwordInput} required onChange={e => this.setState({ passwordInput: e.currentTarget.value })} />
+                                                            <input type="password" id="form3Example4c" className="form-control interactive" value={passwordInput} required onChange={e => this.setState({ passwordInput: e.currentTarget.value })} />
                                                             {passwordInput.length < 6 ? <label htmlFor="form3Example1c" className="form-label label-valid">{passwordWrong}</label> : <img className="checkmark" src={'check-mark.png'} />}
                                                         </div>
                                                     </div>
@@ -180,7 +180,7 @@ export default class Register extends Component<{}, State> {
                                                         <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" htmlFor="form3Example4cd">Jelszó újra</label>
-                                                            <input type="password" id="form3Example4cd" className="form-control" value={passwordAuthInput} required onInput={this.handleValidation} onChange={e => this.setState({ passwordAuthInput: e.currentTarget.value })} />
+                                                            <input type="password" id="form3Example4cd" className="form-control interactive" value={passwordAuthInput} required onInput={this.handleValidation} onChange={e => this.setState({ passwordAuthInput: e.currentTarget.value })} />
                                                             {passwordAuthInput !== passwordInput ? <label htmlFor="form3Example1c" className="form-label label-valid">{passwordAuthWrong}</label> : (passwordInput ? <img className="checkmark" src={'check-mark.png'} /> : null)}
                                                         </div>
                                                     </div>

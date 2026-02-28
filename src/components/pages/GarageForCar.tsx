@@ -252,8 +252,8 @@ export default class GarageForCar extends Component<{}, State> {
             </div>
                 <div className="card-body">
                     <form className="form-control text-center" onSubmit={this.handleUpload}>
-                        <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
-                        <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-4" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
+                        <label htmlFor="numInput" className="form-label fw-light interactive">Kilóméter óra</label>
+                        <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-4 interactive" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
                         <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-4" />
                         <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
                     </form>

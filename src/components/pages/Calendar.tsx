@@ -333,64 +333,46 @@ export default class Calendar extends Component<{}, State> {
         let docs;
         if (this.state.docsLoaded) {
             docs = (
-                <>
-                    {this.state.docDatas.map((docs: DocumentData) => {
-                        const expirationDate = new Date(docs.date);
-                        const daysLeft = Math.ceil(
-                            (expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
-                        );
-                        let status;
-                        let statusClass;
-                        let statusClassDate;
+                <div className="docs-grid">
+                    {this.state.docDatas.map((doc: DocumentData) => {
+                        const expirationDate = new Date(doc.date);
+                        const daysLeft = Math.ceil((expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+
+                        let statusClass = "";
+                        let statusText = "";
+
                         if (daysLeft < 0) {
-                            status = "Már lejárt.";
                             statusClass = "text-danger";
-                            statusClassDate = "text-danger"
+                            statusText = "Már lejárt";
                         } else if (daysLeft === 0) {
-                            status = "Mai napon jár le!";
                             statusClass = "text-warning";
-                            statusClassDate = "text-warning"
+                            statusText = "Mai napon jár le!";
                         } else if (daysLeft <= 30) {
-                            status = `${daysLeft} nap múlva`;
                             statusClass = "text-warning";
-                            statusClassDate = "text-success"
+                            statusText = `${daysLeft} nap múlva`;
                         } else {
-                            status = `${daysLeft} nap múlva`;
-                            statusClass = "text-primary";
-                            statusClassDate = "text-success"
+                            statusClass = "text-success";
+                            statusText = `${daysLeft} nap múlva`;
                         }
+
                         return (
-                            <div className="contriner-fluid text-center" key={docs.docId}>
-                                <span>
-                                    <strong>{docs.name}</strong>&emsp;
-                                    <i className={statusClassDate}>
-                                        {new Date(docs.date).toLocaleDateString("hu-HU", {
-                                            year: "numeric",
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                        }).replace(/\//g, ". ")}
-                                    </i>
-                                </span>
-                                <br />
-                                <span>
-                                    <h6 className="mt-3">
-                                        Lejár: &ensp;<b className={statusClass}>{status}</b>
-                                    </h6>
-                                    <button className="link-danger float-end pt-2 border-0 bg-white" onClick={() => this.handleDocsDelete(docs.docId)}>Törlés</button>
-                                </span>
-                                <hr className="mt-5" />
+                            <div key={doc.docId} className="doc-card">
+                                <div className="doc-card-content">
+                                    <strong className="doc-name">{doc.name}</strong>
+                                    <div className="doc-date">{expirationDate.toLocaleDateString('hu-HU')}</div>
+                                    <div className={`doc-status ${statusClass}`}>{statusText}</div>
+                                </div>
+                                <button className="doc-delete-btn" onClick={() => this.handleDocsDelete(doc.docId)}>Törlés</button>
                             </div>
                         );
                     })}
-                </>
+                </div>
             );
         } else {
             docs = (
-                <>
-                    <h6 className="text-center text-warning mt-3">
-                        Még nincs felvéve dokumentum.
-                    </h6>
-                </>
+                <h6 className="text-center text-warning mt-3">
+                    Még nincs felvéve dokumentum.
+                </h6>
             );
         }
 
@@ -504,24 +486,22 @@ export default class Calendar extends Component<{}, State> {
                                     </div>
                                     <div className="col-lg-9 text-center">
                                         <h4 className='fw-light mb-5'>Felvett események</h4>
-                                        {this.state.calDatas.map((event, index) => (
-                                            <div key={index}>
-                                                <p className='bg-light rounded'>
-                                                    <strong>{event.title}:</strong>
-                                                    <p className='text-success'>{event.comment}</p>
-                                                    <i className='text-danger'>
-                                                        {event.start &&
-                                                            (new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.') === new Date().toLocaleDateString('hu-HU').replace(/\./g, '.')
-                                                                ? <strong>Mai napon!</strong> /* wrap the text in a strong tag */
-                                                                : new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.'))
-                                                        }
-                                                    </i>
-                                                </p>
-                                                <button className='btn btn-danger float-end' onClick={() => this.handleEventDelete(event.calId)}><strong>törlés</strong></button>
-                                                <br />
-                                                <hr className='mt-4' />
-                                            </div>
-                                        ))}
+                                        <div className="events-grid">
+                                            {this.state.calDatas.map((event, index) => (
+                                                <div className="event-card" key={index}>
+                                                    <div className="event-card-content">
+                                                        <h5 className="event-title">{event.title}</h5>
+                                                        <p className="event-comment">{event.comment}</p>
+                                                        <span className="event-date">
+                                                            {event.start && new Date(event.start).toLocaleDateString('hu-HU')}
+                                                        </span>
+                                                    </div>
+                                                    <button className="event-delete-btn" onClick={() => this.handleEventDelete(event.calId)}>
+                                                        Törlés
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

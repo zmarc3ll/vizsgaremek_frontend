@@ -138,7 +138,7 @@ export default class Login extends Component<{}, ILoginState> {
                 </div>
                 <div className="form-outline mb-3">
                   <label className="form-label" htmlFor="form3Example4">Jelszó</label>
-                  <input type="password" id="form3Example4" className="form-control form-control-lg"
+                  <input type="password" id="form3Example4" className="form-control form-control-lg interactive"
                     placeholder="Adja meg a jelszót" value={this.state.password}
                     onChange={this.handlePasswordChange} />
                   {this.state.errors.password && (
