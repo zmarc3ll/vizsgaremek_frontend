@@ -126,7 +126,7 @@ const NavbarComponent: React.FC = () => {
           <ul className="navbar-nav ms-auto">
             <div className="btn-group dropstart">
               <button type="button" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img className="img-fluid img-thumbnail nav-item" src={'profile.png'} alt="Profil" title="User" />
+                <img className="img-fluid img-thumbnail nav-item" src={'/profile.png'} alt="Profil" title="User" />
                 <p>{userName}</p>
               </button>
               <ul className="dropdown-menu">

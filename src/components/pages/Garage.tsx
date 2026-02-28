@@ -240,7 +240,7 @@ export default class Garage extends Component<{}, State> {
             myCar = (
                 <div className="row">
                     {this.state.cars.map((car: Car) => (
-                        <div className="col container-fluid" key={car.carId}>
+                        <div className="d-flex flex-wrap justify-content-center" key={car.carId}>
                             <div className="card">
 
                                 {!this.state.hasCarPic && uploadComponent}
@@ -257,8 +257,8 @@ export default class Garage extends Component<{}, State> {
                                         id="albumPicture"
                                     />
 
-                                    <div className="card-body">
-                                        <ul id="carDataList" className="text-center">
+                                    <div className="card-body text-center">
+                                        <ul id="carDataList" className="list-unstyled">
                                             <li>
                                                 <strong>{car.givenName}</strong><br />
                                                 Márka: <i>{car.brand}</i><br />
@@ -295,20 +295,28 @@ export default class Garage extends Component<{}, State> {
             )
         }
         return <>
-            <main id="undoBlockContent">
+            <main
+                id="undoBlockContent"
+                style={{
+                    backgroundImage: 'url("/garageBg.png")',
+                    backgroundSize: 'cover',        // kitölti az egész felületet
+                    backgroundPosition: 'center',   // középre igazítja
+                    backgroundRepeat: 'no-repeat',  // ne ismétlődjön
+                    minHeight: '100vh',             // legalább a teljes viewport magasság
+                    width: '100%',                  // szélesség 100%
+                }}
+            >
                 <div className="container-fluid" id="garageHeight">
                     <section className="text-center container">
                         <h1 className="fw-light">Garázs</h1>
                         <p className="lead text-muted"> Kezelje autóját, vagy vegyen fel újat!</p>
                     </section>
 
-                    <div className="row justify-content-center" id="carAlbum">
-                        <div className="album py-5 bg-light">
-                            <div className="container">
-                                <div className="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1">
-                                    {myCar}
-                                    {newCarAdd}
-                                </div>
+                    <div className="album py-5 bg-transparent">
+                        <div className="container">
+                            <div className="row justify-content-center">
+                                {myCar}
+                                {newCarAdd}
                             </div>
                         </div>
                     </div>

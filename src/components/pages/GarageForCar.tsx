@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LineChart from "../Chart-component";
 import * as bootstrap from 'bootstrap';
 import { NavLink } from "react-router-dom";
+import React from 'react';
 
 
 interface chartDataResponse {
@@ -23,7 +24,7 @@ interface CarPicture {
     carsId: number;
 }
 interface Props {
-  carId?: string;
+    carId?: string;
 }
 
 interface Car {
@@ -73,6 +74,7 @@ interface State {
     hasSpeedometer: boolean;
     speedometer: number;
     date: string;
+    carsCollapseOpen: { [key: number]: boolean }; // carId -> true/false
 }
 
 const currentDate = new Date();
@@ -95,7 +97,16 @@ export default class GarageForCar extends Component<Props, State> {
         hasSpeedometer: false,
         speedometer: 0,
         date: formattedDate,
+        carsCollapseOpen: {},
     }
+    toggleCollapse = (carId: number) => {
+        this.setState(prev => ({
+            carsCollapseOpen: {
+                ...prev.carsCollapseOpen,
+                [carId]: !prev.carsCollapseOpen[carId],
+            },
+        }));
+    };
 
     async loadCarPics() {
         let userId = localStorage.getItem('userId');
@@ -240,7 +251,7 @@ export default class GarageForCar extends Component<Props, State> {
         let kmSection;
         if (this.state.hasSpeedometer) {
             kmSection = (<>
-                <div className="card-header"><h5 className="text-center mb-3 mt-3 fw-semibold">Felvétel a diagrammra <img src={'chart.png'} className="img-fluid float-end" /></h5></div>
+                <div className="card-header"><h5 className="text-center mb-3 mt-3 fw-semibold">Felvétel a diagrammra <img src="/chart.png" className="img-fluid float-end" /></h5></div>
                 <div className="card-body">
                     <form className="form-control text-center" onSubmit={this.handleUpload}>
                         <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
@@ -253,7 +264,7 @@ export default class GarageForCar extends Component<Props, State> {
                 </div></>)
         } else {
             kmSection = (<><div className="card-header">
-                <h5 className="text-center mb-3 mt-3 fw-semibold">Kilóméter óra bállítása<img src={'chart.png'} className="img-fluid float-end" /></h5>
+                <h5 className="text-center mb-3 mt-3 fw-semibold">Kilóméter óra bállítása<img src="/chart.png" className="img-fluid float-end" /></h5>
             </div>
                 <div className="card-body">
                     <form className="form-control text-center" onSubmit={this.handleUpload}>
@@ -303,12 +314,22 @@ export default class GarageForCar extends Component<Props, State> {
             );
         }
 
-        return <main id="undoBlockContent">
+        return <main
+            id="undoBlockContent"
+            style={{
+                backgroundImage: 'url("/garageBg.png")',
+                backgroundSize: 'cover',        // kitölti az egész felületet
+                backgroundPosition: 'center',   // középre igazítja
+                backgroundRepeat: 'no-repeat',  // ne ismétlődjön
+                minHeight: '100vh',             // legalább a teljes viewport magasság
+                width: '100%',                  // szélesség 100%
+            }}
+        >
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
                     <div className="col-lg-4 ps-4">
-                        <div className="card">
-                            <div className="card-body">
+                        <div className="card" style={{ display: 'inline-block', maxWidth: '100%' }}>
+                            <div className="card-body p-2">
                                 <img
                                     src={`http://localhost:3001/uploadedFiles/cars/${this.state.carPic}`}
                                     alt="Töltsön fel autójáról képet!"
@@ -317,46 +338,47 @@ export default class GarageForCar extends Component<Props, State> {
                                 />
                             </div>
                         </div>
-                        <div className="card mt-4 mb-4">
-                            <div className="card-header">
-                                {/* cars details */}
-                                {this.state.cars.map((car: Car) => (
-                                    <h4 key={car.carId} className={'text-center pb-2 mt-3'}>
-                                        <span><strong>{car.givenName} adatai:</strong></span>
-                                        <img src={'informationBlack.png'} alt="i" className="img-fluid float-end position-absoulute" />
-                                    </h4>
-                                ))}
-                            </div>
-                            <div className="card-body">
-                                <ul id="carDataList">
-                                    <ul id="carDataList" className="ps-3 ms-2">
-                                        {this.state.cars.map((car: Car) => (
-                                            <><li key={car.carId} className={'mt-2'}>
-                                                <span>Márka: {car.brand}</span>
-                                            </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Modell: {car.model}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Évjárat: {car.modelYear}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Üzemanyag típusa: {car.fuelType}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Lóerő: {car.carPower}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Váltó típusa: {car.gearType}</span>
-                                                </li><li key={car.carId} className={'mt-2'}><span>Szín: {car.color}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Autó felépítése: {car.chassisType}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Ajtók száma: {car.doors}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Fogyasztás: {car.fuelEconomy}</span>
-                                                </li><li key={car.carId} className={'mt-2'}>
-                                                    <span>Rendszám: {car.license_plate}</span>
-                                                </li></>
-                                        ))}
-                                    </ul>
-                                </ul>
-                            </div>
+                        <div className="mt-4 mb-4">
+                            {this.state.cars.map(car => {
+                                const isOpen = this.state.carsCollapseOpen[car.carId] ?? true;
+
+                                return (
+                                    <div className="card mt-4 mb-4" key={car.carId}>
+                                        {/* Header: kattintásra toggle */}
+                                        <div
+                                            className="card-header d-flex justify-content-between align-items-center"
+                                            onClick={() => this.toggleCollapse(car.carId)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <strong>{car.givenName} adatai</strong>
+                                            <span style={{ fontSize: '20px' }}>{isOpen ? '▲' : '▼'}</span>
+                                        </div>
+
+                                        {/* Body: itt nincs külön collapse div */}
+                                        <div
+                                            className="card-body"
+                                            style={{
+                                                display: isOpen ? 'block' : 'none',
+                                                backgroundColor: 'transparent', // átlátszó
+                                            }}
+                                        >
+                                            <ul className="ps-3 ms-2">
+                                                <li>Márka: {car.brand}</li>
+                                                <li>Modell: {car.model}</li>
+                                                <li>Évjárat: {car.modelYear}</li>
+                                                <li>Üzemanyag típusa: {car.fuelType}</li>
+                                                <li>Lóerő: {car.carPower}</li>
+                                                <li>Váltó típusa: {car.gearType}</li>
+                                                <li>Szín: {car.color}</li>
+                                                <li>Autó felépítése: {car.chassisType}</li>
+                                                <li>Ajtók száma: {car.doors}</li>
+                                                <li>Fogyasztás: {car.fuelEconomy}</li>
+                                                <li>Rendszám: {car.license_plate}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                     <div className="col-lg-8">
@@ -369,7 +391,7 @@ export default class GarageForCar extends Component<Props, State> {
                             <div className="col-lg-6">
                                 <div className="card mt-4">
                                     <div className="card-header">
-                                        <h5 className="text-center mb-3 mt-3 fw-semibold">Közelgő események   <img src={'calendar.png'} className="img-fluid float-end" /></h5>
+                                        <h5 className="text-center mb-3 mt-3 fw-semibold">Közelgő események   <img src="/calendar.png" className="img-fluid float-end" /></h5>
                                     </div>
                                     {closeEventsCard}
                                 </div>

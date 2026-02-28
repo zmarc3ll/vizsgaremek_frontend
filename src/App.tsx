@@ -14,11 +14,24 @@ import AboutUs from './components/pages/AboutUs';
 import Garage from './components/pages/Garage';
 import Helmet from 'react-helmet';
 import { useParams } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 function GarageForCarWrapper() {
   const { carId } = useParams();
   return <GarageForCar carId={carId} />;
 }
+
+const ConditionalFooter: React.FC = () => {
+  const location = useLocation();
+
+  // Ha a path '/garage/'-rel kezdődik, ne jelenjen meg
+ if (location.pathname.startsWith('/garage/') || location.pathname === '/calendar' || location.pathname.startsWith('/garage')) {
+    return null;
+  }
+
+  return <FooterComponent />;
+};
+
 
 class App extends Component {
 
@@ -41,7 +54,7 @@ class App extends Component {
           <Route path='/garage/:carId' element={<GarageForCarWrapper />} />
         </Routes>
       </main>
-      <FooterComponent></FooterComponent>
+      <ConditionalFooter />
       {/*  <h2>Új user felvétele</h2>
     Username: <input type="text" value={usernameInput} onChange={e => this.setState({ usernameInput: e.currentTarget.value})} /> <br />
     Jelszó: <input type="text" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })}/> <br />

@@ -231,6 +231,7 @@
     height: 70px;
     min-width: 50px;
     padding: 2px;
+    background-color: #ffffff;
   }
 
   .my-calendar-wrapper .fc-daygrid-day-number {
@@ -287,7 +288,6 @@
 
 /* Események stílusa */
 .my-calendar-wrapper .fc-event {
-  background-color: #007bff; /* kék alapszín */
   color: white;
   border-radius: 8px;
   padding: 2px 4px;
@@ -360,9 +360,11 @@
   background: transparent !important;
 }
 
-/* Napok cellái */
 .my-calendar-wrapper .fc-daygrid-day {
-  background: #ffffff10; /* halvány háttér, vagy teljesen átlátszó: transparent */
+  background: #ffffff; /* vagy background-color */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15); /* ha van ilyen */
+  padding: 5px; /* opcionális, nem kötelező törölni */
+  border-radius: 8px;
 }
 
 .events-grid {
@@ -647,7 +649,6 @@ select:focus {
   outline: none;
 }
 
-/* Alap kártya stílus minden kártyára */
 /* Alap kártya stílus */
 .card,
 .event-card,
@@ -814,8 +815,11 @@ select:focus {
   }
 }
 
-.event-card {
-  background-color: white;
+.card,
+.event-card,
+.doc-card {
+  background-color: rgba(255, 255, 255, 0.25); /* üveges */
+  backdrop-filter: blur(12px);
   border-radius: 12px;
   padding: 12px 16px;
   margin-bottom: 12px;
@@ -1008,4 +1012,29 @@ select:focus {
 
 .modern-navbar .nav-link.active::after {
   width: calc(100% - 24px);
+}
+
+/* Minden kártya és naptár cella üveges hatás */
+.card,
+.event-card,
+.doc-card,
+.my-calendar-wrapper .fc-daygrid-day {
+  background-color: rgba(255, 255, 255, 0.25); /* fehér, de átlátszó */ 
+  backdrop-filter: blur(12px);       /* hátteret elmosó effekt */
+  -webkit-backdrop-filter: blur(12px); /* Safari támogatás */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* halvány keret az üveges hatáshoz */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);     /* lágy árnyék */
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effektre picit emeljük az árnyékot és a blur-t */
+.card:hover,
+.event-card:hover,
+.doc-card:hover,
+.my-calendar-wrapper .fc-daygrid-day:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
