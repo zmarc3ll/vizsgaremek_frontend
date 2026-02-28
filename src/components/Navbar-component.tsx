@@ -77,20 +77,20 @@ const NavbarComponent: React.FC = () => {
         <div className="collapse navbar-collapse ms-3" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to={'/'} className="nav-link active" aria-current="page">Főoldal</Link>
+              <Link to={'/'} className="nav-link active texthover" aria-current="page">Főoldal</Link>
             </li>
             {isLoggedIn && (
               <>
                 <li className="nav-item">
-                  <Link to={'/garage'} className="nav-link">Garázs</Link>
+                  <Link to={'/garage'} className="nav-link texthover">Garázs</Link>
                 </li>
                 <li className="nav-item">
-                  <Link to='./calendar' className="nav-link">Naptár</Link>
+                  <Link to='./calendar' className="nav-link texthover">Naptár</Link>
                 </li>
               </>
             )}
             <li className="nav-item">
-              <Link to={'/aboutus'} className="nav-link" >Rólunk</Link>
+              <Link to={'/aboutus'} className="nav-link texthover" >Rólunk</Link>
             </li>
           </ul>
           <ul className="navbar-nav ms-auto">
@@ -105,12 +105,12 @@ const NavbarComponent: React.FC = () => {
                 )}
                 {!isLoggedIn && (
                   <>
-                    <li><Link to='/login' className="dropdown-item">Belépés</Link></li>
-                    <li><Link to='/register' className="dropdown-item">Regisztráció</Link></li>
+                    <li><Link to='/login' className="dropdown-item texthover">Belépés</Link></li>
+                    <li><Link to='/register' className="dropdown-item texthover">Regisztráció</Link></li>
                   </>
                 )}
                 {isLoggedIn && (
-                  <li><Link to={'/'} className="dropdown-item" onClick={handleLogout} >Kijelentkezés</Link></li>
+                  <li><Link to={'/'} className="dropdown-item texthover" onClick={handleLogout} >Kijelentkezés</Link></li>
                 )}
               </ul>
             </div>
