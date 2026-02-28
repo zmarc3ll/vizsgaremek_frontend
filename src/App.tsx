@@ -13,6 +13,12 @@ import GarageForCar from './components/pages/GarageForCar';
 import AboutUs from './components/pages/AboutUs';
 import Garage from './components/pages/Garage';
 import Helmet from 'react-helmet';
+import { useParams } from "react-router-dom";
+
+function GarageForCarWrapper() {
+  const { carId } = useParams();
+  return <GarageForCar carId={carId} />;
+}
 
 class App extends Component {
 
@@ -31,7 +37,8 @@ class App extends Component {
           <Route path='/calendar' element={<Calendar />} />
           <Route path='/garage' element={<Garage />} />
           <Route path='/aboutus' element={<AboutUs />} />
-          <Route path='/carPage' element={<GarageForCar />} />
+          {/*<Route path='/carPage' element={<GarageForCar />} />*/}
+          <Route path='/garage/:carId' element={<GarageForCarWrapper />} />
         </Routes>
       </main>
       <FooterComponent></FooterComponent>

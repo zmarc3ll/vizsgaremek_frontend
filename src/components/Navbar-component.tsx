@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import { NavLink } from "react-router-dom";
 
 const NavbarComponent: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -64,7 +65,7 @@ const NavbarComponent: React.FC = () => {
   }
 
   return (
-    <nav className="navbar navbar-expand-sm bg-light fixed-top">
+    <nav className="navbar navbar-expand-sm modern-navbar fixed-top">
       <div className="container-fluid">
         {showLogoutPopup && (
           <div className={`logout-toast ${fadeOutLogout ? "fade-out-logout" : ""}`}>
@@ -77,26 +78,56 @@ const NavbarComponent: React.FC = () => {
         <div className="collapse navbar-collapse ms-3" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to={'/'} className="nav-link active texthover" aria-current="page">Főoldal</Link>
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  "nav-link texthover" + (isActive ? " active" : "")
+                }
+              >
+                Főoldal
+              </NavLink>
             </li>
             {isLoggedIn && (
               <>
                 <li className="nav-item">
-                  <Link to={'/garage'} className="nav-link texthover">Garázs</Link>
+                  <NavLink
+                    to="/garage"
+                    className={({ isActive }) =>
+                      "nav-link texthover" + (isActive ? " active" : "")
+                    }
+                  >
+                    Garázs
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link to='./calendar' className="nav-link texthover">Naptár</Link>
+                  <NavLink
+                    to="/calendar"
+                    className={({ isActive }) =>
+                      "nav-link texthover" + (isActive ? " active" : "")
+                    }
+                  >
+                    Naptár
+                  </NavLink>
                 </li>
               </>
             )}
             <li className="nav-item">
-              <Link to={'/aboutus'} className="nav-link texthover" >Rólunk</Link>
+              <NavLink
+                to="/aboutus"
+                className={({ isActive }) =>
+                  "nav-link texthover" + (isActive ? " active" : "")
+                }
+              >
+                Rólunk
+              </NavLink>
             </li>
           </ul>
           <ul className="navbar-nav ms-auto">
             <div className="btn-group dropstart">
               <button type="button" className="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img className="img-fluid img-thumbnail nav-item" src={'bxs-user-circle.png'} alt="userProfile" title="User" />
+                <img className="img-fluid img-thumbnail nav-item" src={'profile.png'} alt="Profil" title="User" />
+                <p>{userName}</p>
               </button>
               <ul className="dropdown-menu">
                 {/* Display the username only when it is available */}

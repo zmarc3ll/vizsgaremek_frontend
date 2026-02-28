@@ -2,6 +2,8 @@ import { Component, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import LineChart from "../Chart-component";
 import * as bootstrap from 'bootstrap';
+import { NavLink } from "react-router-dom";
+
 
 interface chartDataResponse {
     chart: ChartData[];
@@ -19,6 +21,9 @@ interface CarPicture {
     picId: number;
     carPic: string;
     carsId: number;
+}
+interface Props {
+  carId?: string;
 }
 
 interface Car {
@@ -74,7 +79,7 @@ const currentDate = new Date();
 const formattedDate = currentDate.toISOString().slice(0, 10);
 
 
-export default class GarageForCar extends Component<{}, State> {
+export default class GarageForCar extends Component<Props, State> {
 
     state: State = {
         carPic: '',

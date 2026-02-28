@@ -1,6 +1,7 @@
 import { Component, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Carousel } from "bootstrap";
+import { NavLink } from "react-router-dom";
 
 interface IMainState {
   showWelcome: boolean;
@@ -22,22 +23,22 @@ export default class Main extends Component<{}, IMainState> {
 
   componentDidMount() {
     const params = new URLSearchParams(window.location.search);
-  
+
     if (params.get("login") === "true") {
       const username = localStorage.getItem("username") || "";
-  
+
       this.setState({ showWelcome: true, username, fadeOut: false });
-  
+
       // 2.5 mp után kezdődjön a kifade-elés animáció
       setTimeout(() => {
         this.setState({ fadeOut: true });
       }, 2500);
-  
+
       // 3 mp után töröljük teljesen a popupot
       setTimeout(() => {
         this.setState({ showWelcome: false });
       }, 3000);
-  
+
       // URL tisztítás
       window.history.replaceState({}, document.title, "/");
     }

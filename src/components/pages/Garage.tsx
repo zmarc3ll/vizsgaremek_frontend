@@ -223,7 +223,7 @@ export default class Garage extends Component<{}, State> {
 
     render() {
         const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded } = this.state;
-        let uploadComponent;
+        let uploadComponent: JSX.Element | null = null;
         if (!this.state.hasCarPic) {
             uploadComponent = (
                 <div className="ps-3 pe-3 pt-2 pb-2 row">
@@ -238,33 +238,47 @@ export default class Garage extends Component<{}, State> {
         let newCarAdd;
         if (carLoaded) {
             myCar = (
-                <div className="col container-fluid">
-                    <div className="card">
-                        {uploadComponent}
-                        <Link to={'/carPage'}>
-                            <img src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`} alt="" className="bd-placeholder-img card-img-top" id="albumPicture" />
+                <div className="row">
+                    {this.state.cars.map((car: Car) => (
+                        <div className="col container-fluid" key={car.carId}>
+                            <div className="card">
 
-                            <div className="card-body">
-                                <p className="card-text">
-                                    <ul id="carDataList" className="text-center">
-                                        {this.state.cars.map((car: Car) => (
-                                            <li key={car.carId}>
-                                                <span className="text-center"><strong>{car.givenName}</strong></span><br />
-                                                <span>Márka: <i>{car.brand}</i></span><br />
-                                                <span>Modell: <i>{car.model}</i></span><br />
-                                                <span>Évjárat: <i>{car.modelYear}</i></span><br />
-                                                <span>Üzemanyag típusa: <i>{car.fuelType}</i></span><br />
-                                                <span>Lóerő: <i>{car.carPower}</i></span><br />
-                                                <span>Váltó típusa: <i>{car.gearType}</i></span><br />
-                                                <span>Rendszám: <i>{car.license_plate}</i></span><br />
+                                {!this.state.hasCarPic && uploadComponent}
+
+                                <Link
+                                    to={`/garage/${car.carId}`}
+                                    style={{ textDecoration: "none", color: "inherit" }}
+                                >
+
+                                    <img
+                                        src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`}
+                                        alt=""
+                                        className="bd-placeholder-img card-img-top"
+                                        id="albumPicture"
+                                    />
+
+                                    <div className="card-body">
+                                        <ul id="carDataList" className="text-center">
+                                            <li>
+                                                <strong>{car.givenName}</strong><br />
+                                                Márka: <i>{car.brand}</i><br />
+                                                Modell: <i>{car.model}</i><br />
+                                                Évjárat: <i>{car.modelYear}</i><br />
+                                                Üzemanyag: <i>{car.fuelType}</i><br />
+                                                Lóerő: <i>{car.carPower}</i><br />
+                                                Váltó: <i>{car.gearType}</i><br />
+                                                Rendszám: <i>{car.license_plate}</i>
                                             </li>
-                                        ))}
-                                    </ul>
-                                </p>
+                                        </ul>
+                                    </div>
 
-                            </div></Link>
-                    </div>
-                </div>)
+                                </Link>
+
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
         } else {
             newCarAdd = (
                 <div className="col ps-3 mt-5">
@@ -312,56 +326,56 @@ export default class Garage extends Component<{}, State> {
                                     window.location.href = '/garage';
                                 }}>
                                     <div className="mb-3">
-                                    <img src={"nameplate.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"nameplate.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carName" className="form-label ms-2 me-2"><strong>Autó neve*</strong></label>
                                         <input type="text" className="form-control" id="carName" placeholder="Írja be az autója nevét" required value={givenNameInput} onChange={e => this.setState({ givenNameInput: e.currentTarget.value })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"carbrand.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"carbrand.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carBrand" className="form-label ms-2 me-2"><strong>Autó márkája*</strong></label>
                                         <input type="text" className="form-control" id="carBrand" placeholder="Írja be az autó márkáját" required value={brandInput} onChange={e => this.setState({ brandInput: e.currentTarget.value })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"cartype.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"cartype.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carType" className="form-label ms-2 me-2"><strong>Autó típusa*</strong></label>
                                         <input type="text" className="form-control" id="carType" placeholder="Írja be az autó típusát" required value={modelInput} onChange={e => this.setState({ modelInput: e.currentTarget.value })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"caryear.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"caryear.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carYear" className="form-label ms-2 me-2"><strong>Évjárat</strong></label>
                                         <input type="number" className="form-control" id="carYear" placeholder="Írja be az autó évjáratát" value={modelYearInput} onChange={e => this.setState({ modelYearInput: e.currentTarget.valueAsNumber })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"fuel.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"fuel.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carFuel" className="form-label ms-2 me-2"><strong>Üzemanyag típusa*</strong></label>
                                         <input type="text" className="form-control" id="carFuel" placeholder="Írja be az autó üzemanyagának a típusát" required value={fuelTypeInput} onChange={e => this.setState({ fuelTypeInput: e.currentTarget.value })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"horses.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"horses.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carPower" className="form-label ms-2 me-2"><strong>Lóerő*</strong></label>
                                         <input type="number" className="form-control" id="carPower" placeholder="Írja be az autó lóerejét" required value={carPowerInput} onChange={e => this.setState({ carPowerInput: e.currentTarget.valueAsNumber })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"gear.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"gear.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carGear" className="form-label ms-2 me-2"><strong>Váltó típusa*</strong></label>
                                         <input type="text" className="form-control" id="carGear" placeholder="Írja be az autó váltójának típusát" required value={gearTypeInput} onChange={e => this.setState({ gearTypeInput: e.currentTarget.value })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"color-palette.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"color-palette.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carColor" className="form-label ms-2 me-2"><strong>Adja meg az autó színét</strong></label>
                                         <input type="text" className="form-control" id="carColor" placeholder="Írja be az autó színét" value={colorInput} onChange={e => this.setState({ colorInput: e.currentTarget.value })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"car.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"car.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carChassis" className="form-label ms-2 me-2"><strong>Autó felépítése</strong> <i className="fw-lighter">(Pl.: szedán, kupé, stb...)</i></label>
                                         <input type="text" className="form-control" id="carChassis" placeholder="Írja be az autó felépítését" value={chassisTypeInput} onChange={e => this.setState({ chassisTypeInput: e.currentTarget.value })} />
                                     </div><hr />
                                     <div className="mb-3">
-                                    <img src={"car-door.png"} alt="" className="img-fluid float-end mb-2" />
+                                        <img src={"car-door.png"} alt="" className="img-fluid float-end mb-2" />
                                         <label htmlFor="carDoors" className="form-label ms-2 me-2"><strong>Autó ajtainak száma</strong></label>
                                         <input type="number" className="form-control" id="carDoors" placeholder="Írja be az autó ajtajainak számát" value={doorsInput} onChange={e => this.setState({ doorsInput: e.currentTarget.valueAsNumber })} />
-                                    </div><hr />       
-                                        <img src={"fuelEco.png"} alt="" className="img-fluid float-end mb-2" />                             <div className="mb-3">
+                                    </div><hr />
+                                    <img src={"fuelEco.png"} alt="" className="img-fluid float-end mb-2" />                             <div className="mb-3">
                                         <label htmlFor="carFuele" className="form-label ms-2 me-2"><strong>Autó fogyasztása</strong> <i className="fw-lighter">(x liter/ 100 kilóméter)</i></label>
                                         <input type="text" className="form-control" id="carFuele" placeholder="Írja be az autó fogyasztását" value={fuelEconomyInput} onChange={e => this.setState({ fuelEconomyInput: e.currentTarget.value })} />
                                     </div>
