@@ -68,7 +68,7 @@ const currentDate = new Date();
 const formattedDate = currentDate.toISOString().slice(0, 10);
 
 export default class Calendar extends Component<{}, State> {
-    
+
     state: State = {
         cars: [],
         carLoaded: false,
@@ -215,7 +215,7 @@ export default class Calendar extends Component<{}, State> {
 
     handleDocsUpload = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const {name, date} = this.state;
+        const { name, date } = this.state;
         const dbData = {
             name: name,
             date: date,
@@ -326,73 +326,73 @@ export default class Calendar extends Component<{}, State> {
         function calculateDaysLeft(expirationDate: Date): string {
             const currentDate = new Date();
             const daysLeft = Math.ceil(
-              (expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+                (expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
             );
             return daysLeft <= 0 ? 'Már lejárt' : `${daysLeft} nap múlva.`;
-          }
+        }
         let docs;
         if (this.state.docsLoaded) {
             docs = (
-              <>
-                {this.state.docDatas.map((docs: DocumentData) => {
-                  const expirationDate = new Date(docs.date);
-                  const daysLeft = Math.ceil(
-                    (expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
-                  );
-                  let status;
-                  let statusClass;
-                  let statusClassDate;
-                  if (daysLeft < 0) {
-                    status = "Már lejárt.";
-                    statusClass = "text-danger";
-                    statusClassDate = "text-danger"
-                } else if (daysLeft === 0) {
-                  status = "Mai napon jár le!";
-                  statusClass = "text-warning";
-                  statusClassDate = "text-warning"
-                  } else if (daysLeft <= 30) {
-                    status = `${daysLeft} nap múlva`;
-                    statusClass = "text-warning";
-                    statusClassDate = "text-success"
-                  } else {
-                    status = `${daysLeft} nap múlva`;
-                    statusClass = "text-primary";
-                    statusClassDate = "text-success"
-                  }
-                  return (
-                    <div className="contriner-fluid text-center" key={docs.docId}>
-                      <span>
-                        <strong>{docs.name}</strong>&emsp;
-                        <i className={statusClassDate}>
-                          {new Date(docs.date).toLocaleDateString("hu-HU", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                          }).replace(/\//g, ". ")}
-                        </i>
-                      </span>
-                      <br />
-                      <span>
-                        <h6 className="mt-3">
-                          Lejár: &ensp;<b className={statusClass}>{status}</b>
-                        </h6>
-                        <button className="link-danger float-end pt-2 border-0 bg-white" onClick={() => this.handleDocsDelete(docs.docId)}>Törlés</button>
-                      </span>
-                      <hr className="mt-5"/>
-                    </div>
-                  );
-                })}
-              </>
+                <>
+                    {this.state.docDatas.map((docs: DocumentData) => {
+                        const expirationDate = new Date(docs.date);
+                        const daysLeft = Math.ceil(
+                            (expirationDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+                        );
+                        let status;
+                        let statusClass;
+                        let statusClassDate;
+                        if (daysLeft < 0) {
+                            status = "Már lejárt.";
+                            statusClass = "text-danger";
+                            statusClassDate = "text-danger"
+                        } else if (daysLeft === 0) {
+                            status = "Mai napon jár le!";
+                            statusClass = "text-warning";
+                            statusClassDate = "text-warning"
+                        } else if (daysLeft <= 30) {
+                            status = `${daysLeft} nap múlva`;
+                            statusClass = "text-warning";
+                            statusClassDate = "text-success"
+                        } else {
+                            status = `${daysLeft} nap múlva`;
+                            statusClass = "text-primary";
+                            statusClassDate = "text-success"
+                        }
+                        return (
+                            <div className="contriner-fluid text-center" key={docs.docId}>
+                                <span>
+                                    <strong>{docs.name}</strong>&emsp;
+                                    <i className={statusClassDate}>
+                                        {new Date(docs.date).toLocaleDateString("hu-HU", {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                        }).replace(/\//g, ". ")}
+                                    </i>
+                                </span>
+                                <br />
+                                <span>
+                                    <h6 className="mt-3">
+                                        Lejár: &ensp;<b className={statusClass}>{status}</b>
+                                    </h6>
+                                    <button className="link-danger float-end pt-2 border-0 bg-white" onClick={() => this.handleDocsDelete(docs.docId)}>Törlés</button>
+                                </span>
+                                <hr className="mt-5" />
+                            </div>
+                        );
+                    })}
+                </>
             );
-          } else {
+        } else {
             docs = (
-              <>
-                <h6 className="text-center text-warning mt-3">
-                  Még nincs felvéve dokumentum.
-                </h6>
-              </>
+                <>
+                    <h6 className="text-center text-warning mt-3">
+                        Még nincs felvéve dokumentum.
+                    </h6>
+                </>
             );
-          }
+        }
 
         if (this.state.carLoaded) {
             return <main id="undoBlockContentForCalendar">
@@ -405,19 +405,34 @@ export default class Calendar extends Component<{}, State> {
                     <div className="card ms-5 me-5 pt-2 mt-4">
                         <div className="card-body">
                             <div className='container-fluid'>
-                                <FullCalendar
-                                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                                    initialView="dayGridMonth"
-                                    selectable={true}
-                                    editable={false}
-                                    droppable={false}
-                                    displayEventTime={false}
-                                    events={calendarEvents}
-                                    eventClassNames={['event-2']}
-                                    select={this.handleDateSelect}
-                                    locale={huLocale}
-                                    locales={[huLocale]}
-                                    dateClick={this.handleDateClick} />
+                                <div className="my-calendar-wrapper">
+                                    <FullCalendar
+                                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                        initialView="dayGridMonth"
+                                        selectable={true}
+                                        editable={false}
+                                        droppable={false}
+                                        displayEventTime={false}
+                                        events={calendarEvents}
+                                        select={this.handleDateSelect}
+                                        locale={huLocale}
+                                        locales={[huLocale]}
+                                        dateClick={this.handleDateClick}
+                                        dayMaxEventRows={2}              // max 2 sor az eseményekből
+                                        dayMaxEvents={true}              // "+" jel ha több esemény van
+                                        contentHeight="auto"             // automatikus magasság
+                                        dayCellClassNames={() => ['custom-day-cell']}
+                                        dayCellContent={(arg) => (
+                                            <div style={{
+                                                fontSize: window.innerWidth < 768 ? '0.65rem' : '0.8rem',
+                                                lineHeight: window.innerWidth < 768 ? '1.1' : '1.3',
+                                                padding: '1px'
+                                            }}>
+                                                {arg.dayNumberText}
+                                            </div>
+                                        )}
+                                    />
+                                </div>
                                 {this.state.showModal && (
                                     <div className="modal" style={{ display: 'block' }}>
                                         <div className="modal-dialog modal-dialog-centered">
@@ -464,51 +479,51 @@ export default class Calendar extends Component<{}, State> {
                         </div>
                     </div><div className="container-fluid">
                         <div className="ms-4 me-4 mt-4 ">
-                                <div className="col-lg-12">
+                            <div className="col-lg-12">
 
-                                    <div className="row">
-                                        <div className="col-lg-3">
-                                            <div className="card mt-5 ms-3">
-                                                <div className="card-header">
-                                                    <h5 className="fw-semibold mt-3 mb-3 ms-4 text-center">Dokumentumok <img src={'document.png'} alt="" className="img-fluid float-end" /></h5>
-                                                </div>
-                                                <div className="card-body">
-                                                   {docs}
-                                                </div>
-                                                <div className="card-footer">
-                                                    <h5 className="fw-semibold mb-3 mt-2 text-center">+ Dokumentum hozzáadása</h5>
-                                                   <form action="submit" className="form-control bg-light border-0" onSubmit={this.handleDocsUpload}>
+                                <div className="row">
+                                    <div className="col-lg-3">
+                                        <div className="card mt-5 ms-3">
+                                            <div className="card-header">
+                                                <h5 className="fw-semibold mt-3 mb-3 ms-4 text-center">Dokumentumok <img src={'document.png'} alt="" className="img-fluid float-end" /></h5>
+                                            </div>
+                                            <div className="card-body">
+                                                {docs}
+                                            </div>
+                                            <div className="card-footer">
+                                                <h5 className="fw-semibold mb-3 mt-2 text-center">+ Dokumentum hozzáadása</h5>
+                                                <form action="submit" className="form-control bg-light border-0" onSubmit={this.handleDocsUpload}>
                                                     <label htmlFor="documentName" className="form-label fw-light">Dokumentum neve:</label>
-                                                    <input type="text" id="documentName" className="form-control fw-lighter" required placeholder="Adja meg a dokumentum nevét!" onChange={(e) => this.setState({ name: e.target.value })}/>
+                                                    <input type="text" id="documentName" className="form-control fw-lighter" required placeholder="Adja meg a dokumentum nevét!" onChange={(e) => this.setState({ name: e.target.value })} />
                                                     <label htmlFor="documentDate" className="fw-light mt-3 mb-2">Lejárati dátum:</label>
-                                                    <input type="date" id="documentDate" className="form-control fw-lighter" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })}/>
+                                                    <input type="date" id="documentDate" className="form-control fw-lighter" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
                                                     <button type="submit" className="btn btn-dark mt-4 mb-1 d-block m-auto"> Hozzáadás </button>
-                                                   </form>
-                                                </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        <div className="col-lg-9 text-center">
-                                            <h4 className='fw-light mb-5'>Felvett események</h4>
-                                            {this.state.calDatas.map((event, index) => (
-                                                <div key={index}>
-                                                    <p className='bg-light rounded'>
-                                                        <strong>{event.title}:</strong>
-                                                        <p className='text-success'>{event.comment}</p>
-                                                        <i className='text-danger'>
-                                                            {event.start &&
-                                                                (new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.') === new Date().toLocaleDateString('hu-HU').replace(/\./g, '.')
-                                                                    ? <strong>Mai napon!</strong> /* wrap the text in a strong tag */
-                                                                    : new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.'))
-                                                            }
-                                                        </i>
-                                                    </p>
-                                                    <button className='btn btn-danger float-end' onClick={() => this.handleEventDelete(event.calId)}><strong>törlés</strong></button>
-                                                    <br />
-                                                    <hr className='mt-4' />
-                                                </div>
-                                            ))}
-                                        </div>
                                     </div>
+                                    <div className="col-lg-9 text-center">
+                                        <h4 className='fw-light mb-5'>Felvett események</h4>
+                                        {this.state.calDatas.map((event, index) => (
+                                            <div key={index}>
+                                                <p className='bg-light rounded'>
+                                                    <strong>{event.title}:</strong>
+                                                    <p className='text-success'>{event.comment}</p>
+                                                    <i className='text-danger'>
+                                                        {event.start &&
+                                                            (new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.') === new Date().toLocaleDateString('hu-HU').replace(/\./g, '.')
+                                                                ? <strong>Mai napon!</strong> /* wrap the text in a strong tag */
+                                                                : new Date(Array.isArray(event.start) ? event.start[0] : event.start).toLocaleDateString('hu-HU').replace(/\./g, '.'))
+                                                        }
+                                                    </i>
+                                                </p>
+                                                <button className='btn btn-danger float-end' onClick={() => this.handleEventDelete(event.calId)}><strong>törlés</strong></button>
+                                                <br />
+                                                <hr className='mt-4' />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                             <ul className='text-start mt-3'>
                                 <p className='fw-lighter'>Jelmagyarázat:</p>

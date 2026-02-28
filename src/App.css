@@ -116,3 +116,251 @@
     transform: translateX(-50%) translateY(0px) scale(1);
   }
 }
+
+.custom-day-cell {
+  height: 150px !important;
+  min-width: 50px !important;
+  font-size: 0.7rem !important;
+  padding: 2px !important;
+}
+
+/* Mobilra, max szélesség 768px */
+@media (max-width: 768px) {
+  /* Napok cellái mobilon */
+  .my-calendar-wrapper .fc-daygrid-day {
+    height: 50px !important;       /* kisebb magasság */
+    min-width: 50px !important;    /* kisebb szélesség */
+    padding: 1px !important;
+  }
+
+  /* Napok számának szövege */
+  .my-calendar-wrapper .fc-daygrid-day-top {
+    font-size: 0.65rem !important;
+  }
+
+  /* Események szövege */
+  .my-calendar-wrapper .fc-event-title {
+    font-size: 0.6rem !important;
+    padding: 1px !important;
+  }
+
+  /* Esetleg a "+" jel stílusa, ha túl nagy */
+  .my-calendar-wrapper .fc-daygrid-more-link {
+    font-size: 0.6rem !important;
+  }
+}
+
+.my-calendar-wrapper .fc-daygrid-day {
+  line-height: 1.1 !important;
+}
+
+/* Wrapper a naptár körül */
+.my-calendar-wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Naptár grid */
+.my-calendar-wrapper {
+  background: transparent !important; /* fehér eltávolítása */
+  box-shadow: none !important;       /* árnyék eltávolítása */
+  padding: 0;                         /* padding eltávolítása */
+}
+
+/* Napok cellái */
+.my-calendar-wrapper .fc-daygrid-day {
+  height: 100px;
+  min-width: 80px;
+  padding: 5px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect */
+.my-calendar-wrapper .fc-daygrid-day:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  cursor: pointer;
+}
+
+/* Napok számának stílusa */
+.my-calendar-wrapper .fc-daygrid-day-number {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+/* Események stílusa */
+.my-calendar-wrapper .fc-event {
+  background-color: #007bff; /* kék alapszín */
+  color: white;
+  border-radius: 8px;
+  padding: 2px 4px;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover esemény */
+.my-calendar-wrapper .fc-event:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Több esemény jelzés */
+.my-calendar-wrapper .fc-daygrid-more-link {
+  font-size: 0.75rem;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Napok neve */
+.my-calendar-wrapper .fc-col-header-cell-cushion {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Mobilra reszponzív */
+@media (max-width: 768px) {
+  .my-calendar-wrapper .fc-daygrid-day {
+    height: 70px;
+    min-width: 50px;
+    padding: 2px;
+  }
+
+  .my-calendar-wrapper .fc-daygrid-day-number {
+    font-size: 0.75rem;
+  }
+
+  .my-calendar-wrapper .fc-event {
+    font-size: 0.65rem;
+    padding: 1px 3px;
+  }
+
+  .my-calendar-wrapper .fc-daygrid-more-link {
+    font-size: 0.6rem;
+  }
+}
+
+/* Wrapper a naptár körül */
+.my-calendar-wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Naptár grid */
+.my-calendar-wrapper .fc {
+  border: none;
+}
+
+/* Napok cellái */
+.my-calendar-wrapper .fc-daygrid-day {
+  height: 100px;
+  min-width: 80px;
+  padding: 5px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect */
+.my-calendar-wrapper .fc-daygrid-day:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  cursor: pointer;
+}
+
+/* Napok számának stílusa */
+.my-calendar-wrapper .fc-daygrid-day-number {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+/* Események stílusa */
+.my-calendar-wrapper .fc-event {
+  background-color: #007bff; /* kék alapszín */
+  color: white;
+  border-radius: 8px;
+  padding: 2px 4px;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover esemény */
+.my-calendar-wrapper .fc-event:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Több esemény jelzés */
+.my-calendar-wrapper .fc-daygrid-more-link {
+  font-size: 0.75rem;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Napok neve */
+.my-calendar-wrapper .fc-col-header-cell-cushion {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Mobilra reszponzív */
+@media (max-width: 768px) {
+  .my-calendar-wrapper .fc-daygrid-day {
+    height: 70px;
+    min-width: 50px;
+    padding: 2px;
+  }
+
+  .my-calendar-wrapper .fc-daygrid-day-number {
+    font-size: 0.75rem;
+  }
+
+  .my-calendar-wrapper .fc-event {
+    font-size: 0.65rem;
+    padding: 1px 3px;
+  }
+
+  .my-calendar-wrapper .fc-daygrid-more-link {
+    font-size: 0.6rem;
+  }
+}
+
+/* Wrapper a naptár körül */
+.my-calendar-wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: #f9f9f9; /* a kívánt háttérszín */
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* FullCalendar belső rész eltüntetjük a fehér hátteret */
+.my-calendar-wrapper .fc {
+  background: transparent !important; /* átlátszó, ne legyen fehér */
+  box-shadow: none !important;
+}
+
+/* Teljes naptár rács */
+.my-calendar-wrapper .fc-daygrid {
+  background: transparent !important;
+}
+
+/* Napok cellái */
+.my-calendar-wrapper .fc-daygrid-day {
+  background: #ffffff10; /* halvány háttér, vagy teljesen átlátszó: transparent */
+}
