@@ -761,3 +761,8 @@ select:focus {
   transform: none !important;
   box-shadow: none !important;
 }
+
+.card-body canvas {
+  width: 100% !important;
+  height: auto; /* vagy auto, ha dinamikus magasság kell */
+}
