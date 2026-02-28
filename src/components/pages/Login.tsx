@@ -36,7 +36,7 @@ export default class Login extends Component<{}, ILoginState> {
     }
     this.setState({ username, errors });
     const usernameStored = username;
-    localStorage.setItem('username', usernameStored);
+    localStorage.setItem('username', this.state.username);
   };
 
   handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,8 @@ export default class Login extends Component<{}, ILoginState> {
       const { token, userId } = await response.json();
       localStorage.setItem("accessToken", token);
       localStorage.setItem("userId", userId);
-      window.location.href = "/";
+      localStorage.setItem("username", this.state.username);
+      window.location.href = "/?login=true"; //window.location.href = "/";
       console.log('Üdvözöljük!');
       const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
