@@ -511,12 +511,6 @@ export default class Calendar extends Component<{}, State> {
                                     </div>
                                 </div>
                             </div>
-                            <ul className='text-start mt-3'>
-                                <p className='fw-lighter'>Jelmagyarázat:</p>
-                                <li><strong>Esemény</strong></li>
-                                <li className='text-success'>Infó</li>
-                                <li className='text-danger'><i>Dátum</i></li>
-                            </ul>
                         </div>
                     </div>
                 </div>

@@ -310,7 +310,6 @@ export default class GarageForCar extends Component<Props, State> {
                                 max={10000000}
                                 onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })}
                             />
-
                             <input
                                 type="submit"
                                 value="Rögzítés"
