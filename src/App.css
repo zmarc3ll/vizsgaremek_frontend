@@ -1059,3 +1059,61 @@ select:focus {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
+
+.glass-input {
+  background-color: rgba(255, 255, 255, 0.25); /* üveges hatás */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.25s ease-in-out;
+}
+
+.glass-input:focus,
+.glass-input:hover {
+  border-color: #4caf50; /* fókusz zöld keret */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transform: scale(1.02);
+  outline: none;
+}
+
+.km-submit-btn {
+  color: white !important; /* alap szöveg */
+  transition: all 0.25s ease;
+}
+
+.km-submit-btn:hover,
+.km-submit-btn:focus {
+  color: white !important; /* hover alatt is látszódjon */
+  background-color: #333 !important; /* vagy tetszőleges hover szín */
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.interactive {
+  background-color: rgba(255, 255, 255, 0.25); /* üveges */
+  color: #333;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.2s ease-in-out;
+}
+
+.interactive:hover,
+.interactive:focus {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-color: #4caf50;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #333; /* hover alatt se tűnjön el a szöveg */
+  outline: none;
+}

@@ -251,29 +251,77 @@ export default class GarageForCar extends Component<Props, State> {
         let kmSection;
         if (this.state.hasSpeedometer) {
             kmSection = (<>
-                <div className="card-header"><h5 className="text-center mb-3 mt-3 fw-semibold">Felvétel a diagrammra <img src="/chart.png" className="img-fluid float-end" /></h5></div>
+                <div className="card-header rounded-4">
+                    <h5 className="text-center mb-3 mt-3 fw-semibold">
+                        Felvétel a diagrammra
+                        <img src="/chart.png" className="img-fluid float-end" />
+                    </h5>
+                </div>
                 <div className="card-body">
-                    <form className="form-control text-center" onSubmit={this.handleUpload}>
+                    <form className="text-center">
                         <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
-                        <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-2" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
+                        <input
+                            type="number"
+                            id="numInput"
+                            placeholder="Írja be a kilóméter óra jelenlegi állását!"
+                            required
+                            className="form-control mb-2 interactive"
+                            max={10000000}
+                            onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })}
+                        />
+
                         <label htmlFor="dateInput" className="fw-light mb-2">Dátum</label>
-                        <input type="date" id="datumInput" className="form-control mb-4 fw-light text-center" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
-                        <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-2" />
+                        <input
+                            type="date"
+                            id="datumInput"
+                            className="form-control mb-4 fw-light text-center interactive"
+                            defaultValue={formattedDate}
+                            required
+                            onChange={(e) => this.setState({ date: e.target.value })}
+                        />
+
+                        <input
+                            type="submit"
+                            value='Rögzítés'
+                            className="btn btn-dark form-control mb-2 interactive"
+                        />
                         <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
                     </form>
-                </div></>)
+                </div>
+            </>)
         } else {
-            kmSection = (<><div className="card-header">
-                <h5 className="text-center mb-3 mt-3 fw-semibold">Kilóméter óra bállítása<img src="/chart.png" className="img-fluid float-end" /></h5>
-            </div>
-                <div className="card-body">
-                    <form className="form-control text-center" onSubmit={this.handleUpload}>
-                        <label htmlFor="numInput" className="form-label fw-light interactive">Kilóméter óra</label>
-                        <input type="number" id="numInput" placeholder="Írja be a kilóméter óra jelenlegi állását!" required className="form-control mb-4 interactive" max={10000000} onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })} />
-                        <input type="submit" value='Rögzítés' className="btn btn-dark form-control mb-4" />
-                        <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
-                    </form>
-                </div></>)
+            kmSection = (
+                <div className="mt-4">
+                    <div className="card-header rounded-4">
+                        <h5 className="text-center mb-3 mt-3 fw-semibold">
+                            Kilóméter óra beállítása
+                            <img src="/chart.png" className="img-fluid float-end" />
+                        </h5>
+                    </div>
+                    <div className="card-body">
+                        <form className="text-center" onSubmit={this.handleUpload}>
+                            <label htmlFor="numInput" className="form-label fw-light">Kilóméter óra</label>
+                            <input
+                                type="number"
+                                id="numInput"
+                                placeholder="Írja be a kilóméter óra jelenlegi állását!"
+                                required
+                                className="form-control mb-2 interactive"
+                                max={10000000}
+                                onChange={(e) => this.setState({ speedometer: parseInt(e.target.value) })}
+                            />
+
+                            <input
+                                type="submit"
+                                value="Rögzítés"
+                                className="btn btn-dark form-control mb-2 interactive"
+                            />
+
+                            <p className="fw-light mb-2"><i>Érdemes hónaponta rögzíteni!</i></p>
+                        </form>
+                    </div>
+                </div>
+            );
         }
 
         let closeEventsCard;
@@ -346,7 +394,7 @@ export default class GarageForCar extends Component<Props, State> {
                                     <div className="card mt-4 mb-4" key={car.carId}>
                                         {/* Header: kattintásra toggle */}
                                         <div
-                                            className="card-header d-flex justify-content-between align-items-center"
+                                            className="card-header d-flex justify-content-between align-items-center rounded-4"
                                             onClick={() => this.toggleCollapse(car.carId)}
                                             style={{ cursor: 'pointer' }}
                                         >
@@ -390,7 +438,7 @@ export default class GarageForCar extends Component<Props, State> {
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="card mt-4">
-                                    <div className="card-header">
+                                    <div className="card-header rounded-4">
                                         <h5 className="text-center mb-3 mt-3 fw-semibold">Közelgő események   <img src="/calendar.png" className="img-fluid float-end" /></h5>
                                     </div>
                                     {closeEventsCard}
