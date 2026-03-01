@@ -16,12 +16,34 @@
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
-  display: flex;
+  display: block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.garage-wrapper {
+  width: 100%;
+}
+
+.garage-card {
+  height: 550px; /* állítsd be amit jónak látsz */
+  display: flex;
+  flex-direction: column;
+}
+
+.add-car-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border: 2px dashed rgba(255,255,255,0.4);
+  transition: all 0.3s ease;
+}
+
+.add-car-card:hover {
+  transform: scale(1.05);
+  background: rgba(255,255,255,0.25);
 }
 
 .App-link {
@@ -814,7 +836,6 @@ select:focus {
     font-size: 0.9rem;
   }
 }
-
 .card,
 .event-card,
 .doc-card {

@@ -234,66 +234,61 @@ export default class Garage extends Component<{}, State> {
                     </button>
                 </div>)
         }
-        let myCar;
-        let newCarAdd;
-        if (carLoaded) {
-            myCar = (
-                <div className="row">
-                    {this.state.cars.map((car: Car) => (
-                        <div className="d-flex flex-wrap justify-content-center" key={car.carId}>
-                            <div className="card">
+        let myCar = (
+            this.state.cars.map((car: Car) => (
+                <div className="col-auto mb-4 d-flex justify-content-center py-3" key={car.carId} style={{ width: "350px" }}>
+                    <div className="card garage-card">
 
-                                {!this.state.hasCarPic && uploadComponent}
+                        {!this.state.hasCarPic && uploadComponent}
 
-                                <Link
-                                    to={`/garage/${car.carId}`}
-                                    style={{ textDecoration: "none", color: "inherit" }}
-                                >
+                        <Link
+                            to={`/garage/${car.carId}`}
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
 
-                                    <img
-                                        src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`}
-                                        alt=""
-                                        className="bd-placeholder-img card-img-top"
-                                        id="albumPicture"
-                                    />
+                            <img
+                                src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`}
+                                alt=""
+                                className="bd-placeholder-img card-img-top"
+                                id="albumPicture"
+                            />
 
-                                    <div className="card-body text-center">
-                                        <ul id="carDataList" className="list-unstyled">
-                                            <li>
-                                                <strong>{car.givenName}</strong><br />
-                                                Márka: <i>{car.brand}</i><br />
-                                                Modell: <i>{car.model}</i><br />
-                                                Évjárat: <i>{car.modelYear}</i><br />
-                                                Üzemanyag: <i>{car.fuelType}</i><br />
-                                                Lóerő: <i>{car.carPower}</i><br />
-                                                Váltó: <i>{car.gearType}</i><br />
-                                                Rendszám: <i>{car.license_plate}</i>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                </Link>
-
+                            <div className="card-body text-center">
+                                <ul className="list-unstyled mb-0">
+                                    <li>
+                                        <strong>{car.givenName}</strong><br />
+                                        <hr className="glass-hr" />
+                                        Márka: <i>{car.brand}</i><br />
+                                        Modell: <i>{car.model}</i><br />
+                                        Évjárat: <i>{car.modelYear}</i><br />
+                                        Üzemanyag: <i>{car.fuelType}</i><br />
+                                        Lóerő: <i>{car.carPower}</i><br />
+                                        Váltó: <i>{car.gearType}</i><br />
+                                        Rendszám: <i>{car.license_plate}</i>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            );
-        } else {
-            newCarAdd = (
-                <div className="col ps-3 mt-5">
-                    <div className="card" id="addCarCard">
-                        <div className="card-header bg-dark">
-                            <h5 className="fw-semibold text-center mt-3 mb-3 text-white">Vegye fel első autóját!</h5>
-                        </div>
-                        <div className="card-body">
-                            <img src={'carAdd.png'} alt="" className="img-fluid mt-5 mb-5" />
-                            <button type="button" className="btn btn-dark mt-4 mb-5 ms-5 btn-lg pe-4 ps-4" data-bs-toggle="modal" data-bs-target="#addCarModal">+ Autó hozzáadása</button>
-                        </div>
+
+                        </Link>
+
                     </div>
                 </div>
-            )
-        }
+            ))
+        );
+        let newCarAdd = (
+            <div className="m-3" style={{ width: "350px" }}>
+                <div className="card garage-card add-car-card d-flex align-items-center justify-content-center"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addCarModal"
+                    style={{ cursor: "pointer" }}
+                >
+                    <div className="text-center p-4">
+                <h1 className="fw-light">+</h1>
+                <p className="fw-semibold">Új autó hozzáadása</p>
+            </div>
+                </div>
+            </div>
+        )
         return <>
             <main
                 id="undoBlockContent"
@@ -312,9 +307,9 @@ export default class Garage extends Component<{}, State> {
                         <p className="lead text-muted"> Kezelje autóját, vagy vegyen fel újat!</p>
                     </section>
 
-                    <div className="album py-5 bg-transparent">
+                    <div className="py-5">
                         <div className="container">
-                            <div className="row justify-content-center">
+                            <div className="d-flex flex-wrap justify-content-center">
                                 {myCar}
                                 {newCarAdd}
                             </div>

@@ -135,7 +135,7 @@ export default class Main extends Component<{}, IMainState> {
             <div className="card-header"><img src={'money.png'} alt="" className="float-start ms-3 mt-2" id="cardImg" /></div>
             <div className="card-body">
               <div className="card-text">
-                <h4 className="fw-light">Könnyítheti autója majdani <strong>eladását</strong> az autó adatai részletes nyomonkövetésével.</h4>
+                <h4 className="fw-light text-white">Könnyítheti autója majdani <strong>eladását</strong> az autó adatai részletes nyomonkövetésével.</h4>
               </div>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default class Main extends Component<{}, IMainState> {
             <div className="card-header"><img src={'information.png'} alt="i" className="float-end ms-3 mt-2" id="cardImg" /></div>
             <div className="card-body">
               <div className="card-text">
-                <h4 className="fw-light pb-4">Tartsa számon a legfontosabb <strong>információkat</strong> a diagramm és naptár segítségével! </h4>
+                <h4 className="fw-light pb-4 text-white">Tartsa számon a legfontosabb <strong>információkat</strong> a diagramm és naptár segítségével! </h4>
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default class Main extends Component<{}, IMainState> {
             <div className="card-header"><img src={'easy.png'} alt="" className="float-end ms-3 mt-2" id="cardImg" /></div>
             <div className="card-body">
               <div className="card-text">
-                <h4 className="fw-light">Tegye <strong>könnyebé</strong> és érdekesebbé az autóival kapcsolatos teendők, információk vezetését.</h4>
+                <h4 className="fw-light text-white">Tegye <strong>könnyebé</strong> és érdekesebbé az autóival kapcsolatos teendők, információk vezetését.</h4>
               </div>
             </div>
           </div>
