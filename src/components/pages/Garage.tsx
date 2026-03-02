@@ -142,7 +142,21 @@ export default class Garage extends Component<{}, State> {
     }
 
     handleUpload = async () => {
-        const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput } = this.state;
+        const {
+            brandInput,
+            modelInput,
+            modelYearInput,
+            fuelTypeInput,
+            carPowerInput,
+            gearTypeInput,
+            colorInput,
+            chassisTypeInput,
+            doorsInput,
+            fuelEconomyInput,
+            licensePlateInput,
+            givenNameInput
+        } = this.state;
+
         const dbData = {
             brand: brandInput,
             model: modelInput,
@@ -156,36 +170,54 @@ export default class Garage extends Component<{}, State> {
             fuelEconomy: fuelEconomyInput,
             license_plate: licensePlateInput,
             givenName: givenNameInput,
-        }
-        let userId = localStorage.getItem('userId');
-        let responseOk = await fetch('http://localhost:3001/car/${userId}')
-        let responseUrl: string = responseOk.url.substring(0, 26) + userId;
-        console.log('url:', responseUrl);
-        let response = await fetch(responseUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dbData),
-        });
+        };
 
-        this.setState({
-            givenNameInput: '',
-            brandInput: '',
-            modelInput: '',
-            modelYearInput: 0,
-            fuelTypeInput: '',
-            carPowerInput: 0,
-            gearTypeInput: '',
-            colorInput: '',
-            chassisTypeInput: '',
-            doorsInput: 0,
-            fuelEconomyInput: '',
-            licensePlateInput: '',
-            cars: [],
-        })
-        await this.loadUsersCars();
-    }
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            console.log("No user logged in");
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `http://localhost:3001/users/${userId}/cars`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dbData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Car creation failed");
+            }
+
+            // 🔥 Form reset
+            this.setState({
+                givenNameInput: '',
+                brandInput: '',
+                modelInput: '',
+                modelYearInput: 0,
+                fuelTypeInput: '',
+                carPowerInput: 0,
+                gearTypeInput: '',
+                colorInput: '',
+                chassisTypeInput: '',
+                doorsInput: 0,
+                fuelEconomyInput: '',
+                licensePlateInput: '',
+            });
+
+            // 🔥 Frissítjük az autó listát
+            await this.loadUsersCars();
+
+        } catch (error) {
+            console.log("Add car error:", error);
+        }
+    };
 
     onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // Update the state
@@ -237,7 +269,7 @@ export default class Garage extends Component<{}, State> {
         let myCar = (
             this.state.cars.map((car: Car) => (
                 <div className="col-auto mb-4 d-flex justify-content-center py-3" key={car.carId} style={{ width: "350px" }}>
-                    <div className="card garage-card">
+                    <div className="card garage-card m-2">
 
                         {!this.state.hasCarPic && uploadComponent}
 
@@ -276,16 +308,16 @@ export default class Garage extends Component<{}, State> {
             ))
         );
         let newCarAdd = (
-            <div className="m-3" style={{ width: "350px" }}>
+            <div className="m-4" style={{ width: "300px" }}>
                 <div className="card garage-card add-car-card d-flex align-items-center justify-content-center"
                     data-bs-toggle="modal"
                     data-bs-target="#addCarModal"
                     style={{ cursor: "pointer" }}
                 >
                     <div className="text-center p-4">
-                <h1 className="fw-light">+</h1>
-                <p className="fw-semibold">Új autó hozzáadása</p>
-            </div>
+                        <h1 className="fw-light">+</h1>
+                        <p className="fw-semibold">Új autó hozzáadása</p>
+                    </div>
                 </div>
             </div>
         )
@@ -296,7 +328,7 @@ export default class Garage extends Component<{}, State> {
                     backgroundImage: 'url("/garageBg.png")',
                     backgroundSize: 'cover',        // kitölti az egész felületet
                     backgroundPosition: 'center',   // középre igazítja
-                    backgroundRepeat: 'no-repeat',  // ne ismétlődjön
+                    backgroundRepeat: 'repeat', 
                     minHeight: '100vh',             // legalább a teljes viewport magasság
                     width: '100%',                  // szélesség 100%
                 }}

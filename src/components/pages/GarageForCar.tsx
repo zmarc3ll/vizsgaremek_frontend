@@ -367,7 +367,7 @@ export default class GarageForCar extends Component<Props, State> {
                 backgroundImage: 'url("/garageBg.png")',
                 backgroundSize: 'cover',        // kitölti az egész felületet
                 backgroundPosition: 'center',   // középre igazítja
-                backgroundRepeat: 'no-repeat',  // ne ismétlődjön
+                backgroundRepeat: 'repeat', 
                 minHeight: '100vh',             // legalább a teljes viewport magasság
                 width: '100%',                  // szélesség 100%
             }}
