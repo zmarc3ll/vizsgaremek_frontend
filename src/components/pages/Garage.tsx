@@ -28,6 +28,7 @@ interface Car {
     fuelEconomy: string;
     license_plate: string;
     givenName: string;
+    pictures?: CarPicture[];
 }
 
 interface CarPicture {
@@ -56,6 +57,7 @@ interface State {
     pictures: CarPicture[];
     users: User[];
     hasCarPic: boolean;
+    activeCarId: number | null;
 }
 
 interface User {
@@ -89,6 +91,7 @@ export default class Garage extends Component<{}, State> {
         pictures: [],
         users: [],
         hasCarPic: false,
+        activeCarId: null,
     };
 
     async loadCarPics() {
@@ -224,8 +227,39 @@ export default class Garage extends Component<{}, State> {
         this.setState({ selectedFile: event.target.files?.[0] || null });
     };
 
+    onFileUpload = async (carId: number) => {
 
-    onFileUpload = async () => {
+        const { selectedFile } = this.state;
+
+        if (!selectedFile) {
+            console.log("No file selected");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("carFile", selectedFile);
+
+        try {
+            const response = await axios.post(
+                `http://localhost:3001/uploadfile/${carId}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
+            );
+
+            console.log("Upload success:", response.data);
+
+            await this.loadUsersCars();
+
+        } catch (error) {
+            console.log("Upload error:", error);
+        }
+    };
+
+    /*onFileUpload = async () => {
         // Create an object of formData
         const formData = new FormData();
 
@@ -251,39 +285,46 @@ export default class Garage extends Component<{}, State> {
         } else {
             console.log('Error on upload!');
         }
-    };
+    };*/
 
     render() {
         const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded } = this.state;
-        let uploadComponent: JSX.Element | null = null;
-        if (!this.state.hasCarPic) {
-            uploadComponent = (
-                <div className="ps-3 pe-3 pt-2 pb-2 row">
-                    <label htmlFor="carPic" className="text-center"><strong>Töltsön fel autójáról egy képet!</strong></label><br />
-                    <input type="file" required onChange={this.onFileChange} id="carPic" />
-                    <button onClick={this.onFileUpload} onInput={this.loadCarPics} className="btn btn-dark">
-                        Feltöltés!
-                    </button>
-                </div>)
-        }
+        const renderUpload = (carId: number) => (
+            <div className="ps-3 pe-3 pt-2 pb-2">
+                <input
+                    type="file"
+                    onChange={this.onFileChange}
+                    className="form-control mb-2"
+                />
+                <button
+                    onClick={() => this.onFileUpload(carId)}
+                    className="btn btn-dark w-100"
+                >
+                    Kép feltöltése
+                </button>
+            </div>
+        );
         let myCar = (
             this.state.cars.map((car: Car) => (
                 <div className="col-auto mb-4 d-flex justify-content-center py-3" key={car.carId} style={{ width: "350px" }}>
                     <div className="card garage-card m-2">
 
-                        {!this.state.hasCarPic && uploadComponent}
+                        {renderUpload(car.carId)}
 
                         <Link
                             to={`/garage/${car.carId}`}
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
-
-                            <img
-                                src={`http://localhost:3001/uploadedfiles/cars/${this.state.carPic}`}
-                                alt=""
-                                className="bd-placeholder-img card-img-top"
-                                id="albumPicture"
-                            />
+                             <img
+                        src={
+                            car.pictures && car.pictures.length > 0
+                                ? `http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`
+                                : "/no-image.png"
+                        }
+                        alt=""
+                        className="bd-placeholder-img card-img-top"
+                        id="albumPicture"
+                    />
 
                             <div className="card-body text-center">
                                 <ul className="list-unstyled mb-0">
@@ -328,7 +369,7 @@ export default class Garage extends Component<{}, State> {
                     backgroundImage: 'url("/garageBg.png")',
                     backgroundSize: 'cover',        // kitölti az egész felületet
                     backgroundPosition: 'center',   // középre igazítja
-                    backgroundRepeat: 'repeat', 
+                    backgroundRepeat: 'repeat',
                     minHeight: '100vh',             // legalább a teljes viewport magasság
                     width: '100%',                  // szélesség 100%
                 }}

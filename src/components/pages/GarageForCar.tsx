@@ -41,6 +41,7 @@ interface Car {
     fuelEconomy: string;
     license_plate: string;
     givenName: string;
+    pictures: CarPicture[];
 }
 
 interface ChartData {
@@ -367,7 +368,7 @@ export default class GarageForCar extends Component<Props, State> {
                 backgroundImage: 'url("/garageBg.png")',
                 backgroundSize: 'cover',        // kitölti az egész felületet
                 backgroundPosition: 'center',   // középre igazítja
-                backgroundRepeat: 'repeat', 
+                backgroundRepeat: 'repeat',
                 minHeight: '100vh',             // legalább a teljes viewport magasság
                 width: '100%',                  // szélesség 100%
             }}
@@ -375,16 +376,25 @@ export default class GarageForCar extends Component<Props, State> {
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
                     <div className="col-lg-4 ps-4">
-                        <div className="card" style={{ display: 'inline-block', maxWidth: '100%' }}>
-                            <div className="card-body p-2">
-                                <img
-                                    src={`http://localhost:3001/uploadedFiles/cars/${this.state.carPic}`}
-                                    alt="Töltsön fel autójáról képet!"
-                                    className=" rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
-                                    id="carsImage"
-                                />
-                            </div>
-                        </div>
+                        {this.state.cars.map(car => {
+                            const isOpen = this.state.carsCollapseOpen[car.carId] ?? true;
+                            return (
+                                <div className="card mt-4 mb-4" key={car.carId}>
+                                    <div className="card-body p-2">
+                                        <img
+                                            src={
+                                                car.pictures && car.pictures.length > 0
+                                                    ? `http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`
+                                                    : '/no-image.png'
+                                            }
+                                            alt={car.givenName}
+                                            className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
+                                            id="carsImage"
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        })}
                         <div className="mt-4 mb-4">
                             {this.state.cars.map(car => {
                                 const isOpen = this.state.carsCollapseOpen[car.carId] ?? true;
