@@ -318,10 +318,7 @@ export default class Garage extends Component<{}, State> {
 
                         {renderUpload(car)}
 
-                        <Link
-                            to={`/garage/${car.carId}`}
-                            style={{ textDecoration: "none", color: "inherit" }}
-                        >
+                        <Link to={`/garage/${car.carId}`} key={car.carId} style={{ textDecoration: 'none', color: 'inherit' }}>
                             <img
                                 src={
                                     car.pictures && car.pictures.length > 0

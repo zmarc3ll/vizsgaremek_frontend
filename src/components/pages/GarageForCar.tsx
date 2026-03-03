@@ -62,6 +62,7 @@ interface CalendarData {
 }
 
 interface State {
+    car: Car | null;
     carPic: string;
     cars: Car[];
     pictures: CarPicture[];
@@ -86,6 +87,7 @@ const formattedDate = currentDate.toISOString().slice(0, 10);
 export default class GarageForCar extends Component<Props, State> {
 
     state: State = {
+        car: null,
         carPic: '',
         cars: [],
         pictures: [],
@@ -111,6 +113,8 @@ export default class GarageForCar extends Component<Props, State> {
         }));
     };
 
+
+
     async loadCarPics() {
         let userId = localStorage.getItem('userId');
         let response = await fetch('http://localhost:3001/carPic/${userId}');
@@ -127,26 +131,22 @@ export default class GarageForCar extends Component<Props, State> {
     }
 
     async loadUsersCars() {
+        const userId = localStorage.getItem('userId');
+        const carId = this.props.carId; // ide fontos hozzáadni a parametert
+
         try {
-            const thisUserId = localStorage.getItem('userId');
-            let response = await fetch('http://localhost:3001/usersCar/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 31) + thisUserId;
-            let responseOk = await fetch(responseUrl);
-            if (!responseOk.ok) {
-                throw new Error('Network response was not ok');
-            }
-            let data = await responseOk.json() as carListResponse;
+            let response = await fetch(`http://localhost:3001/usersCar/${userId}`);
+            let data = await response.json() as carListResponse;
+
+            // Csak a kiválasztott autót keressük
+            const selectedCar = data.cars.find(c => c.carId === Number(carId)) || null;
+
             this.setState({
-                cars: data.cars,
-                carLoaded: true,
+                car: selectedCar,
+                carLoaded: true
             });
-            if (response === null) {
-                this.setState({
-                    carLoaded: false,
-                });
-            }
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching cars:', error);
         }
     }
 
@@ -211,8 +211,31 @@ export default class GarageForCar extends Component<Props, State> {
         }
     }
 
+    async loadCar() {
+        if (!this.props.carId) return;
+
+        try {
+            const response = await fetch(
+                `http://localhost:3001/car/${this.props.carId}`
+            );
+
+            if (!response.ok) throw new Error("Hiba a lekérésnél");
+
+            const data = await response.json();
+
+            this.setState({
+                cars: [data], // csak 1 autó
+                carLoaded: true
+            });
+
+        } catch (error) {
+            console.error("Hiba:", error);
+        }
+    }
+
     componentDidMount() {
         this.loadUsersCars();
+        this.loadCar();
         this.loadCarPics();
         this.loadCarsEvents();
         this.loadChartData();
@@ -241,6 +264,7 @@ export default class GarageForCar extends Component<Props, State> {
 
             // Újratöltjük az autókat, hogy megjelenjen a kép
             await this.loadUsersCars();
+            //await this.loadCar();
 
             // töröljük a feltöltött fájlt a state-ből
             this.setState(prev => ({
@@ -293,11 +317,13 @@ export default class GarageForCar extends Component<Props, State> {
     render() {
         const data = this.state.chart.map((chart) => (chart.speedometer));
         const labels = this.state.chart.map((chart) => (chart.date));
-
-
+        const car = this.state.cars[0];
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().slice(0, 10);
         let kmSection;
+        if (!this.state.carLoaded) {
+            return <div className="text-center mt-5 py-5">Betöltés...</div>;
+        }
         if (this.state.hasSpeedometer) {
             kmSection = (<>
                 <div className="card-header rounded-4">
@@ -424,81 +450,72 @@ export default class GarageForCar extends Component<Props, State> {
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
                     <div className="col-lg-4 ps-4">
-                        {this.state.cars.map(car => {
-                            const isOpen = this.state.carsCollapseOpen[car.carId] ?? true;
-
-                            return (
-                                <div className="card mt-4 mb-4" key={car.carId}>
-                                    <div className="card-body p-2">
-                                        {car.pictures && car.pictures.length > 0 ? (
-                                            <img
-                                                src={`http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`}
-                                                alt={car.givenName}
-                                                className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
-                                                id="carsImage"
-                                            />
-                                        ) : (
-                                            <div className="ps-3 pe-3 pt-2 pb-2 text-center">
-                                                <input
-                                                    type="file"
-                                                    onChange={(e) => this.onFileChange(car.carId, e)}
-                                                    className="form-control mb-2"
-                                                />
-                                                <button
-                                                    className="btn btn-dark w-100"
-                                                    onClick={() => this.onFileUpload(car.carId)}
-                                                >
-                                                    Kép feltöltése
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )
-                        })}
-                        <div className="mt-4 mb-4">
-                            {this.state.cars.map(car => {
-                                const isOpen = this.state.carsCollapseOpen[car.carId] ?? true;
-
-                                return (
-                                    <div className="card mt-4 mb-4" key={car.carId}>
-                                        {/* Header: kattintásra toggle */}
-                                        <div
-                                            className="card-header d-flex justify-content-between align-items-center rounded-4"
-                                            onClick={() => this.toggleCollapse(car.carId)}
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            <strong>{car.givenName} adatai</strong>
-                                            <span style={{ fontSize: '20px' }}>{isOpen ? '▲' : '▼'}</span>
-                                        </div>
-
-                                        {/* Body: itt nincs külön collapse div */}
-                                        <div
-                                            className="card-body"
-                                            style={{
-                                                display: isOpen ? 'block' : 'none',
-                                                backgroundColor: 'transparent', // átlátszó
-                                            }}
-                                        >
-                                            <ul className="ps-3 ms-2">
-                                                <li>Márka: {car.brand}</li>
-                                                <li>Modell: {car.model}</li>
-                                                <li>Évjárat: {car.modelYear}</li>
-                                                <li>Üzemanyag típusa: {car.fuelType}</li>
-                                                <li>Lóerő: {car.carPower}</li>
-                                                <li>Váltó típusa: {car.gearType}</li>
-                                                <li>Szín: {car.color}</li>
-                                                <li>Autó felépítése: {car.chassisType}</li>
-                                                <li>Ajtók száma: {car.doors}</li>
-                                                <li>Fogyasztás: {car.fuelEconomy}</li>
-                                                <li>Rendszám: {car.license_plate}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
+    {this.state.car && (
+        <div className="card mt-4 mb-4" key={this.state.car.carId}>
+            {/* Kép / feltöltés */}
+            <div className="card-body p-2">
+                {this.state.car.pictures && this.state.car.pictures.length > 0 ? (
+                    <img
+                        src={`http://localhost:3001/uploadedfiles/cars/${this.state.car.pictures[0].carPic}`}
+                        alt={this.state.car.givenName}
+                        className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
+                        id="carsImage"
+                    />
+                ) : (
+                    <div className="ps-3 pe-3 pt-2 pb-2 text-center">
+                        <input
+                            type="file"
+                            onChange={(e) => this.onFileChange(this.state.car!.carId, e)}
+                            className="form-control mb-2"
+                        />
+                        <button
+                            className="btn btn-dark w-100"
+                            onClick={() => this.onFileUpload(this.state.car!.carId)}
+                        >
+                            Kép feltöltése
+                        </button>
+                        <p className="mt-2">Nincs feltöltött kép</p>
                     </div>
+                )}
+            </div>
+
+            {/* Collapse opener */}
+            <div
+                className="card-header d-flex justify-content-between align-items-center rounded-4"
+                onClick={() => this.toggleCollapse(this.state.car!.carId)}
+                style={{ cursor: 'pointer' }}
+            >
+                <strong>{this.state.car.givenName} adatai</strong>
+                <span style={{ fontSize: '20px' }}>
+                    {this.state.carsCollapseOpen[this.state.car.carId] ?? true ? '▲' : '▼'}
+                </span>
+            </div>
+
+            {/* Adatok */}
+            <div
+                className="card-body"
+                style={{
+                    display: this.state.carsCollapseOpen[this.state.car.carId] ?? true ? 'block' : 'none',
+                    backgroundColor: 'transparent',
+                }}
+            >
+                <ul>
+                    <li>Márka: {this.state.car.brand}</li>
+                    <li>Modell: {this.state.car.model}</li>
+                    <li>Évjárat: {this.state.car.modelYear}</li>
+                    <li>Üzemanyag: {this.state.car.fuelType}</li>
+                    <li>Lóerő: {this.state.car.carPower}</li>
+                    <li>Váltó: {this.state.car.gearType}</li>
+                    <li>Szín: {this.state.car.color}</li>
+                    <li>Felépítés: {this.state.car.chassisType}</li>
+                    <li>Ajtók: {this.state.car.doors}</li>
+                    <li>Fogyasztás: {this.state.car.fuelEconomy}</li>
+                    <li>Rendszám: {this.state.car.license_plate}</li>
+                </ul>
+            </div>
+        </div>
+    )}
+</div>
                     <div className="col-lg-8">
                         <div className="card">
                             <div className="card-body">
