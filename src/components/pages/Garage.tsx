@@ -289,42 +289,49 @@ export default class Garage extends Component<{}, State> {
 
     render() {
         const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded } = this.state;
-        const renderUpload = (carId: number) => (
-            <div className="ps-3 pe-3 pt-2 pb-2">
-                <input
-                    type="file"
-                    onChange={this.onFileChange}
-                    className="form-control mb-2"
-                />
-                <button
-                    onClick={() => this.onFileUpload(carId)}
-                    className="btn btn-dark w-100"
-                >
-                    Kép feltöltése
-                </button>
-            </div>
-        );
+        const renderUpload = (car: Car) => {
+            // Ha már van kép, ne jelenítsd meg a feltöltést
+            if (car.pictures && car.pictures.length > 0) {
+                return null;
+            }
+
+            return (
+                <div className="ps-3 pe-3 pt-2 pb-2">
+                    <input
+                        type="file"
+                        onChange={this.onFileChange}
+                        className="form-control mb-2"
+                    />
+                    <button
+                        onClick={() => this.onFileUpload(car.carId)}
+                        className="btn btn-dark w-100"
+                    >
+                        Kép feltöltése
+                    </button>
+                </div>
+            );
+        };
         let myCar = (
             this.state.cars.map((car: Car) => (
                 <div className="col-auto mb-4 d-flex justify-content-center py-3" key={car.carId} style={{ width: "350px" }}>
                     <div className="card garage-card m-2">
 
-                        {renderUpload(car.carId)}
+                        {renderUpload(car)}
 
                         <Link
                             to={`/garage/${car.carId}`}
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
-                             <img
-                        src={
-                            car.pictures && car.pictures.length > 0
-                                ? `http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`
-                                : "/no-image.png"
-                        }
-                        alt=""
-                        className="bd-placeholder-img card-img-top"
-                        id="albumPicture"
-                    />
+                            <img
+                                src={
+                                    car.pictures && car.pictures.length > 0
+                                        ? `http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`
+                                        : "/no-image.png"
+                                }
+                                alt=""
+                                className="bd-placeholder-img card-img-top"
+                                id="albumPicture"
+                            />
 
                             <div className="card-body text-center">
                                 <ul className="list-unstyled mb-0">

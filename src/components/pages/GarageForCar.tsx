@@ -76,6 +76,7 @@ interface State {
     speedometer: number;
     date: string;
     carsCollapseOpen: { [key: number]: boolean }; // carId -> true/false
+    selectedFiles: { [carId: number]: File | null };
 }
 
 const currentDate = new Date();
@@ -99,6 +100,7 @@ export default class GarageForCar extends Component<Props, State> {
         speedometer: 0,
         date: formattedDate,
         carsCollapseOpen: {},
+        selectedFiles: {},
     }
     toggleCollapse = (carId: number) => {
         this.setState(prev => ({
@@ -217,6 +219,51 @@ export default class GarageForCar extends Component<Props, State> {
         window.scrollTo(0, 0);
     }
 
+    onFileUpload = async (carId: number) => {
+        const file = this.state.selectedFiles[carId];
+        if (!file) {
+            console.log("Nincs kiválasztott fájl!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("carFile", file);
+
+        try {
+            const response = await fetch(`http://localhost:3001/uploadfile/${carId}`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) throw new Error("Upload sikertelen");
+
+            console.log("Upload sikeres:", await response.json());
+
+            // Újratöltjük az autókat, hogy megjelenjen a kép
+            await this.loadUsersCars();
+
+            // töröljük a feltöltött fájlt a state-ből
+            this.setState(prev => ({
+                selectedFiles: {
+                    ...prev.selectedFiles,
+                    [carId]: null
+                }
+            }));
+        } catch (err) {
+            console.error("Upload hiba:", err);
+        }
+    };
+
+    onFileChange = (carId: number, event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null;
+        this.setState(prev => ({
+            selectedFiles: {
+                ...prev.selectedFiles,
+                [carId]: file
+            }
+        }));
+    };
+
     handleUpload = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const { speedometer, date } = this.state;
@@ -246,6 +293,7 @@ export default class GarageForCar extends Component<Props, State> {
     render() {
         const data = this.state.chart.map((chart) => (chart.speedometer));
         const labels = this.state.chart.map((chart) => (chart.date));
+
 
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().slice(0, 10);
@@ -378,19 +426,32 @@ export default class GarageForCar extends Component<Props, State> {
                     <div className="col-lg-4 ps-4">
                         {this.state.cars.map(car => {
                             const isOpen = this.state.carsCollapseOpen[car.carId] ?? true;
+
                             return (
                                 <div className="card mt-4 mb-4" key={car.carId}>
                                     <div className="card-body p-2">
-                                        <img
-                                            src={
-                                                car.pictures && car.pictures.length > 0
-                                                    ? `http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`
-                                                    : '/no-image.png'
-                                            }
-                                            alt={car.givenName}
-                                            className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
-                                            id="carsImage"
-                                        />
+                                        {car.pictures && car.pictures.length > 0 ? (
+                                            <img
+                                                src={`http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`}
+                                                alt={car.givenName}
+                                                className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
+                                                id="carsImage"
+                                            />
+                                        ) : (
+                                            <div className="ps-3 pe-3 pt-2 pb-2 text-center">
+                                                <input
+                                                    type="file"
+                                                    onChange={(e) => this.onFileChange(car.carId, e)}
+                                                    className="form-control mb-2"
+                                                />
+                                                <button
+                                                    className="btn btn-dark w-100"
+                                                    onClick={() => this.onFileUpload(car.carId)}
+                                                >
+                                                    Kép feltöltése
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )
