@@ -223,8 +223,24 @@ export default class Garage extends Component<{}, State> {
     };
 
     onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // Update the state
-        this.setState({ selectedFile: event.target.files?.[0] || null });
+        const file = event.target.files?.[0];
+
+        if (!file) return;
+
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (file.size > maxSize) {
+            alert("A kép túl nagy! Maximum 2MB lehet.");
+            return;
+        }
+
+        // Csak képet engedünk
+        if (!file.type.startsWith("image/")) {
+            alert("Csak képfájl tölthető fel!");
+            return;
+        }
+
+        this.setState({ selectedFile: file });
     };
 
     onFileUpload = async (carId: number) => {
@@ -259,34 +275,6 @@ export default class Garage extends Component<{}, State> {
         }
     };
 
-    /*onFileUpload = async () => {
-        // Create an object of formData
-        const formData = new FormData();
-
-        // Update the formData object
-        if (this.state.selectedFile) {
-            formData.append(
-                "carFile",
-                this.state.selectedFile,
-                this.state.selectedFile.name
-            );
-            let userId = localStorage.getItem('userId');
-            let responseOk = await fetch('http://localhost:3001/uploadfile/${userId}')
-            let responseUrl: string = responseOk.url.substring(0, 33) + userId;
-            axios.post(responseUrl, formData).then((res) => {
-                // Set the carPic state to the filename returned by the server
-                this.setState({
-                    carPic: res.data.carPic,
-                    hasCarPic: true,
-                });
-            }).catch((err) => {
-                console.log(err);
-            });
-        } else {
-            console.log('Error on upload!');
-        }
-    };*/
-
     render() {
         const { brandInput, modelInput, modelYearInput, fuelTypeInput, carPowerInput, gearTypeInput, colorInput, chassisTypeInput, doorsInput, fuelEconomyInput, licensePlateInput, givenNameInput, carLoaded } = this.state;
         const renderUpload = (car: Car) => {
@@ -299,6 +287,7 @@ export default class Garage extends Component<{}, State> {
                 <div className="ps-3 pe-3 pt-2 pb-2">
                     <input
                         type="file"
+                        accept="image/png, image/jpeg, image/webp"
                         onChange={this.onFileChange}
                         className="form-control mb-2"
                     />
@@ -313,22 +302,20 @@ export default class Garage extends Component<{}, State> {
         };
         let myCar = (
             this.state.cars.map((car: Car) => (
-                <div className="col-auto mb-4 d-flex justify-content-center py-3" key={car.carId} style={{ width: "350px" }}>
+                <div className="col-auto mb-4 d-flex justify-content-center py-3" key={car.carId} style={{ width: "350px"}}>
                     <div className="card garage-card m-2">
-
-                        {renderUpload(car)}
-
                         <Link to={`/garage/${car.carId}`} key={car.carId} style={{ textDecoration: 'none', color: 'inherit' }}>
                             <img
                                 src={
                                     car.pictures && car.pictures.length > 0
                                         ? `http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`
-                                        : "/no-image.png"
+                                        : "/no-image.jpg"
                                 }
                                 alt=""
-                                className="bd-placeholder-img card-img-top"
+                                className="bd-placeholder-img card-img-top rounded-3"
                                 id="albumPicture"
                             />
+                            {renderUpload(car)}
 
                             <div className="card-body text-center">
                                 <ul className="list-unstyled mb-0">

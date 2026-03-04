@@ -183,29 +183,24 @@ export default class GarageForCar extends Component<Props, State> {
     }
 
     async loadChartData() {
+        if (!this.props.carId) return;
+
         try {
-            const thisUserId = localStorage.getItem('userId');
-            let response = await fetch('http://localhost:3001/chart/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 28) + thisUserId;
-            let responseOk = await fetch(responseUrl);
-            if (!responseOk.ok) {
+            const response = await fetch(
+                `http://localhost:3001/chart/car/${this.props.carId}`
+            );
+
+            if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            let data = await responseOk.json() as chartDataResponse;
+
+            const data = await response.json() as chartDataResponse;
+
             this.setState({
                 chart: data.chart,
-                hasSpeedometer: true,
+                hasSpeedometer: data.chart.length > 0,
             });
-            if (data.chart.length <= 0) {
-                this.setState({
-                    hasSpeedometer: false,
-                });
-            }
-            if (response === null) {
-                this.setState({
-                    hasSpeedometer: false,
-                });
-            }
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -232,6 +227,11 @@ export default class GarageForCar extends Component<Props, State> {
             console.error("Hiba:", error);
         }
     }
+
+    /*async componentDidMount() {
+        await this.loadCar();
+        await this.loadChartData();
+    }*/
 
     componentDidMount() {
         this.loadUsersCars();
@@ -279,7 +279,24 @@ export default class GarageForCar extends Component<Props, State> {
     };
 
     onFileChange = (carId: number, event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0] || null;
+        const file = event.target.files?.[0];
+
+        if (!file) return;
+
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        // Méret ellenőrzés
+        if (file.size > maxSize) {
+            alert("A kép túl nagy! Maximum 2MB lehet.");
+            return;
+        }
+
+        // Típus ellenőrzés
+        if (!file.type.startsWith("image/")) {
+            alert("Csak képfájl tölthető fel!");
+            return;
+        }
+
         this.setState(prev => ({
             selectedFiles: {
                 ...prev.selectedFiles,
@@ -290,28 +307,41 @@ export default class GarageForCar extends Component<Props, State> {
 
     handleUpload = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (!this.props.carId) return;
+
         const { speedometer, date } = this.state;
+
         const dbData = {
-            speedometer: speedometer,
-            date: date,
+            speedometer,
+            date,
+        };
+
+        try {
+            const response = await fetch(
+                `http://localhost:3001/chart/car/${this.props.carId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dbData),
+                }
+            );
+
+            if (!response.ok) throw new Error("Hiba mentéskor");
+
+            this.setState({
+                speedometer: 0,
+                date: formattedDate,
+            });
+
+            await this.loadChartData();
+
+        } catch (error) {
+            console.error("Upload hiba:", error);
         }
-        let userId = localStorage.getItem('userId');
-        let responseOk = await fetch('http://localhost:3001/chart/${userId}')
-        let responseUrl: string = responseOk.url.substring(0, 28) + userId;
-        let response = await fetch(responseUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dbData),
-        });
-        this.setState({
-            speedometer: 0,
-            date: formattedDate,
-        })
-        window.location.reload();
-        await this.loadChartData();
-    }
+    };
 
 
     render() {
@@ -450,72 +480,73 @@ export default class GarageForCar extends Component<Props, State> {
             <div className="container-fluid" id="garageContainer">
                 <div className="row">
                     <div className="col-lg-4 ps-4">
-    {this.state.car && (
-        <div className="card mt-4 mb-4" key={this.state.car.carId}>
-            {/* Kép / feltöltés */}
-            <div className="card-body p-2">
-                {this.state.car.pictures && this.state.car.pictures.length > 0 ? (
-                    <img
-                        src={`http://localhost:3001/uploadedfiles/cars/${this.state.car.pictures[0].carPic}`}
-                        alt={this.state.car.givenName}
-                        className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
-                        id="carsImage"
-                    />
-                ) : (
-                    <div className="ps-3 pe-3 pt-2 pb-2 text-center">
-                        <input
-                            type="file"
-                            onChange={(e) => this.onFileChange(this.state.car!.carId, e)}
-                            className="form-control mb-2"
-                        />
-                        <button
-                            className="btn btn-dark w-100"
-                            onClick={() => this.onFileUpload(this.state.car!.carId)}
-                        >
-                            Kép feltöltése
-                        </button>
-                        <p className="mt-2">Nincs feltöltött kép</p>
+                        {this.state.car && (
+                            <div className="card mt-4 mb-4" key={this.state.car.carId}>
+                                {/* Kép / feltöltés */}
+                                <div className="card-body p-2">
+                                    {this.state.car.pictures && this.state.car.pictures.length > 0 ? (
+                                        <img
+                                            src={`http://localhost:3001/uploadedfiles/cars/${this.state.car.pictures[0].carPic}`}
+                                            alt={this.state.car.givenName}
+                                            className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
+                                            id="carsImage"
+                                        />
+                                    ) : (
+                                        <div className="ps-3 pe-3 pt-2 pb-2 text-center">
+                                            <img src="/no-image.jpg" alt="no-imgae" id="albumPicture" className="rounded-4"/>
+                                            <input
+                                                type="file"
+                                                accept="image/png, image/jpeg, image/webp"
+                                                onChange={(e) => this.onFileChange(this.state.car!.carId, e)}
+                                                className="form-control mb-2"
+                                            />
+                                            <button
+                                                className="btn btn-dark w-100"
+                                                onClick={() => this.onFileUpload(this.state.car!.carId)}
+                                            >
+                                                Kép feltöltése
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Collapse opener */}
+                                <div
+                                    className="card-header d-flex justify-content-between align-items-center rounded-4"
+                                    onClick={() => this.toggleCollapse(this.state.car!.carId)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <strong>{this.state.car.givenName} adatai</strong>
+                                    <span style={{ fontSize: '20px' }}>
+                                        {this.state.carsCollapseOpen[this.state.car.carId] ?? true ? '▲' : '▼'}
+                                    </span>
+                                </div>
+
+                                {/* Adatok */}
+                                <div
+                                    className="card-body"
+                                    style={{
+                                        display: this.state.carsCollapseOpen[this.state.car.carId] ?? true ? 'block' : 'none',
+                                        backgroundColor: 'transparent',
+                                    }}
+                                >
+                                    <ul>
+                                        <li>Márka: {this.state.car.brand}</li>
+                                        <li>Modell: {this.state.car.model}</li>
+                                        <li>Évjárat: {this.state.car.modelYear}</li>
+                                        <li>Üzemanyag: {this.state.car.fuelType}</li>
+                                        <li>Lóerő: {this.state.car.carPower}</li>
+                                        <li>Váltó: {this.state.car.gearType}</li>
+                                        <li>Szín: {this.state.car.color}</li>
+                                        <li>Felépítés: {this.state.car.chassisType}</li>
+                                        <li>Ajtók: {this.state.car.doors}</li>
+                                        <li>Fogyasztás: {this.state.car.fuelEconomy}</li>
+                                        <li>Rendszám: {this.state.car.license_plate}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-
-            {/* Collapse opener */}
-            <div
-                className="card-header d-flex justify-content-between align-items-center rounded-4"
-                onClick={() => this.toggleCollapse(this.state.car!.carId)}
-                style={{ cursor: 'pointer' }}
-            >
-                <strong>{this.state.car.givenName} adatai</strong>
-                <span style={{ fontSize: '20px' }}>
-                    {this.state.carsCollapseOpen[this.state.car.carId] ?? true ? '▲' : '▼'}
-                </span>
-            </div>
-
-            {/* Adatok */}
-            <div
-                className="card-body"
-                style={{
-                    display: this.state.carsCollapseOpen[this.state.car.carId] ?? true ? 'block' : 'none',
-                    backgroundColor: 'transparent',
-                }}
-            >
-                <ul>
-                    <li>Márka: {this.state.car.brand}</li>
-                    <li>Modell: {this.state.car.model}</li>
-                    <li>Évjárat: {this.state.car.modelYear}</li>
-                    <li>Üzemanyag: {this.state.car.fuelType}</li>
-                    <li>Lóerő: {this.state.car.carPower}</li>
-                    <li>Váltó: {this.state.car.gearType}</li>
-                    <li>Szín: {this.state.car.color}</li>
-                    <li>Felépítés: {this.state.car.chassisType}</li>
-                    <li>Ajtók: {this.state.car.doors}</li>
-                    <li>Fogyasztás: {this.state.car.fuelEconomy}</li>
-                    <li>Rendszám: {this.state.car.license_plate}</li>
-                </ul>
-            </div>
-        </div>
-    )}
-</div>
                     <div className="col-lg-8">
                         <div className="card">
                             <div className="card-body">
