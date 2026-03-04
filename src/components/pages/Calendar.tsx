@@ -6,6 +6,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import huLocale from '@fullcalendar/core/locales/hu';
+import { useLocation } from 'react-router-dom';
 
 interface carListResponse {
     cars: Car[];
@@ -62,6 +63,7 @@ interface State {
     name: string;
     date: string;
     docsLoaded: boolean;
+    selectedCarId: number | null;
 }
 
 const currentDate = new Date();
@@ -83,6 +85,7 @@ export default class Calendar extends Component<{}, State> {
         name: '',
         date: formattedDate,
         docsLoaded: false,
+        selectedCarId: null,
     }
 
     async loadUsersCars() {
@@ -112,10 +115,34 @@ export default class Calendar extends Component<{}, State> {
     }
 
     async loadCarsEvents() {
+        if (!this.state.selectedCarId) return;
+
+        try {
+            const response = await fetch(
+                `http://localhost:3001/calendarEvent/${this.state.selectedCarId}?limit=50`
+            );
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json() as calendarDataResponse;
+
+            this.setState({
+                calDatas: data.calDatas,
+                eventsLoaded: true,
+            });
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    /*async loadCarsEvents() {
         try {
             const thisUserId = localStorage.getItem('userId');
             let response = await fetch('http://localhost:3001/calendarEvent/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 36) + thisUserId + "?limit=50"; /* max 50 */
+            let responseUrl: string = response.url.substring(0, 36) + thisUserId + "?limit=50"; 
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
                 throw new Error('Network response was not ok');
@@ -135,7 +162,7 @@ export default class Calendar extends Component<{}, State> {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
-    }
+    }*/
 
     async loadDocuments() {
         try {
@@ -263,6 +290,7 @@ export default class Calendar extends Component<{}, State> {
             title: title,
             start: start,
             comment: comment,
+            carId: this.state.selectedCarId
         }
         let userId = localStorage.getItem('userId');
         let responseOk = await fetch('http://localhost:3001/calendarEvent/${userId}')
@@ -300,13 +328,40 @@ export default class Calendar extends Component<{}, State> {
         this.setState({ comment: e.target.value })
     };
 
+    handleCarChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const carId = Number(e.target.value);
+
+        this.setState({
+            selectedCarId: carId
+        }, () => {
+            this.loadCarsEvents();   // később átírjuk carId alapúra
+            this.loadDocuments();    // ha ezek is carhoz tartoznak
+        });
+    };
+
     componentDidMount() {
+
+        const params = new URLSearchParams(window.location.search);
+        const carIdFromQuery = params.get('carId');
+
+        if (carIdFromQuery && !isNaN(Number(carIdFromQuery))) {
+            this.setState({ selectedCarId: Number(carIdFromQuery) });
+        }
         this.loadUsersCars();
         this.loadCarsEvents();
         this.loadDocuments();
     }
 
+    componentDidUpdate(prevProps: any, prevState: State) {
+        if (this.state.selectedCarId && prevState.selectedCarId !== this.state.selectedCarId) {
+            this.loadCarsEvents(); // csak az adott autó eseményei
+        }
+    }
+
     render() {
+        const selectedCar = this.state.cars.find(
+            car => car.carId === this.state.selectedCarId
+        );
         const calendarEvents = this.state.calDatas.map((event, index) => {
             const startParts = event.start.split('. '); // Split the string into parts using the period and space characters
             const startDate = new Date(`${startParts[0]}-${startParts[1]}-${startParts[2]}`); // Create a Date object from the formatted string
@@ -377,144 +432,167 @@ export default class Calendar extends Component<{}, State> {
         }
 
         if (this.state.carLoaded) {
-            return <main id="undoBlockContentForCalendar">
-                {this.state.cars.map((car: Car) => (
-                    <h1 key={car.carId} className=" text-center">
-                        {this.state.cars.map((car: Car) => (
-                            <h1 key={car.carId} className="text-center">
-                                <Link to={`/garage/${car.carId}`} id="carPageLink">
-                                    <span className="texthover">{car.givenName}</span>
-                                </Link>
-                            </h1>
-                        ))}
-                    </h1>
-                ))}
-                <div className="container-fluid">
-                    <div className="card ms-5 me-5 pt-2 mt-4">
-                        <div className="card-body">
-                            <div className='container-fluid'>
-                                <div className="my-calendar-wrapper">
-                                    <FullCalendar
-                                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                                        initialView="dayGridMonth"
-                                        selectable={true}
-                                        editable={false}
-                                        droppable={false}
-                                        displayEventTime={false}
-                                        events={calendarEvents}
-                                        select={this.handleDateSelect}
-                                        locale={huLocale}
-                                        locales={[huLocale]}
-                                        dateClick={this.handleDateClick}
-                                        dayMaxEventRows={2}              // max 2 sor az eseményekből
-                                        dayMaxEvents={true}              // "+" jel ha több esemény van
-                                        contentHeight="auto"             // automatikus magasság
-                                        dayCellClassNames={() => ['custom-day-cell']}
-                                        dayCellContent={(arg) => (
-                                            <div style={{
-                                                fontSize: window.innerWidth < 768 ? '0.65rem' : '0.8rem',
-                                                lineHeight: window.innerWidth < 768 ? '1.1' : '1.3',
-                                                padding: '1px'
-                                            }}>
-                                                {arg.dayNumberText}
-                                            </div>
-                                        )}
-                                    />
-                                </div>
-                                {this.state.showModal && (
-                                    <div className="modal" style={{ display: 'block' }}>
-                                        <div className="modal-dialog modal-dialog-centered">
-                                            <div className="modal-content">
-                                                <form onSubmit={this.handleUpload}>
-                                                    <div className="modal-header">
-                                                        <h5 className="modal-title">Esemény hozzáadása - {this.state.start}</h5>
-                                                        <button type="button" className="btn-close" aria-label="Close" onClick={this.handleModalClose}></button>
-                                                    </div>
-                                                    <div className="modal-body">
-                                                        <div className="form-group">
-                                                            <label htmlFor='selectEvent'>Válasszon eseményt</label>
-                                                            <select name='selectEvent' className='form-select' onChange={(e) => this.setState({ title: e.target.value })} required>
-                                                                <option hidden value={''}>Válasszon az alábbiak közül</option>
-                                                                <option value="Tankolás">Tankolás</option>
-                                                                <option value="Büntetés">Büntetés</option>
-                                                                <option value="Biztosítás">Biztosítás</option>
-                                                                <option value="Szervíz">Szervíz</option>
-                                                                <option value="Műszaki vizsga">Műszaki vizsga</option>
-                                                                <option value="Havi szemle">Havi szemle</option>
-                                                                <option value="Pályamatrica">Pályamatrica</option>
-                                                                <option value="Gépjárműadó">Gépjárműadó</option>
-                                                                <option value="Parkolás">Parkolás</option>
-                                                                <option value="Autómosás">Autómosás</option>
-                                                                <option value="Befizetés">Befizetés</option>
-                                                                <option value="Egyéb">Egyéb</option>
-                                                            </select>
-                                                        </div>
-                                                        <div className="input-group ms-1 me-1 pt-3">
-                                                            <span className='input-group-text'>További információk:</span>
-                                                            <textarea className='form-control' aria-label='További információk:' onChange={this.handleTextareaChange} maxLength={100}></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div className="modal-footer">
-                                                        <button type="submit" className="btn btn-primary">Save</button>
-                                                        <button type="button" className="btn btn-secondary" onClick={this.handleModalClose}>Cancel</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div><div className="container-fluid">
-                        <div className="ms-4 me-4 mt-4 ">
-                            <div className="col-lg-12">
+            const selectedCar = this.state.cars.find(car => car.carId === this.state.selectedCarId);
 
-                                <div className="row">
-                                    <div className="col-lg-3">
-                                        <div className="card mt-5 ms-3">
-                                            <div className="card-header">
-                                                <h5 className="fw-semibold mt-3 mb-3 ms-4 text-center">Dokumentumok <img src={'document.png'} alt="" className="img-fluid float-end" /></h5>
-                                            </div>
-                                            <div className="card-body">
-                                                {docs}
-                                            </div>
-                                            <div className="card-footer">
-                                                <h5 className="fw-semibold mb-3 mt-2 text-center">+ Dokumentum hozzáadása</h5>
-                                                <form action="submit" className="form-control bg-light border-0" onSubmit={this.handleDocsUpload}>
-                                                    <label htmlFor="documentName" className="form-label fw-light">Dokumentum neve:</label>
-                                                    <input type="text" id="documentName" className="form-control fw-lighter" required placeholder="Adja meg a dokumentum nevét!" onChange={(e) => this.setState({ name: e.target.value })} />
-                                                    <label htmlFor="documentDate" className="fw-light mt-3 mb-2">Lejárati dátum:</label>
-                                                    <input type="date" id="documentDate" className="form-control fw-lighter" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
-                                                    <button type="submit" className="btn btn-dark mt-4 mb-1 d-block m-auto"> Hozzáadás </button>
-                                                </form>
+            return (
+                <main id="undoBlockContentForCalendar">
+                    <div className="text-center mt-4">
+                        <select
+                            className="form-select w-50 m-auto"
+                            value={this.state.selectedCarId ?? ''}
+                            onChange={this.handleCarChange}
+                        >
+                            <option value="" disabled>-- Autó kiválasztása --</option>
+                            {this.state.cars.map(car => (
+                                <option key={car.carId} value={car.carId}>
+                                    {car.givenName} ({car.brand} {car.model})
+                                </option>
+                            ))}
+                        </select>
+
+                        {selectedCar && (
+                            <h2 className="mt-3 fw-light">
+                                <Link to={`/garage/${selectedCar.carId}`} id="carPageLink">
+                                    <span className="texthover">{selectedCar.givenName}</span>
+                                </Link>
+                            </h2>
+                        )}
+                    </div>
+
+                    {/* Itt jön a naptár és a modal, teljesen változatlan */}
+                    <div className="container-fluid">
+                        <div className="card ms-5 me-5 pt-2 mt-4">
+                            <div className="card-body">
+                                <div className='container-fluid'>
+                                    <div className="my-calendar-wrapper">
+                                        {this.state.selectedCarId ? (
+                                            <FullCalendar
+                                                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                                initialView="dayGridMonth"
+                                                selectable={true}
+                                                editable={false}
+                                                droppable={false}
+                                                displayEventTime={false}
+                                                events={calendarEvents}
+                                                select={this.handleDateSelect}
+                                                locale={huLocale}
+                                                locales={[huLocale]}
+                                                dateClick={this.handleDateClick}
+                                                dayMaxEventRows={2}
+                                                dayMaxEvents={true}
+                                                contentHeight="auto"
+                                                dayCellClassNames={() => ['custom-day-cell']}
+                                                dayCellContent={(arg) => (
+                                                    <div style={{
+                                                        fontSize: window.innerWidth < 768 ? '0.65rem' : '0.8rem',
+                                                        lineHeight: window.innerWidth < 768 ? '1.1' : '1.3',
+                                                        padding: '1px'
+                                                    }}>
+                                                        {arg.dayNumberText}
+                                                    </div>
+                                                )}
+                                            />
+                                        ) : (
+                                            <h5 className="text-center mt-5 text-muted">
+                                                Először válasszon autót a naptár megtekintéséhez.
+                                            </h5>
+                                        )}
+                                    </div>
+                                    {this.state.showModal && (
+                                        <div className="modal" style={{ display: 'block' }}>
+                                            <div className="modal-dialog modal-dialog-centered">
+                                                <div className="modal-content">
+                                                    <form onSubmit={this.handleUpload}>
+                                                        <div className="modal-header">
+                                                            <h5 className="modal-title">Esemény hozzáadása - {this.state.start}</h5>
+                                                            <button type="button" className="btn-close" aria-label="Close" onClick={this.handleModalClose}></button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <div className="form-group">
+                                                                <label htmlFor='selectEvent'>Válasszon eseményt</label>
+                                                                <select name='selectEvent' className='form-select' onChange={(e) => this.setState({ title: e.target.value })} required>
+                                                                    <option hidden value={''}>Válasszon az alábbiak közül</option>
+                                                                    <option value="Tankolás">Tankolás</option>
+                                                                    <option value="Büntetés">Büntetés</option>
+                                                                    <option value="Biztosítás">Biztosítás</option>
+                                                                    <option value="Szervíz">Szervíz</option>
+                                                                    <option value="Műszaki vizsga">Műszaki vizsga</option>
+                                                                    <option value="Havi szemle">Havi szemle</option>
+                                                                    <option value="Pályamatrica">Pályamatrica</option>
+                                                                    <option value="Gépjárműadó">Gépjárműadó</option>
+                                                                    <option value="Parkolás">Parkolás</option>
+                                                                    <option value="Autómosás">Autómosás</option>
+                                                                    <option value="Befizetés">Befizetés</option>
+                                                                    <option value="Egyéb">Egyéb</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="input-group ms-1 me-1 pt-3">
+                                                                <span className='input-group-text'>További információk:</span>
+                                                                <textarea className='form-control' aria-label='További információk:' onChange={this.handleTextareaChange} maxLength={100}></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="submit" className="btn btn-primary">Save</button>
+                                                            <button type="button" className="btn btn-secondary" onClick={this.handleModalClose}>Cancel</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-9 text-center">
-                                        <h4 className='fw-light mb-5'>Felvett események</h4>
-                                        <div className="events-grid">
-                                            {this.state.calDatas.map((event, index) => (
-                                                <div className="event-card" key={index}>
-                                                    <div className="event-card-content">
-                                                        <h5 className="event-title">{event.title}</h5>
-                                                        <p className="event-comment">{event.comment}</p>
-                                                        <span className="event-date">
-                                                            {event.start && new Date(event.start).toLocaleDateString('hu-HU')}
-                                                        </span>
-                                                    </div>
-                                                    <button className="event-delete-btn" onClick={() => this.handleEventDelete(event.calId)}>
-                                                        Törlés
-                                                    </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div><div className="container-fluid">
+                            <div className="ms-4 me-4 mt-4 ">
+                                <div className="col-lg-12">
+
+                                    <div className="row">
+                                        <div className="col-lg-3">
+                                            <div className="card mt-5 ms-3">
+                                                <div className="card-header">
+                                                    <h5 className="fw-semibold mt-3 mb-3 ms-4 text-center">Dokumentumok <img src={'document.png'} alt="" className="img-fluid float-end" /></h5>
                                                 </div>
-                                            ))}
+                                                <div className="card-body">
+                                                    {docs}
+                                                </div>
+                                                <div className="card-footer">
+                                                    <h5 className="fw-semibold mb-3 mt-2 text-center">+ Dokumentum hozzáadása</h5>
+                                                    <form action="submit" className="form-control bg-light border-0" onSubmit={this.handleDocsUpload}>
+                                                        <label htmlFor="documentName" className="form-label fw-light">Dokumentum neve:</label>
+                                                        <input type="text" id="documentName" className="form-control fw-lighter" required placeholder="Adja meg a dokumentum nevét!" onChange={(e) => this.setState({ name: e.target.value })} />
+                                                        <label htmlFor="documentDate" className="fw-light mt-3 mb-2">Lejárati dátum:</label>
+                                                        <input type="date" id="documentDate" className="form-control fw-lighter" defaultValue={formattedDate} required onChange={(e) => this.setState({ date: e.target.value })} />
+                                                        <button type="submit" className="btn btn-dark mt-4 mb-1 d-block m-auto"> Hozzáadás </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-lg-9 text-center">
+                                            <h4 className='fw-light mb-5'>Felvett események</h4>
+                                            <div className="events-grid">
+                                                {this.state.calDatas.map((event, index) => (
+                                                    <div className="event-card" key={index}>
+                                                        <div className="event-card-content">
+                                                            <h5 className="event-title">{event.title}</h5>
+                                                            <p className="event-comment">{event.comment}</p>
+                                                            <span className="event-date">
+                                                                {event.start && new Date(event.start).toLocaleDateString('hu-HU')}
+                                                            </span>
+                                                        </div>
+                                                        <button className="event-delete-btn" onClick={() => this.handleEventDelete(event.calId)}>
+                                                            Törlés
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            )
         } else {
             return <body id="undoBlockContent">
                 <div className="container text-center">

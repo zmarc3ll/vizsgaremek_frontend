@@ -443,11 +443,13 @@ export default class GarageForCar extends Component<Props, State> {
                             </div>
                         </>
                     ))}
-                    <Link to={'/calendar'}>
-                        <button className="btn btn-dark" id="calButton">
-                            Ugrás a naptárra
-                        </button>
-                    </Link>
+                    {this.state.car && (
+                        <Link to={`/calendar?carId=${this.state.car.carId}`}>
+                            <button className="btn btn-dark" id="calButton">
+                                Ugrás a naptárra
+                            </button>
+                        </Link>
+                    )}
                 </div>
             );
         } else {
@@ -493,7 +495,7 @@ export default class GarageForCar extends Component<Props, State> {
                                         />
                                     ) : (
                                         <div className="ps-3 pe-3 pt-2 pb-2 text-center">
-                                            <img src="/no-image.jpg" alt="no-imgae" id="albumPicture" className="rounded-4"/>
+                                            <img src="/no-image.jpg" alt="no-imgae" id="albumPicture" className="rounded-4" />
                                             <input
                                                 type="file"
                                                 accept="image/png, image/jpeg, image/webp"
