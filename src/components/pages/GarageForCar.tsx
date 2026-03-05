@@ -343,6 +343,27 @@ export default class GarageForCar extends Component<Props, State> {
         }
     };
 
+    deleteCarImage = async (picId: number) => {
+        try {
+            const response = await fetch(`http://localhost:3001/deleteCarImage/${picId}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Kép törlése sikertelen");
+            }
+
+            console.log("Kép törölve");
+
+            // újratöltjük az autót hogy eltűnjön a kép
+            await this.loadUsersCars();
+            await this.loadCar();
+
+        } catch (error) {
+            console.error("Törlés hiba:", error);
+        }
+    };
+
 
     render() {
         const data = this.state.chart.map((chart) => (chart.speedometer));
@@ -487,12 +508,24 @@ export default class GarageForCar extends Component<Props, State> {
                                 {/* Kép / feltöltés */}
                                 <div className="card-body p-2">
                                     {this.state.car.pictures && this.state.car.pictures.length > 0 ? (
-                                        <img
-                                            src={`http://localhost:3001/uploadedfiles/cars/${this.state.car.pictures[0].carPic}`}
-                                            alt={this.state.car.givenName}
-                                            className="rounded shadow-lg bg-body ms-0 img-fluid d-block m-auto"
-                                            id="carsImage"
-                                        />
+                                        <div className="car-image-container text-center rounded shadow-lg img-fluid d-block mx-auto">
+                                            <img
+                                                src={`http://localhost:3001/uploadedfiles/cars/${this.state.car.pictures[0].carPic}`}
+                                                alt={this.state.car.givenName}
+                                                className="rounded shadow-lg bg-body img-fluid"
+                                                id="carsImage"
+                                            />
+
+                                            <button
+                                                className="delete-car-image"
+                                                onClick={() => this.deleteCarImage(this.state.car!.pictures[0].picId)}
+                                            >
+                                                🗑
+                                            </button>
+
+                                        </div>
+
+
                                     ) : (
                                         <div className="ps-3 pe-3 pt-2 pb-2 text-center">
                                             <img src="/no-image.jpg" alt="no-imgae" id="albumPicture" className="rounded-4" />

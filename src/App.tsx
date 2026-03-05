@@ -38,7 +38,7 @@ class App extends Component {
   render() {
     return <div>
       <Helmet>
-        <title>TeAutod.hu</title>
+        <title>TeAutod</title>
       </Helmet>
 
       <NavbarComponent></NavbarComponent>
@@ -50,24 +50,10 @@ class App extends Component {
           <Route path='/calendar' element={<Calendar />} />
           <Route path='/garage' element={<Garage />} />
           <Route path='/aboutus' element={<AboutUs />} />
-          {/*<Route path='/carPage' element={<GarageForCar />} />*/}
           <Route path='/garage/:carId' element={<GarageForCarWrapper />} />
         </Routes>
       </main>
       <ConditionalFooter />
-      {/*  <h2>Új user felvétele</h2>
-    Username: <input type="text" value={usernameInput} onChange={e => this.setState({ usernameInput: e.currentTarget.value})} /> <br />
-    Jelszó: <input type="text" value={passwordInput} onChange={e => this.setState({ passwordInput: e.currentTarget.value })}/> <br />
-    Jelszó újra: <input type="text" value={passwordAuthInput} onChange={e => this.setState({passwordAuthInput: e.currentTarget.value })}/> <br />
-    Email: <input type="text" value={emailInput} onChange={e => this.setState({emailInput: e.currentTarget.value })}/> <br /> 
-    Születési Év: <input type="date" value={birthDateInput} onChange={e => this.setState({ birthDateInput: e.currentTarget.value })}/> <br /> 
-    <button onClick={this.handleUpload}>Hozzáaddás</button> <br />
-      <h2>Adatbázis tábla tartalmazza:</h2>
-      <ul>{
-        this.state.users.map(user =>
-        <li>{user.username}, {user.email} </li>
-        )
-        }</ul> */}
     </div>
   }
 }
