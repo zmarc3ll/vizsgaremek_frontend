@@ -78,6 +78,8 @@ interface State {
     date: string;
     carsCollapseOpen: { [key: number]: boolean }; // carId -> true/false
     selectedFiles: { [carId: number]: File | null };
+    showEditModal: boolean;       // modal láthatósága
+    editedCar: Partial<Car>;      // az aktuálisan szerkesztett autó adatai
 }
 
 const currentDate = new Date();
@@ -103,6 +105,9 @@ export default class GarageForCar extends Component<Props, State> {
         date: formattedDate,
         carsCollapseOpen: {},
         selectedFiles: {},
+        showEditModal: false,
+        editedCar: {},
+
     }
     toggleCollapse = (carId: number) => {
         this.setState(prev => ({
@@ -364,6 +369,54 @@ export default class GarageForCar extends Component<Props, State> {
         }
     };
 
+    handleEditClick = (car: Car) => {
+        this.setState({
+            showEditModal: true,
+            editedCar: { ...car }, // másolat a jelenlegi autóról
+        });
+    };
+
+    /*handleSaveEdit = (e: FormEvent) => {
+        e.preventDefault();
+        this.setState((prev) => ({
+            car: { ...prev.car!, ...prev.editedCar },
+            showEditModal: false,
+        }));
+    };*/
+
+    handleSaveEdit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const { editedCar, car } = this.state;
+
+        if (!editedCar || !car) {
+            alert('Hiba: nincs szerkesztett autó vagy aktuális autó adat.');
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `http://localhost:3001/cars/${car.carId}`, // car biztosan nem null
+                {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(editedCar),
+                }
+            );
+
+            if (!response.ok) throw new Error('Hiba történt a frissítés során');
+
+            const updatedCar = await response.json();
+
+            this.setState({
+                car: updatedCar,
+                showEditModal: false,
+            });
+        } catch (err) {
+            console.error(err);
+            alert('Hiba történt a frissítés során');
+        }
+    };
 
     render() {
         const data = this.state.chart.map((chart) => (chart.speedometer));
@@ -548,13 +601,27 @@ export default class GarageForCar extends Component<Props, State> {
                                 {/* Collapse opener */}
                                 <div
                                     className="card-header d-flex justify-content-between align-items-center rounded-4"
-                                    onClick={() => this.toggleCollapse(this.state.car!.carId)}
                                     style={{ cursor: 'pointer' }}
+                                    onClick={() => this.toggleCollapse(this.state.car!.carId)}
                                 >
-                                    <strong>{this.state.car.givenName} adatai</strong>
-                                    <span style={{ fontSize: '20px' }}>
-                                        {this.state.carsCollapseOpen[this.state.car.carId] ?? true ? '▲' : '▼'}
-                                    </span>
+                                    <div className="d-flex align-items-center">
+                                        <strong className="me-2">{this.state.car.givenName} adatai</strong>
+                                        <button
+                                            className="btn btn-sm btn-outline-none me-2"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                this.handleEditClick(this.state.car!);
+                                                this.setState({ showEditModal: true });
+                                            }}
+                                        >
+                                            ✏️
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <span style={{ fontSize: '20px' }}>
+                                            {this.state.carsCollapseOpen[this.state.car.carId] ?? true ? '▲' : '▼'}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 {/* Adatok */}
@@ -606,6 +673,202 @@ export default class GarageForCar extends Component<Props, State> {
                     </div>
                 </div>
             </div>
+            {this.state.showEditModal && (
+                <div className="modal show d-block" tabIndex={-1}>
+                    <div className="modal-dialog modal-dialog-centered modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Autó szerkesztése</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => this.setState({ showEditModal: false })}
+                                ></button>
+                            </div>
+                            <div className="modal-body">
+                                <form onSubmit={(e) => this.handleSaveEdit(e)}>
+                                    <div className="mb-3">
+                                        <label className="form-label">Autó neve*</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.givenName || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, givenName: e.target.value },
+                                                })
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Márka*</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.brand || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, brand: e.target.value },
+                                                })
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Modell*</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.model || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, model: e.target.value },
+                                                })
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Évjárat</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            value={this.state.editedCar.modelYear || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, modelYear: e.target.valueAsNumber },
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Üzemanyag*</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.fuelType || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, fuelType: e.target.value },
+                                                })
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Lóerő*</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            value={this.state.editedCar.carPower || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, carPower: e.target.valueAsNumber },
+                                                })
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Váltó*</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.gearType || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, gearType: e.target.value },
+                                                })
+                                            }
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Szín</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.color || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, color: e.target.value },
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Felépítés</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.chassisType || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, chassisType: e.target.value },
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Ajtók száma</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            value={this.state.editedCar.doors || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, doors: e.target.valueAsNumber },
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Fogyasztás (liter/100km)</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.fuelEconomy || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, fuelEconomy: e.target.value },
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Rendszám*</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={this.state.editedCar.license_plate || ''}
+                                            onChange={(e) =>
+                                                this.setState({
+                                                    editedCar: { ...this.state.editedCar, license_plate: e.target.value },
+                                                })
+                                            }
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="modal-footer">
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            onClick={() => this.setState({ showEditModal: false })}
+                                        >
+                                            Mégse
+                                        </button>
+                                        <button type="submit" className="btn btn-primary">
+                                            Mentés
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </main>
     }
 }
