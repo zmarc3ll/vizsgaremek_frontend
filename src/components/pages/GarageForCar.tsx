@@ -376,14 +376,6 @@ export default class GarageForCar extends Component<Props, State> {
         });
     };
 
-    /*handleSaveEdit = (e: FormEvent) => {
-        e.preventDefault();
-        this.setState((prev) => ({
-            car: { ...prev.car!, ...prev.editedCar },
-            showEditModal: false,
-        }));
-    };*/
-
     handleSaveEdit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
