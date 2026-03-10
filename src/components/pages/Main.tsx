@@ -19,7 +19,8 @@ export default class Main extends Component<{}, IMainState> {
       username: "",
       fadeOut: false,
     };
-  }
+  } //.env be: #REACT_APP_API_URL=http://192.168.0.15:3001 -nas
+  // .env be: #REACT_APP_API_URL=http://localhost:3001 - ha xampp
 
   componentDidMount() {
     const params = new URLSearchParams(window.location.search);

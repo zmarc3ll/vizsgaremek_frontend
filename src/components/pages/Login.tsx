@@ -53,113 +53,100 @@ export default class Login extends Component<{}, ILoginState> {
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:3001/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password,
-      }),
-    });
-    if (response.ok) {
-      const { token, userId } = await response.json();
-      localStorage.setItem("accessToken", token);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("username", this.state.username);
-      window.location.href = "/?login=true"; //window.location.href = "/";
-      console.log('Üdvözöljük!');
-      const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const loginData = {
-          username: formData.get('username') as string,
-          password: formData.get('password') as string,
-        };
-        axios.post('http://localhost:3001/auth/login', loginData)
-          .then(response => {
-            const token = response.data.token;
-            localStorage.setItem('token', token);
-            setIsLoggedIn(true);
-          })
-          .catch(error => {
-            console.log('Error during login: ', error);
-          });
-      };
-    } else if (response.status === 401) {
-      this.setState({
-        errors: {
-          username: "",
-          password: "A megadott felhasználónév vagy jelszó helytelen.",
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          username: this.state.username,
+          password: this.state.password,
+        }),
       });
-    } else {
-      console.error("Failed to log in");
+
+      if (response.ok) {
+        const { token, userId } = await response.json();
+        localStorage.setItem("accessToken", token);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("username", this.state.username);
+        window.location.href = "/?login=true";
+      } else if (response.status === 401) {
+        this.setState({
+          errors: {
+            username: "",
+            password: "A megadott felhasználónév vagy jelszó helytelen.",
+          },
+        });
+      } else {
+        console.error("Failed to log in");
+      }
+
+    } catch (error) {
+      console.error("Error during login:", error);
     }
   };
 
-  componentDidMount() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("registered") === "true") {
-      this.setState({
-        successMessage: "Sikeres regisztráció! Most bejelentkezhet.",
-      });
+componentDidMount() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("registered") === "true") {
+    this.setState({
+      successMessage: "Sikeres regisztráció! Most bejelentkezhet.",
+    });
 
-      window.history.replaceState({}, document.title, "/login");
-    }
+    window.history.replaceState({}, document.title, "/login");
   }
+}
 
 
-  render() {
-    return <><main id="undoBlockContent">
-      <section>
-        <div className="container-fluid h-custom">
-          <div className="row d-flex justify-content-center align-items-center h-100" id="fillPage">
-            <div className="col-md-9 col-lg-6 col-xl-5">
-              <img src={'auto-removebg-preview.png'} className="img-fluid" alt="Sample image" />
-            </div>
-            <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <form onSubmit={this.handleSubmit}>
-                {this.state.successMessage && (
-                  <div className="alert alert-success text-center">
-                    {this.state.successMessage}
-                  </div>
+render() {
+  return <><main id="undoBlockContent">
+    <section>
+      <div className="container-fluid h-custom">
+        <div className="row d-flex justify-content-center align-items-center h-100" id="fillPage">
+          <div className="col-md-9 col-lg-6 col-xl-5">
+            <img src={'auto-removebg-preview.png'} className="img-fluid" alt="Sample image" />
+          </div>
+          <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <form onSubmit={this.handleSubmit}>
+              {this.state.successMessage && (
+                <div className="alert alert-success text-center">
+                  {this.state.successMessage}
+                </div>
+              )}
+              <div className="divider d-flex align-items-center my-4">
+                <h2 className="text-center fw-bold mx-1 mb-3 pt-2">Belépés</h2>
+              </div>
+              <div className="form-outline mb-4">
+                <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
+                <input type="text" id="form3Example3" className="form-control form-control-lg"
+                  placeholder="Adja meg a felhsználónevét" value={this.state.username}
+                  onChange={this.handleUsernameChange} />
+              </div>
+              <div className="form-outline mb-3">
+                <label className="form-label" htmlFor="form3Example4">Jelszó</label>
+                <input type="password" id="form3Example4" className="form-control form-control-lg interactive"
+                  placeholder="Adja meg a jelszót" value={this.state.password}
+                  onChange={this.handlePasswordChange} />
+                {this.state.errors.password && (
+                  <div className="invalid-feedback">{this.state.errors.password}</div>
                 )}
-                <div className="divider d-flex align-items-center my-4">
-                  <h2 className="text-center fw-bold mx-1 mb-3 pt-2">Belépés</h2>
-                </div>
-                <div className="form-outline mb-4">
-                  <label className="form-label" htmlFor="form3Example3">Felhasználónév</label>
-                  <input type="text" id="form3Example3" className="form-control form-control-lg"
-                    placeholder="Adja meg a felhsználónevét" value={this.state.username}
-                    onChange={this.handleUsernameChange} />
-                </div>
-                <div className="form-outline mb-3">
-                  <label className="form-label" htmlFor="form3Example4">Jelszó</label>
-                  <input type="password" id="form3Example4" className="form-control form-control-lg interactive"
-                    placeholder="Adja meg a jelszót" value={this.state.password}
-                    onChange={this.handlePasswordChange} />
-                  {this.state.errors.password && (
-                    <div className="invalid-feedback">{this.state.errors.password}</div>
-                  )}
-                </div>
-                <div className="d-flex justify-content-between align-items-center">
-                  <p className="text-body"><em>Üdvözöljük!</em></p>
-                </div>
-                <div className="text-center text-lg-start mt-4 pt-2">
-                  <button className="btn btn-success btn-lg" type="submit" role="button" aria-pressed="false">Bejelentkezés</button>
-                  <p className="small fw-bold mt-2 pt-1 mb-0">Nincs fiókja? <Link to={'/register'} className="link-danger">Regisztrálok</Link></p>
-                </div>
-              </form>
-            </div>
+              </div>
+              <div className="d-flex justify-content-between align-items-center">
+                <p className="text-body"><em>Üdvözöljük!</em></p>
+              </div>
+              <div className="text-center text-lg-start mt-4 pt-2">
+                <button className="btn btn-success btn-lg" type="submit" role="button" aria-pressed="false">Bejelentkezés</button>
+                <p className="small fw-bold mt-2 pt-1 mb-0">Nincs fiókja? <Link to={'/register'} className="link-danger">Regisztrálok</Link></p>
+              </div>
+            </form>
           </div>
         </div>
-      </section>
-    </main></>
+      </div>
+    </section>
+  </main></>
 
-  }
+}
 
 }
 

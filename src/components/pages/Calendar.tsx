@@ -91,7 +91,7 @@ export default class Calendar extends Component<{}, State> {
     async loadUsersCars() {
         try {
             const thisUserId = localStorage.getItem('userId');
-            let response = await fetch('http://localhost:3001/usersCar/${thisUserId}');
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/usersCar/${thisUserId}`);
             let responseUrl: string = response.url.substring(0, 31) + thisUserId;
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
@@ -113,13 +113,39 @@ export default class Calendar extends Component<{}, State> {
             console.error('Error fetching data:', error);
         }
     }
+    //majd csere erre:
+    /*
+    async loadUsersCars() {
+    try {
+        const thisUserId = localStorage.getItem('userId');
+
+        const response = await fetch(`http://localhost:3001/usersCar/${thisUserId}`);
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json() as carListResponse;
+
+        if (data.cars.length > 0) {
+            this.setState({
+                cars: data.cars,
+                carLoaded: true,
+            });
+        }
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+    */
 
     async loadCarsEvents() {
         if (!this.state.selectedCarId) return;
 
         try {
             const response = await fetch(
-                `http://localhost:3001/calendarEvent/${this.state.selectedCarId}?limit=50`
+                `${process.env.REACT_APP_API_URL}/calendarEvent/${this.state.selectedCarId}?limit=50`
             );
 
             if (!response.ok) {
@@ -138,37 +164,11 @@ export default class Calendar extends Component<{}, State> {
         }
     }
 
-    /*async loadCarsEvents() {
-        try {
-            const thisUserId = localStorage.getItem('userId');
-            let response = await fetch('http://localhost:3001/calendarEvent/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 36) + thisUserId + "?limit=50"; 
-            let responseOk = await fetch(responseUrl);
-            if (!responseOk.ok) {
-                throw new Error('Network response was not ok');
-            }
-            let data = await responseOk.json() as calendarDataResponse;
-            if (data.calDatas.length > 0) {
-                this.setState({
-                    calDatas: data.calDatas,
-                    eventsLoaded: true,
-                });
-            }
-            if (response === null) {
-                this.setState({
-                    eventsLoaded: false,
-                });
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }*/
-
     async loadDocuments() {
         try {
             const thisUserId = localStorage.getItem('userId');
-            let response = await fetch('http://localhost:3001/documents/${thisUserId}');
-            let responseUrl: string = response.url.substring(0, 32) + thisUserId
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/documents/${thisUserId}`);
+            let responseUrl: string = response.url.substring(0, 32) + thisUserId;
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
                 throw new Error('Network response was not ok');
@@ -223,7 +223,7 @@ export default class Calendar extends Component<{}, State> {
 
     handleEventDelete = async (eventId: number) => {
         try {
-            const response = await fetch(`http://localhost:3001/calendarEvent/${eventId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/calendarEvent/${eventId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -248,7 +248,7 @@ export default class Calendar extends Component<{}, State> {
             date: date,
         }
         let userId = localStorage.getItem('userId');
-        let responseOk = await fetch('http://localhost:3001/documents/${userId}')
+        let responseOk = await fetch(`${process.env.REACT_APP_API_URL}/documents/${userId}`)
         let responseUrl: string = responseOk.url.substring(0, 32) + userId;
         let response = await fetch(responseUrl, {
             method: 'POST',
@@ -266,7 +266,7 @@ export default class Calendar extends Component<{}, State> {
 
     handleDocsDelete = async (docsId: number) => {
         try {
-            const response = await fetch(`http://localhost:3001/documents/${docsId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/documents/${docsId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -293,7 +293,7 @@ export default class Calendar extends Component<{}, State> {
             carId: this.state.selectedCarId
         }
         let userId = localStorage.getItem('userId');
-        let responseOk = await fetch('http://localhost:3001/calendarEvent/${userId}')
+        let responseOk = await fetch(`${process.env.REACT_APP_API_URL}/calendarEvent/${userId}`)
         let responseUrl: string = responseOk.url.substring(0, 36) + userId;
         let response = await fetch(responseUrl, {
             method: 'POST',

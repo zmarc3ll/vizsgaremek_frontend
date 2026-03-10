@@ -96,7 +96,7 @@ export default class Garage extends Component<{}, State> {
 
     async loadCarPics() {
         let userId = localStorage.getItem('userId');
-        let response = await fetch('http://localhost:3001/carPic/${userId}');
+        let response = await fetch(`${process.env.REACT_APP_API_URL}/carPic/${userId}`);
         let responseUrl: string = response.url.substring(0, 29) + userId;
         let responseOk = await fetch(responseUrl);
         let data = await responseOk.json() as carPictureResponse;
@@ -113,7 +113,7 @@ export default class Garage extends Component<{}, State> {
     async loadUsersCars() {
         try {
             const thisUserId = localStorage.getItem('userId');
-            let response = await fetch('http://localhost:3001/usersCar/${thisUserId}');
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/usersCar/${thisUserId}`);
             let responseUrl: string = response.url.substring(0, 31) + thisUserId;
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
@@ -184,7 +184,7 @@ export default class Garage extends Component<{}, State> {
 
         try {
             const response = await fetch(
-                `http://localhost:3001/users/${userId}/cars`,
+                `${process.env.REACT_APP_API_URL}/users/${userId}/cars`,
                 {
                     method: 'POST',
                     headers: {
@@ -257,7 +257,7 @@ export default class Garage extends Component<{}, State> {
 
         try {
             const response = await axios.post(
-                `http://localhost:3001/uploadfile/${carId}`,
+                `${process.env.REACT_APP_API_URL}/uploadfile/${carId}`,
                 formData,
                 {
                     headers: {
@@ -308,7 +308,7 @@ export default class Garage extends Component<{}, State> {
                             <img
                                 src={
                                     car.pictures && car.pictures.length > 0
-                                        ? `http://localhost:3001/uploadedfiles/cars/${car.pictures[0].carPic}`
+                                        ? `${process.env.REACT_APP_API_URL}/uploadedfiles/cars/${car.pictures[0].carPic}`
                                         : "/no-image.jpg"
                                 }
                                 alt=""

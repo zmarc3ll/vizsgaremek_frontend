@@ -14,7 +14,7 @@ const NavbarComponent: React.FC = () => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       setIsLoggedIn(true);
-      axios.get('http://localhost:3001/user', {
+      axios.get(`${process.env.REACT_APP_API_URL}/user`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }
@@ -35,7 +35,7 @@ const NavbarComponent: React.FC = () => {
   const handleLogout = async () => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      const response = await fetch('http://localhost:3001/auth/logout', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/logout`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

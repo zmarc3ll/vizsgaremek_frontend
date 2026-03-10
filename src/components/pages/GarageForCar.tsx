@@ -122,7 +122,7 @@ export default class GarageForCar extends Component<Props, State> {
 
     async loadCarPics() {
         let userId = localStorage.getItem('userId');
-        let response = await fetch('http://localhost:3001/carPic/${userId}');
+        let response = await fetch(`${process.env.REACT_APP_API_URL}/carPic/${userId}`); 
         let responseUrl: string = response.url.substring(0, 29) + userId;
         let responseOk = await fetch(responseUrl);
         let data = await responseOk.json() as carPictureResponse;
@@ -140,7 +140,7 @@ export default class GarageForCar extends Component<Props, State> {
         const carId = this.props.carId; // ide fontos hozzáadni a parametert
 
         try {
-            let response = await fetch(`http://localhost:3001/usersCar/${userId}`);
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/usersCar/${userId}`);
             let data = await response.json() as carListResponse;
 
             // Csak a kiválasztott autót keressük
@@ -164,7 +164,7 @@ export default class GarageForCar extends Component<Props, State> {
             const dateString = `${year}. ${month}. ${day}`;
             console.log('date:', dateString)
             const thisUserId = localStorage.getItem('userId');
-            let response = await fetch('http://localhost:3001/calendarEvent/${thisUserId}');
+            let response = await fetch(`${process.env.REACT_APP_API_URL}/calendarEvent/${thisUserId}`);
             let responseUrl: string = response.url.substring(0, 36) + thisUserId + "?limit=3&from=" + dateString;
             let responseOk = await fetch(responseUrl);
             if (!responseOk.ok) {
@@ -192,7 +192,7 @@ export default class GarageForCar extends Component<Props, State> {
 
         try {
             const response = await fetch(
-                `http://localhost:3001/chart/car/${this.props.carId}`
+                `${process.env.REACT_APP_API_URL}/chart/car/${this.props.carId}`
             );
 
             if (!response.ok) {
@@ -216,7 +216,7 @@ export default class GarageForCar extends Component<Props, State> {
 
         try {
             const response = await fetch(
-                `http://localhost:3001/car/${this.props.carId}`
+                `${process.env.REACT_APP_API_URL}/car/${this.props.carId}`
             );
 
             if (!response.ok) throw new Error("Hiba a lekérésnél");
@@ -258,7 +258,7 @@ export default class GarageForCar extends Component<Props, State> {
         formData.append("carFile", file);
 
         try {
-            const response = await fetch(`http://localhost:3001/uploadfile/${carId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/uploadfile/${carId}`, {
                 method: 'POST',
                 body: formData,
             });
@@ -324,7 +324,7 @@ export default class GarageForCar extends Component<Props, State> {
 
         try {
             const response = await fetch(
-                `http://localhost:3001/chart/car/${this.props.carId}`,
+                `${process.env.REACT_APP_API_URL}/chart/car/${this.props.carId}`,
                 {
                     method: 'POST',
                     headers: {
@@ -350,7 +350,7 @@ export default class GarageForCar extends Component<Props, State> {
 
     deleteCarImage = async (picId: number) => {
         try {
-            const response = await fetch(`http://localhost:3001/deleteCarImage/${picId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/deleteCarImage/${picId}`, {
                 method: "DELETE",
             });
 
@@ -388,7 +388,7 @@ export default class GarageForCar extends Component<Props, State> {
 
         try {
             const response = await fetch(
-                `http://localhost:3001/cars/${car.carId}`, // car biztosan nem null
+                `${process.env.REACT_APP_API_URL}/cars/${car.carId}`, // car biztosan nem null
                 {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
@@ -555,7 +555,7 @@ export default class GarageForCar extends Component<Props, State> {
                                     {this.state.car.pictures && this.state.car.pictures.length > 0 ? (
                                         <div className="car-image-container text-center rounded shadow-lg img-fluid d-block mx-auto">
                                             <img
-                                                src={`http://localhost:3001/uploadedfiles/cars/${this.state.car.pictures[0].carPic}`}
+                                                src={`${process.env.REACT_APP_API_URL}/uploadedfiles/cars/${this.state.car.pictures[0].carPic}`}
                                                 alt={this.state.car.givenName}
                                                 className="rounded shadow-lg bg-body img-fluid"
                                                 id="carsImage"
